@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtomViz 3D + MediaPipe Hands</title>
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- MediaPipe Hands (oficial Google CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+:root {
+  --bg: #030912;
+  --panel: rgba(4,12,28,0.93);
+  --border: rgba(0,200,255,0.15);
+  --accent: #00c8ff;
+  --accent2: #8b5cf6;
+  --accent3: #f43f5e;
+  --accent4: #10b981;
+  --text: #dbeafe;
+  --muted: rgba(180,210,255,0.45);
+  --glow: 0 0 24px rgba(0,200,255,0.35);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  height: 100vh; overflow: hidden;
+}
+
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,200,255,0.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; height:52px;
+  display:flex; align-items:stretch;
+  background:rgba(3,9,18,0.96);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  z-index:200;
+}
+.logo {
+  display:flex; align-items:center; padding:0 24px;
+  border-right:1px solid var(--border);
+  font-family:'Orbitron',sans-serif; font-size:1.05rem; font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:2px; white-space:nowrap;
+}
+.tab-btn {
+  display:flex; align-items:center; gap:7px;
+  padding:0 22px; border:none; background:transparent;
+  color:var(--muted); font-family:'Rajdhani',sans-serif;
+  font-size:0.92rem; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; cursor:pointer;
+  border-bottom:2px solid transparent; transition:all 0.2s;
+}
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); background:rgba(0,200,255,0.05); }
+.tab-btn .dot { width:7px;height:7px;border-radius:50%;background:var(--accent2);flex-shrink:0; }
+.tab-btn .dot.green { background:var(--accent4); }
+
+.mp-nav-btn {
+  margin-left:auto; display:flex; align-items:center; gap:8px;
+  padding:0 20px; border:none;
+  background:rgba(139,92,246,0.08); border-left:1px solid var(--border);
+  color:var(--accent2); font-family:'Rajdhani',sans-serif;
+  font-size:0.88rem; font-weight:600; letter-spacing:1px; cursor:pointer;
+  transition:all 0.2s;
+}
+.mp-nav-btn:hover { background:rgba(139,92,246,0.2); }
+.mp-nav-btn.on { background:rgba(139,92,246,0.28); color:#c4b5fd; }
+
+.mp-indicator {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--accent2); flex-shrink:0;
+}
+.mp-indicator.live {
+  background:var(--accent4);
+  box-shadow:0 0 8px var(--accent4);
+  animation:blink 1s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* ── PANELS ── */
+.panel { display:none; position:fixed; top:52px;left:0;right:0;bottom:0; z-index:10; }
+.panel.active { display:flex; }
+
+/* ── PANEL ATOM ── */
+#panelAtom { flex-direction:row; }
+
+.sidebar {
+  width:230px; background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:10px 7px; overflow-y:auto; flex-shrink:0;
+}
+.sidebar-lbl {
+  font-family:'Orbitron',sans-serif; font-size:0.58rem;
+  letter-spacing:4px; color:var(--accent); text-transform:uppercase;
+  padding:6px 8px 10px; border-bottom:1px solid var(--border); margin-bottom:8px;
+}
+.el-btn {
+  width:100%; display:flex; align-items:center; gap:7px;
+  padding:8px 9px; margin-bottom:3px;
+  background:rgba(0,200,255,0.03); border:1px solid rgba(0,200,255,0.07);
+  border-radius:7px; cursor:pointer; color:var(--text);
+  font-family:'Rajdhani',sans-serif; font-size:0.88rem; font-weight:600;
+  text-align:left; transition:all 0.18s; position:relative; overflow:hidden;
+}
+.el-btn::before {
+  content:''; position:absolute; left:0;top:0;bottom:0;width:2px;
+  background:var(--accent); transform:scaleY(0); transition:transform 0.18s;
+}
+.el-btn:hover,.el-btn.active {
+  background:rgba(0,200,255,0.1); border-color:rgba(0,200,255,0.35);
+  transform:translateX(3px);
+}
+.el-btn:hover::before,.el-btn.active::before { transform:scaleY(1); }
+.el-btn.active { border-color:var(--accent); }
+.el-z { font-family:'Orbitron',sans-serif;font-size:0.62rem;color:var(--accent);min-width:20px;opacity:.55; }
+.el-sym { font-family:'Orbitron',sans-serif;font-size:0.78rem;color:var(--accent2);font-weight:700;min-width:24px; }
+
+#atomCanvas { flex:1; display:block; }
+
+.info-panel {
+  width:290px; background:var(--panel);
+  border-left:1px solid var(--border);
+  padding:18px 16px; overflow-y:auto; flex-shrink:0;
+  display:flex; flex-direction:column; gap:16px;
+}
+.info-name {
+  font-family:'Orbitron',sans-serif; font-size:1.5rem; font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1;
+}
+.info-sub { font-size:0.82rem; color:var(--muted); margin-top:3px; }
+.big-sym {
+  position:absolute; right:0; top:-4px;
+  font-family:'Orbitron',sans-serif; font-size:3.2rem; font-weight:900;
+  color:rgba(255,255,255,0.04); line-height:1; pointer-events:none;
+}
+.sec-lbl {
+  font-family:'Orbitron',sans-serif; font-size:0.53rem;
+  letter-spacing:3px; color:var(--accent); text-transform:uppercase;
+  margin-bottom:8px; opacity:.7;
+}
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.stat-card {
+  background:rgba(0,200,255,0.04); border:1px solid rgba(0,200,255,0.1);
+  border-radius:7px; padding:9px 11px; position:relative; overflow:hidden;
+}
+.stat-card::after {
+  content:''; position:absolute; top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--accent),transparent); opacity:.35;
+}
+.stat-lbl { font-size:0.58rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:3px; }
+.stat-val { font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700; }
+.shell-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 11px; background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.055); border-radius:6px; font-size:0.83rem;
+}
+.shell-lbl { color:var(--muted); }
+.shell-val { font-family:'Orbitron',sans-serif;font-size:0.83rem;color:var(--accent2);font-weight:600; }
+.desc-txt { font-size:0.83rem;line-height:1.68;color:rgba(200,220,255,0.55); }
+.view-btns { display:flex;gap:5px; }
+.vbtn {
+  flex:1;padding:8px 4px;border-radius:6px;
+  border:1px solid rgba(0,200,255,0.18); background:transparent;
+  color:var(--muted); font-family:'Rajdhani',sans-serif;
+  font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.18s;
+  text-transform:uppercase;letter-spacing:1px;
+}
+.vbtn:hover,.vbtn.active {
+  background:rgba(0,200,255,0.13); border-color:var(--accent); color:var(--accent);
+}
+
+/* ── PANEL MOLECULE ── */
+#panelMolecule { flex-direction:column; }
+.mol-wrap { flex:1;display:flex;overflow:hidden; }
+#molCanvas { flex:1;display:block; }
+
+.mol-side {
+  width:270px;background:var(--panel);border-left:1px solid var(--border);
+  padding:16px 14px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;
+}
+.mol-title { font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase; }
+.builder-atom-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 11px;background:rgba(0,200,255,0.04);
+  border:1px solid rgba(0,200,255,0.13);border-radius:7px;font-size:0.83rem;
+}
+.b-sym { font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700; }
+.cnt-ctrl { display:flex;align-items:center;gap:7px; }
+.cnt-btn {
+  width:20px;height:20px;border-radius:4px;
+  border:1px solid rgba(0,200,255,0.22);background:transparent;
+  color:var(--accent);font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.13s;
+}
+.cnt-btn:hover { background:rgba(0,200,255,0.15); }
+.cnt-num { font-family:'Orbitron',sans-serif;font-size:0.82rem;min-width:18px;text-align:center; }
+.val-btn {
+  width:100%;padding:12px;border-radius:9px;border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-family:'Orbitron',sans-serif;
+  font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all 0.18s;box-shadow:0 4px 18px rgba(0,200,255,0.28);
+}
+.val-btn:hover { transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,200,255,0.45); }
+.clr-btn {
+  width:100%;padding:9px;border-radius:7px;
+  border:1px solid rgba(244,63,94,0.28);background:rgba(244,63,94,0.05);
+  color:var(--accent3);font-family:'Rajdhani',sans-serif;
+  font-size:0.83rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;transition:all 0.18s;
+}
+.clr-btn:hover { background:rgba(244,63,94,0.14);border-color:var(--accent3); }
+.result-card {
+  padding:13px;border-radius:9px;border:1px solid var(--border);
+  background:rgba(0,0,0,0.18);display:none;flex-direction:column;gap:7px;
+}
+.result-card.show { display:flex; }
+.result-card.valid { border-color:rgba(16,185,129,0.45);background:rgba(16,185,129,0.06); }
+.result-card.invalid { border-color:rgba(244,63,94,0.45);background:rgba(244,63,94,0.06); }
+.r-title { font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;display:flex;align-items:center;gap:7px; }
+.r-formula { font-family:'Orbitron',sans-serif;font-size:1.25rem;font-weight:900; }
+.r-name { font-size:0.82rem;color:var(--muted); }
+.r-desc { font-size:0.77rem;color:rgba(200,220,255,0.48);line-height:1.5; }
+
+/* ── ELEMENT SHELF ── */
+.shelf {
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  width:min(740px,88vw);background:rgba(4,12,28,0.96);
+  border:1px solid var(--border);border-radius:13px;
+  padding:11px 14px;z-index:50;backdrop-filter:blur(20px);
+}
+.shelf-title { font-family:'Orbitron',sans-serif;font-size:0.57rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:9px; }
+.shelf-scroll {
+  display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;
+  scrollbar-width:thin;scrollbar-color:rgba(0,200,255,0.28) transparent;
+}
+.shelf-scroll::-webkit-scrollbar { height:3px; }
+.shelf-scroll::-webkit-scrollbar-thumb { background:rgba(0,200,255,0.28);border-radius:2px; }
+.shelf-el {
+  flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;
+  width:58px;padding:9px 3px;
+  background:rgba(0,200,255,0.035);border:1px solid rgba(0,200,255,0.1);
+  border-radius:9px;cursor:grab;transition:all 0.18s;user-select:none;
+}
+.shelf-el:hover {
+  background:rgba(0,200,255,0.11);border-color:var(--accent);
+  transform:translateY(-3px);box-shadow:var(--glow);
+}
+.shelf-el:active { cursor:grabbing;transform:translateY(-1px) scale(0.94); }
+.shelf-sym { font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:700; }
+.shelf-name { font-size:0.57rem;color:var(--muted);text-align:center;line-height:1.2; }
+.shelf-z { font-size:0.52rem;color:var(--accent);font-family:'Orbitron',sans-serif; }
+
+/* ── MEDIAPIPE PANEL ── */
+#panelMP { flex-direction:row; }
+
+.mp-left {
+  flex:1;position:relative;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+#mpVideo {
+  width:100%;height:100%;object-fit:cover;
+  transform:scaleX(-1);display:none;
+}
+#mpOverlayCanvas {
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;transform:scaleX(-1);
+}
+.mp-placeholder {
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  color:var(--muted);
+}
+.mp-placeholder .icon { font-size:4rem;opacity:0.4; }
+.mp-placeholder p { font-size:0.9rem;text-align:center;line-height:1.6; }
+
+.mp-right {
+  width:320px;background:var(--panel);border-left:1px solid var(--border);
+  padding:24px 20px;display:flex;flex-direction:column;gap:18px;overflow-y:auto;
+}
+.mp-right-title {
+  font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.mp-section-lbl { font-family:'Orbitron',sans-serif;font-size:0.55rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;opacity:.7; }
+
+.gesture-card {
+  padding:12px 14px;border-radius:9px;
+  border:1px solid rgba(0,200,255,0.1);
+  background:rgba(0,200,255,0.03);
+  display:flex;align-items:center;gap:12px;
+}
+.gesture-icon { font-size:1.6rem;flex-shrink:0; }
+.gesture-desc { font-size:0.82rem;line-height:1.5;color:rgba(200,220,255,0.6); }
+.gesture-name { font-weight:700;color:var(--text);font-size:0.88rem; }
+
+.mp-live-data {
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  border-radius:9px;padding:14px;display:flex;flex-direction:column;gap:9px;
+}
+.mp-data-row {
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:0.82rem;
+}
+.mp-data-lbl { color:var(--muted); }
+.mp-data-val { font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:600; }
+.mp-data-val.active { color:var(--accent4); }
+.mp-data-val.warn { color:var(--accent3); }
+
+.mp-start-btn {
+  width:100%;padding:14px;border-radius:9px;border:none;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;font-family:'Orbitron',sans-serif;
+  font-size:0.82rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(139,92,246,0.35);
+}
+.mp-start-btn:hover { transform:translateY(-2px);box-shadow:0 6px 30px rgba(139,92,246,0.5); }
+.mp-start-btn.stop {
+  background:linear-gradient(135deg,#b91c1c,var(--accent3));
+  box-shadow:0 4px 20px rgba(244,63,94,0.35);
+}
+.mp-tip {
+  padding:12px 14px;border-radius:8px;
+  border:1px solid rgba(139,92,246,0.25);background:rgba(139,92,246,0.05);
+  font-size:0.78rem;color:rgba(200,210,255,0.55);line-height:1.6;
+}
+
+/* ── HAND CURSOR ── */
+#handCursor {
+  position:fixed;pointer-events:none;z-index:1000;
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid var(--accent2);background:rgba(139,92,246,0.18);
+  transform:translate(-50%,-50%);
+  display:none;transition:width 0.1s,height 0.1s,background 0.1s;
+}
+#handCursor.pinch {
+  width:14px;height:14px;
+  background:rgba(139,92,246,0.7);
+  border-color:var(--accent);
+  box-shadow:0 0 14px var(--accent2);
+}
+#handCursor.grab {
+  width:36px;height:36px;
+  border-color:var(--accent4);background:rgba(16,185,129,0.15);
+}
+
+/* ── TOAST ── */
+.toast {
+  position:fixed;bottom:150px;left:50%;
+  transform:translateX(-50%) translateY(14px);
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:9px;padding:9px 18px;
+  font-size:0.83rem;font-weight:600;
+  z-index:500;opacity:0;transition:all 0.28s;pointer-events:none;white-space:nowrap;
+}
+.toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+
+/* ── GESTURE HUD ── */
+#gestureHud {
+  position:fixed;top:68px;right:16px;
+  background:rgba(4,12,28,0.9);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;
+  font-family:'Orbitron',sans-serif;font-size:0.72rem;
+  color:var(--accent);letter-spacing:1px;
+  z-index:150;display:none;
+  backdrop-filter:blur(10px);
+  min-width:160px;
+}
+#gestureHud.show { display:block; }
+.hud-row { display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px; }
+.hud-label { color:var(--muted);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase; }
+.hud-val { color:var(--accent);font-size:0.72rem; }
+.hud-val.gest { color:var(--accent4); }
+
+
+.cat-chip {
+  font-size:0.55rem; padding:2px 6px; border-radius:4px;
+  cursor:pointer; border:1px solid transparent;
+  font-family:'Orbitron',sans-serif; letter-spacing:0.5px;
+  transition:all 0.15s; opacity:0.7; font-weight:600;
+}
+.cat-chip:hover, .cat-chip.active { opacity:1; border-color:currentColor; }
+.el-btn .cat-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+
+/* scrollbar */
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(0,200,255,0.22);border-radius:2px; }
+</style>
+</head>
+<body>
+
+<!-- HAND CURSOR -->
+<div id="handCursor"></div>
+
+<!-- GESTURE HUD (overlay while MP active) -->
+<div id="gestureHud">
+  <div class="hud-row"><span class="hud-label">Mano</span><span class="hud-val" id="hudHand">—</span></div>
+  <div class="hud-row"><span class="hud-label">Gesto</span><span class="hud-val gest" id="hudGest">—</span></div>
+  <div class="hud-row"><span class="hud-label">Confianza</span><span class="hud-val" id="hudConf">—</span></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">⚛ ATOMVIZ 3D</div>
+  <button class="tab-btn active" onclick="switchTab('Atom',this)"><span class="dot"></span>Explorador</button>
+  <button class="tab-btn" onclick="switchTab('Molecule',this)"><span class="dot" style="background:var(--accent3)"></span>Moléculas</button>
+  <button class="tab-btn" id="mpTabBtn" onclick="switchTab('MP',this)"><span class="dot green"></span>MediaPipe AR</button>
+  <button class="mp-nav-btn" id="mpNavBtn" onclick="toggleMPControl()">
+    <span class="mp-indicator" id="mpIndicator"></span>
+    <span id="mpNavTxt">Activar Control</span>
+  </button>
+</nav>
+
+<!-- ═══ PANEL ATOM ═══ -->
+<div class="panel active" id="panelAtom">
+  <aside class="sidebar">
+    <div class="sidebar-lbl">118 Elementos</div>
+    <input id="elSearch" type="text" placeholder="Buscar elemento..." 
+      style="width:100%;padding:7px 10px;margin-bottom:8px;background:rgba(0,200,255,0.05);
+      border:1px solid rgba(0,200,255,0.2);border-radius:7px;color:var(--text);
+      font-family:'Rajdhani',sans-serif;font-size:0.82rem;outline:none;"
+      oninput="filterElements(this.value)"/>
+    <div id="catFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;"></div>
+    <div id="elList"></div>
+  </aside>
+  <canvas id="atomCanvas"></canvas>
+  <div class="info-panel">
+    <div style="position:relative">
+      <div class="sec-lbl">Elemento</div>
+      <div class="info-name" id="iName">Hidrógeno</div>
+        <span id="iCatBadge" style="display:inline-block;padding:2px 10px;border-radius:4px;font-size:0.65rem;font-family:Orbitron,sans-serif;letter-spacing:1px;margin-top:4px;"></span>
+      <div class="info-sub" id="iSub">Z = 1 · H</div>
+      <div class="big-sym" id="iBig">H</div>
+    </div>
+    <div>
+      <div class="sec-lbl">Propiedades</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-lbl">Número Z</div><div class="stat-val" id="sZ">1</div></div>
+        <div class="stat-card"><div class="stat-lbl">Masa</div><div class="stat-val" id="sMass">1.008</div></div>
+        <div class="stat-card"><div class="stat-lbl">Protones</div><div class="stat-val" id="sP">1</div></div>
+        <div class="stat-card"><div class="stat-lbl">Neutrones</div><div class="stat-val" id="sN">0</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-lbl">Capas Electrónicas</div>
+      <div id="shellsList" style="display:flex;flex-direction:column;gap:5px;"></div>
+    </div>
+    <div>
+      <div class="sec-lbl">Descripción</div>
+      <div class="desc-txt" id="iDesc"></div>
+    </div>
+    <div>
+      <div class="sec-lbl">Modo Visual 3D</div>
+      <div class="view-btns">
+        <button class="vbtn active" onclick="setView('bohr',this)">Bohr</button>
+        <button class="vbtn" onclick="setView('cloud',this)">Nube e⁻</button>
+        <button class="vbtn" onclick="setView('orbital',this)">Orbital</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL MOLECULE ═══ -->
+<div class="panel" id="panelMolecule">
+  <div class="mol-wrap" style="position:relative">
+    <canvas id="molCanvas"></canvas>
+    <div class="mol-side">
+      <div class="mol-title">Constructor de Moléculas</div>
+      <div>
+        <div class="sec-lbl">Átomos añadidos</div>
+        <div id="builderAtoms" style="display:flex;flex-direction:column;gap:5px;min-height:70px;">
+          <div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:18px 0">Haz clic o arrastra elementos</div>
+        </div>
+      </div>
+      <button class="val-btn" onclick="validateMolecule()">⚡ Validar Molécula</button>
+      <button class="clr-btn" onclick="clearBuilder()">✕ Limpiar área</button>
+      <div class="result-card" id="resultCard">
+        <div class="r-title"><span id="rIcon">✓</span><span id="rTitle">Válida</span></div>
+        <div class="r-formula" id="rFormula"></div>
+        <div class="r-name" id="rName"></div>
+        <div class="r-desc" id="rDesc"></div>
+        <!-- Análisis del octeto -->
+        <div id="octetAnalysis" style="display:none;margin-top:6px;border-top:1px solid rgba(0,200,255,0.12);padding-top:8px;">
+          <div style="font-family:'Orbitron',sans-serif;font-size:0.52rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:7px;opacity:.7">Análisis de Valencia</div>
+          <div id="octetRows" style="display:flex;flex-direction:column;gap:4px;"></div>
+          <div id="octetSummary" style="margin-top:8px;padding:7px 10px;border-radius:6px;font-size:0.77rem;line-height:1.5;"></div>
+        </div>
+      </div>
+      <div style="margin-top:auto">
+        <div class="sec-lbl">Consejo MediaPipe</div>
+        <div style="font-size:0.77rem;color:var(--muted);line-height:1.6">Con el control de mano activo, mueve la mano para rotar la molécula. Pellizca para seleccionar elementos del shelf.</div>
+      </div>
+    </div>
+    <!-- SHELF -->
+    <div class="shelf">
+      <div class="shelf-title" style="display:flex;align-items:center;justify-content:space-between;"><span>Elementos — Arrastra o haz clic</span><span style="font-size:0.55rem;color:var(--muted);opacity:.7">118 elementos</span></div>
+      <div class="shelf-scroll" id="shelfItems"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANEL MEDIAPIPE ═══ -->
+<div class="panel" id="panelMP">
+  <div class="mp-left">
+    <video id="mpVideo" autoplay playsinline muted></video>
+    <canvas id="mpOverlayCanvas"></canvas>
+    <div class="mp-placeholder" id="mpPlaceholder">
+      <div class="icon">✋</div>
+      <p>Activa la cámara para ver el<br>seguimiento de manos en tiempo real</p>
+    </div>
+  </div>
+  <div class="mp-right">
+    <div class="mp-right-title">MediaPipe Hands</div>
+    <div style="font-size:0.82rem;color:var(--muted);line-height:1.6">
+      Detección de 21 puntos del esqueleto de la mano en tiempo real. Los gestos controlan la visualización 3D directamente.
+    </div>
+
+    <div>
+      <div class="mp-section-lbl" style="margin-bottom:10px">Gestos reconocidos</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="gesture-card"><div class="gesture-icon">🖐</div><div><div class="gesture-name">Mano abierta</div><div class="gesture-desc">Mueve la mano para rotar el átomo/molécula en 3D</div></div></div>
+        <div class="gesture-card"><div class="gesture-icon">🤏</div><div><div class="gesture-name">Pellizco (pinch)</div><div class="gesture-desc">Pulgar + índice juntos para seleccionar o hacer clic</div></div></div>
+        <div class="gesture-card"><div class="gesture-icon">✌️</div><div><div class="gesture-name">Dos dedos</div><div class="gesture-desc">Índice + medio extendidos para cambiar de elemento</div></div></div>
+        <div class="gesture-card"><div class="gesture-icon">✊</div><div><div class="gesture-name">Puño</div><div class="gesture-desc">Pausa el movimiento / congela la rotación</div></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mp-section-lbl" style="margin-bottom:10px">Datos en vivo</div>
+      <div class="mp-live-data">
+        <div class="mp-data-row"><span class="mp-data-lbl">Estado cámara</span><span class="mp-data-val" id="liveCam">Inactiva</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">Manos detectadas</span><span class="mp-data-val" id="liveHands">0</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">Gesto actual</span><span class="mp-data-val" id="liveGest">—</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">Posición X</span><span class="mp-data-val" id="liveX">—</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">Posición Y</span><span class="mp-data-val" id="liveY">—</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">Distancia pinch</span><span class="mp-data-val" id="livePinch">—</span></div>
+        <div class="mp-data-row"><span class="mp-data-lbl">FPS MediaPipe</span><span class="mp-data-val" id="liveFPS">—</span></div>
+      </div>
+    </div>
+
+    <button class="mp-start-btn" id="mpStartBtn" onclick="toggleCamera()">📷 Iniciar Cámara</button>
+
+    <div class="mp-tip">
+      💡 <strong>Tip:</strong> Asegúrate de tener buena iluminación frontal y mantener la mano a 30–60 cm de la cámara para mejor detección.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────────
+// DATOS
+// ─────────────────────────────────────────────
+const ELEMENTS = [
+  {z:1  , name:'Hidrógeno', symbol:'H', mass:'1.008', shells:[1], neutrons:0, color:0xff9f1c, cat:'nonmetal', desc:'El elemento más ligero. Forma el 75% de la materia del universo. Esencial en el agua y los seres vivos.'},
+  {z:2  , name:'Helio', symbol:'He', mass:'4.003', shells:[2], neutrons:2, color:0x48cae4, cat:'noble', desc:'Gas noble inerte, segundo más abundante. Usado en globos, criogenia y reactores de fusión.'},
+  {z:3  , name:'Litio', symbol:'Li', mass:'6.941', shells:[2, 1], neutrons:4, color:0xff6b6b, cat:'alkali', desc:'Metal alcalino muy ligero. Clave en baterías de ion-litio y en psiquiatría.'},
+  {z:4  , name:'Berilio', symbol:'Be', mass:'9.012', shells:[2, 2], neutrons:5, color:0xffd93d, cat:'alkaline', desc:'Metal duro y ligero. Usado en aleaciones aeroespaciales y ventanas de rayos X.'},
+  {z:5  , name:'Boro', symbol:'B', mass:'10.81', shells:[2, 3], neutrons:6, color:0xc77dff, cat:'metalloid', desc:'Metaloide semiconductor. Base del vidrio Pyrex y fibras de alta resistencia.'},
+  {z:6  , name:'Carbono', symbol:'C', mass:'12.01', shells:[2, 4], neutrons:6, color:0xff9f1c, cat:'nonmetal', desc:'Fundamento de la química orgánica. Existe como diamante, grafito y nanotubos.'},
+  {z:7  , name:'Nitrógeno', symbol:'N', mass:'14.01', shells:[2, 5], neutrons:7, color:0xff9f1c, cat:'nonmetal', desc:'78% del aire. Esencial en proteínas, ADN y fertilizantes agrícolas.'},
+  {z:8  , name:'Oxígeno', symbol:'O', mass:'16.00', shells:[2, 6], neutrons:8, color:0xff9f1c, cat:'nonmetal', desc:'Vital para respiración y combustión. Tercer elemento más abundante del universo.'},
+  {z:9  , name:'Flúor', symbol:'F', mass:'19.00', shells:[2, 7], neutrons:10, color:0x52b788, cat:'halogen', desc:'Halógeno más reactivo. Presente en pasta dental, teflón y medicamentos.'},
+  {z:10 , name:'Neón', symbol:'Ne', mass:'20.18', shells:[2, 8], neutrons:10, color:0x48cae4, cat:'noble', desc:'Gas noble usado en tubos de luz de neón. No reacciona con nada.'},
+  {z:11 , name:'Sodio', symbol:'Na', mass:'22.99', shells:[2, 8, 1], neutrons:12, color:0xff6b6b, cat:'alkali', desc:'Metal blando, reactivo con agua. Componente de la sal (NaCl). Esencial para nervios.'},
+  {z:12 , name:'Magnesio', symbol:'Mg', mass:'24.31', shells:[2, 8, 2], neutrons:12, color:0xffd93d, cat:'alkaline', desc:'Parte de la clorofila. Aleaciones ligeras. Antiácido y suplemento mineral.'},
+  {z:13 , name:'Aluminio', symbol:'Al', mass:'26.98', shells:[2, 8, 3], neutrons:14, color:0x4d96ff, cat:'post-transition', desc:'Metal ligero y muy abundante. Latas, aviones, construcción y conductores.'},
+  {z:14 , name:'Silicio', symbol:'Si', mass:'28.09', shells:[2, 8, 4], neutrons:14, color:0xc77dff, cat:'metalloid', desc:'Semiconductor. Base de chips, paneles solares y la electrónica moderna.'},
+  {z:15 , name:'Fósforo', symbol:'P', mass:'30.97', shells:[2, 8, 5], neutrons:16, color:0xff9f1c, cat:'nonmetal', desc:'En el ADN, ATP y huesos. Esencial en fertilizantes y fósforos.'},
+  {z:16 , name:'Azufre', symbol:'S', mass:'32.07', shells:[2, 8, 6], neutrons:16, color:0xff9f1c, cat:'nonmetal', desc:'Olor a huevo podrido. En proteínas, ácido sulfúrico y vulcanización.'},
+  {z:17 , name:'Cloro', symbol:'Cl', mass:'35.45', shells:[2, 8, 7], neutrons:18, color:0x52b788, cat:'halogen', desc:'Gas verde tóxico. Desinfectante del agua, PVC y ácido clorhídrico.'},
+  {z:18 , name:'Argón', symbol:'Ar', mass:'39.95', shells:[2, 8, 8], neutrons:22, color:0x48cae4, cat:'noble', desc:'Gas noble más abundante en la atmósfera. Soldadura y bombillas de gas.'},
+  {z:19 , name:'Potasio', symbol:'K', mass:'39.10', shells:[2, 8, 8, 1], neutrons:20, color:0xff6b6b, cat:'alkali', desc:'Metal alcalino esencial en células vegetales y animales. Fertilizantes.'},
+  {z:20 , name:'Calcio', symbol:'Ca', mass:'40.08', shells:[2, 8, 8, 2], neutrons:20, color:0xffd93d, cat:'alkaline', desc:'Metal de huesos y dientes. Vital en señalización celular y coagulación.'},
+  {z:21 , name:'Escandio', symbol:'Sc', mass:'44.96', shells:[2, 8, 9, 2], neutrons:24, color:0x6bcb77, cat:'transition', desc:'Metal de transición ligero. Aleaciones de alta resistencia para aviones.'},
+  {z:22 , name:'Titanio', symbol:'Ti', mass:'47.87', shells:[2, 8, 10, 2], neutrons:26, color:0x6bcb77, cat:'transition', desc:'Metal resistente y ligero. Implantes médicos, aviones y pigmentos blancos.'},
+  {z:23 , name:'Vanadio', symbol:'V', mass:'50.94', shells:[2, 8, 11, 2], neutrons:28, color:0x6bcb77, cat:'transition', desc:'Metal duro. Catalizador industrial. Aleaciones de acero de alta resistencia.'},
+  {z:24 , name:'Cromo', symbol:'Cr', mass:'52.00', shells:[2, 8, 13, 1], neutrons:28, color:0x6bcb77, cat:'transition', desc:'Metal duro y brillante. Cromado anticorrosión. En acero inoxidable.'},
+  {z:25 , name:'Manganeso', symbol:'Mn', mass:'54.94', shells:[2, 8, 13, 2], neutrons:30, color:0x6bcb77, cat:'transition', desc:'Metal en pilas alcalinas. Esencial en enzimas antioxidantes del cuerpo.'},
+  {z:26 , name:'Hierro', symbol:'Fe', mass:'55.85', shells:[2, 8, 14, 2], neutrons:30, color:0x6bcb77, cat:'transition', desc:'El metal más usado. Acero, hemoglobina, núcleo de la Tierra.'},
+  {z:27 , name:'Cobalto', symbol:'Co', mass:'58.93', shells:[2, 8, 15, 2], neutrons:32, color:0x6bcb77, cat:'transition', desc:'En vitamina B12. Imanes potentes. Pigmento azul cobalto en cerámica.'},
+  {z:28 , name:'Níquel', symbol:'Ni', mass:'58.69', shells:[2, 8, 16, 2], neutrons:30, color:0x6bcb77, cat:'transition', desc:'Metal anticorrosión. Monedas, baterías y catalizadores de hidrogenación.'},
+  {z:29 , name:'Cobre', symbol:'Cu', mass:'63.55', shells:[2, 8, 18, 1], neutrons:34, color:0x6bcb77, cat:'transition', desc:'Excelente conductor. Cables eléctricos, tuberías y aleaciones (bronce, latón).'},
+  {z:30 , name:'Zinc', symbol:'Zn', mass:'65.38', shells:[2, 8, 18, 2], neutrons:34, color:0x6bcb77, cat:'transition', desc:'Galvanización del acero. Esencial en más de 300 enzimas. Suplemento zinc.'},
+  {z:31 , name:'Galio', symbol:'Ga', mass:'69.72', shells:[2, 8, 18, 3], neutrons:38, color:0x4d96ff, cat:'post-transition', desc:'Metal que se funde en la mano (30°C). En LEDs, semiconductores y termómetros.'},
+  {z:32 , name:'Germanio', symbol:'Ge', mass:'72.63', shells:[2, 8, 18, 4], neutrons:40, color:0xc77dff, cat:'metalloid', desc:'Semiconductor clave en fibra óptica, transistores e infrarrojo.'},
+  {z:33 , name:'Arsénico', symbol:'As', mass:'74.92', shells:[2, 8, 18, 5], neutrons:42, color:0xc77dff, cat:'metalloid', desc:'Metaloide tóxico. Usado en semiconductores y preservativos de madera.'},
+  {z:34 , name:'Selenio', symbol:'Se', mass:'78.97', shells:[2, 8, 18, 6], neutrons:44, color:0xff9f1c, cat:'nonmetal', desc:'Antioxidante esencial en la dieta. Celdas fotovoltaicas y copiadoras.'},
+  {z:35 , name:'Bromo', symbol:'Br', mass:'79.90', shells:[2, 8, 18, 7], neutrons:44, color:0x52b788, cat:'halogen', desc:'Único halógeno líquido a temperatura ambiente. Ignifugantes y medicamentos.'},
+  {z:36 , name:'Kriptón', symbol:'Kr', mass:'83.80', shells:[2, 8, 18, 8], neutrons:48, color:0x48cae4, cat:'noble', desc:'Gas noble raro. Láseres y lámparas de alta intensidad fotográfica.'},
+  {z:37 , name:'Rubidio', symbol:'Rb', mass:'85.47', shells:[2, 8, 18, 8, 1], neutrons:48, color:0xff6b6b, cat:'alkali', desc:'Metal alcalino muy reactivo. Relojes atómicos y catalizadores.'},
+  {z:38 , name:'Estroncio', symbol:'Sr', mass:'87.62', shells:[2, 8, 18, 8, 2], neutrons:50, color:0xffd93d, cat:'alkaline', desc:'Colorante rojo en fuegos artificiales. Análogo al calcio en tejido óseo.'},
+  {z:39 , name:'Itrio', symbol:'Y', mass:'88.91', shells:[2, 8, 18, 9, 2], neutrons:50, color:0x6bcb77, cat:'transition', desc:'En LEDs blancos, superconductores y cámaras de TV de alta definición.'},
+  {z:40 , name:'Circonio', symbol:'Zr', mass:'91.22', shells:[2, 8, 18, 10, 2], neutrons:50, color:0x6bcb77, cat:'transition', desc:'Resistente a la corrosión. Revestimiento de varas de combustible nuclear.'},
+  {z:41 , name:'Niobio', symbol:'Nb', mass:'92.91', shells:[2, 8, 18, 12, 1], neutrons:52, color:0x6bcb77, cat:'transition', desc:'En superconductores y aceros especiales para oleoductos y turbinas.'},
+  {z:42 , name:'Molibdeno', symbol:'Mo', mass:'95.96', shells:[2, 8, 18, 13, 1], neutrons:54, color:0x6bcb77, cat:'transition', desc:'En enzimas que fijan nitrógeno. Aceros de alta temperatura.'},
+  {z:43 , name:'Tecnecio', symbol:'Tc', mass:'97.00', shells:[2, 8, 18, 13, 2], neutrons:55, color:0x6bcb77, cat:'transition', desc:'Primer elemento artificial. Isótopo Tc-99m clave en medicina nuclear.'},
+  {z:44 , name:'Rutenio', symbol:'Ru', mass:'101.1', shells:[2, 8, 18, 15, 1], neutrons:58, color:0x6bcb77, cat:'transition', desc:'Metal del grupo platino. Catalizador y en discos duros magnéticos.'},
+  {z:45 , name:'Rodio', symbol:'Rh', mass:'102.9', shells:[2, 8, 18, 16, 1], neutrons:58, color:0x6bcb77, cat:'transition', desc:'Catalizador en convertidores catalíticos de automóviles. Muy raro.'},
+  {z:46 , name:'Paladio', symbol:'Pd', mass:'106.4', shells:[2, 8, 18, 18, 0], neutrons:60, color:0x6bcb77, cat:'transition', desc:'Catalizador en síntesis orgánica y convertidores catalíticos.'},
+  {z:47 , name:'Plata', symbol:'Ag', mass:'107.9', shells:[2, 8, 18, 18, 1], neutrons:60, color:0x6bcb77, cat:'transition', desc:'Mejor conductor eléctrico. Joyería, fotografía analógica y antibacteriano.'},
+  {z:48 , name:'Cadmio', symbol:'Cd', mass:'112.4', shells:[2, 8, 18, 18, 2], neutrons:64, color:0x6bcb77, cat:'transition', desc:'Baterías Ni-Cd, pigmentos amarillos y recubrimientos anticorrosión.'},
+  {z:49 , name:'Indio', symbol:'In', mass:'114.8', shells:[2, 8, 18, 18, 3], neutrons:66, color:0x4d96ff, cat:'post-transition', desc:'En pantallas LCD (ITO). Metal muy blando y dúctil.'},
+  {z:50 , name:'Estaño', symbol:'Sn', mass:'118.7', shells:[2, 8, 18, 18, 4], neutrons:68, color:0x4d96ff, cat:'post-transition', desc:'Usado en bronce (con Cu) y soldadura. Recubrimiento de latas de conserva.'},
+  {z:51 , name:'Antimonio', symbol:'Sb', mass:'121.8', shells:[2, 8, 18, 18, 5], neutrons:70, color:0xc77dff, cat:'metalloid', desc:'En ignifugantes y semiconductores. Usado en la antigüedad como cosmético.'},
+  {z:52 , name:'Teluro', symbol:'Te', mass:'127.6', shells:[2, 8, 18, 18, 6], neutrons:76, color:0xc77dff, cat:'metalloid', desc:'En paneles solares de telururo de cadmio. Semiconductor.'},
+  {z:53 , name:'Yodo', symbol:'I', mass:'126.9', shells:[2, 8, 18, 18, 7], neutrons:74, color:0x52b788, cat:'halogen', desc:'Esencial en hormonas tiroideas. Antiséptico y contraste en radiología.'},
+  {z:54 , name:'Xenón', symbol:'Xe', mass:'131.3', shells:[2, 8, 18, 18, 8], neutrons:78, color:0x48cae4, cat:'noble', desc:'Gas noble. Lámparas de xenón, propulsor iónico y anestésico experimental.'},
+  {z:55 , name:'Cesio', symbol:'Cs', mass:'132.9', shells:[2, 8, 18, 18, 8, 1], neutrons:78, color:0xff6b6b, cat:'alkali', desc:'Metal alcalino más reactivo estable. Relojes atómicos más precisos.'},
+  {z:56 , name:'Bario', symbol:'Ba', mass:'137.3', shells:[2, 8, 18, 18, 8, 2], neutrons:82, color:0xffd93d, cat:'alkaline', desc:'Colorante verde en fuegos artificiales. Papilla baritada en radiología.'},
+  {z:57 , name:'Lantano', symbol:'La', mass:'138.9', shells:[2, 8, 18, 18, 9, 2], neutrons:82, color:0xf4a261, cat:'lanthanide', desc:'Primer lantánido. En baterías NiMH, catalizadores de craqueo y lentes ópticas.'},
+  {z:58 , name:'Cerio', symbol:'Ce', mass:'140.1', shells:[2, 8, 18, 19, 9, 2], neutrons:82, color:0xf4a261, cat:'lanthanide', desc:'Lantánido más abundante. En catalizadores de vehículos y pulido de vidrio.'},
+  {z:59 , name:'Praseodimio', symbol:'Pr', mass:'140.9', shells:[2, 8, 18, 21, 8, 2], neutrons:82, color:0xf4a261, cat:'lanthanide', desc:'En imanes NdFeB (con Nd). Vidrios verdes y gafas de soldador.'},
+  {z:60 , name:'Neodimio', symbol:'Nd', mass:'144.2', shells:[2, 8, 18, 22, 8, 2], neutrons:84, color:0xf4a261, cat:'lanthanide', desc:'Imanes más potentes del mundo (Nd₂Fe₁₄B). Motores eléctricos y auriculares.'},
+  {z:61 , name:'Prometio', symbol:'Pm', mass:'145.0', shells:[2, 8, 18, 23, 8, 2], neutrons:84, color:0xf4a261, cat:'lanthanide', desc:'Único lantánido radiactivo sin isótopos estables. Marcapasos y minibaterías.'},
+  {z:62 , name:'Samario', symbol:'Sm', mass:'150.4', shells:[2, 8, 18, 24, 8, 2], neutrons:88, color:0xf4a261, cat:'lanthanide', desc:'Imanes SmCo para altas temperaturas. En tratamiento del cáncer óseo.'},
+  {z:63 , name:'Europio', symbol:'Eu', mass:'152.0', shells:[2, 8, 18, 25, 8, 2], neutrons:90, color:0xf4a261, cat:'lanthanide', desc:'Fluorescente rojo y azul en pantallas y billetes de banco anti-falsificación.'},
+  {z:64 , name:'Gadolinio', symbol:'Gd', mass:'157.3', shells:[2, 8, 18, 25, 9, 2], neutrons:94, color:0xf4a261, cat:'lanthanide', desc:'Contraste en resonancias magnéticas (MRI). Absorbedor de neutrones en reactores.'},
+  {z:65 , name:'Terbio', symbol:'Tb', mass:'158.9', shells:[2, 8, 18, 27, 8, 2], neutrons:94, color:0xf4a261, cat:'lanthanide', desc:'En fosfores de lámparas fluorescentes verdes y en actuadores magnetoestrictivos.'},
+  {z:66 , name:'Disprosio', symbol:'Dy', mass:'162.5', shells:[2, 8, 18, 28, 8, 2], neutrons:96, color:0xf4a261, cat:'lanthanide', desc:'Imprescindible en imanes de motores de vehículos eléctricos a alta temperatura.'},
+  {z:67 , name:'Holmio', symbol:'Ho', mass:'164.9', shells:[2, 8, 18, 29, 8, 2], neutrons:98, color:0xf4a261, cat:'lanthanide', desc:'Mayor momento magnético de todos los elementos. Polos de imanes en ciclotrones.'},
+  {z:68 , name:'Erbio', symbol:'Er', mass:'167.3', shells:[2, 8, 18, 30, 8, 2], neutrons:98, color:0xf4a261, cat:'lanthanide', desc:'Amplificador de señal en fibra óptica (EDFA). Tinte rosa en vidrio.'},
+  {z:69 , name:'Tulio', symbol:'Tm', mass:'168.9', shells:[2, 8, 18, 31, 8, 2], neutrons:100, color:0xf4a261, cat:'lanthanide', desc:'Lantánido más raro. Fuente portátil de rayos X y en escáneres de aeropuertos.'},
+  {z:70 , name:'Iterbio', symbol:'Yb', mass:'173.0', shells:[2, 8, 18, 32, 8, 2], neutrons:102, color:0xf4a261, cat:'lanthanide', desc:'Relojes atómicos más precisos del mundo (1s en 10¹⁸ años). Aleaciones de acero.'},
+  {z:71 , name:'Lutecio', symbol:'Lu', mass:'175.0', shells:[2, 8, 18, 32, 9, 2], neutrons:104, color:0xf4a261, cat:'lanthanide', desc:'Catalizador en refino de petróleo. En detectores PET de alta resolución.'},
+  {z:72 , name:'Hafnio', symbol:'Hf', mass:'178.5', shells:[2, 8, 18, 32, 10, 2], neutrons:106, color:0x6bcb77, cat:'transition', desc:'En reactores nucleares (absorbedor de neutrones). Compuertas en microprocesadores Intel.'},
+  {z:73 , name:'Tántalo', symbol:'Ta', mass:'180.9', shells:[2, 8, 18, 32, 11, 2], neutrons:108, color:0x6bcb77, cat:'transition', desc:'Condensadores en móviles y portátiles. Biocompatible para implantes quirúrgicos.'},
+  {z:74 , name:'Wolframio', symbol:'W', mass:'183.8', shells:[2, 8, 18, 32, 12, 2], neutrons:110, color:0x6bcb77, cat:'transition', desc:'Punto de fusión más alto (3422°C). Filamentos de bombillas y puntas de taladro.'},
+  {z:75 , name:'Renio', symbol:'Re', mass:'186.2', shells:[2, 8, 18, 32, 13, 2], neutrons:112, color:0x6bcb77, cat:'transition', desc:'En catalizadores de aviación y superaleaciones de turbinas de alta temperatura.'},
+  {z:76 , name:'Osmio', symbol:'Os', mass:'190.2', shells:[2, 8, 18, 32, 14, 2], neutrons:116, color:0x6bcb77, cat:'transition', desc:'Metal más denso (22.59 g/cm³). Puntas de plumas estilográficas y contactos eléctricos.'},
+  {z:77 , name:'Iridio', symbol:'Ir', mass:'192.2', shells:[2, 8, 18, 32, 15, 2], neutrons:116, color:0x6bcb77, cat:'transition', desc:'Metal más resistente a la corrosión. El kilogramo patrón original contenía iridio.'},
+  {z:78 , name:'Platino', symbol:'Pt', mass:'195.1', shells:[2, 8, 18, 32, 17, 1], neutrons:118, color:0x6bcb77, cat:'transition', desc:'Catalizador en convertidores y celdas de combustible. Joyería de alto valor.'},
+  {z:79 , name:'Oro', symbol:'Au', mass:'197.0', shells:[2, 8, 18, 32, 18, 1], neutrons:118, color:0x6bcb77, cat:'transition', desc:'Metal precioso símbolo de riqueza. Conductor en electrónica y tratamiento de cáncer.'},
+  {z:80 , name:'Mercurio', symbol:'Hg', mass:'200.6', shells:[2, 8, 18, 32, 18, 2], neutrons:122, color:0x6bcb77, cat:'transition', desc:'Único metal líquido a temperatura ambiente. Termómetros, fluorescentes y minería.'},
+  {z:81 , name:'Talio', symbol:'Tl', mass:'204.4', shells:[2, 8, 18, 32, 18, 3], neutrons:124, color:0x4d96ff, cat:'post-transition', desc:'Metal tóxico. En detectores de radiación y semiconductores de infrarrojo.'},
+  {z:82 , name:'Plomo', symbol:'Pb', mass:'207.2', shells:[2, 8, 18, 32, 18, 4], neutrons:126, color:0x4d96ff, cat:'post-transition', desc:'Metal denso. Baterías de plomo-ácido, blindaje de radiación y tuberías antiguas.'},
+  {z:83 , name:'Bismuto', symbol:'Bi', mass:'209.0', shells:[2, 8, 18, 32, 18, 5], neutrons:126, color:0x4d96ff, cat:'post-transition', desc:'Metal pesado no tóxico. En medicamentos gástricos (Pepto-Bismol) y aleaciones de bajo punto de fusión.'},
+  {z:84 , name:'Polonio', symbol:'Po', mass:'209.0', shells:[2, 8, 18, 32, 18, 6], neutrons:126, color:0xc77dff, cat:'metalloid', desc:'Elemento radiactivo muy tóxico. Fuente alfa en dispositivos antiest­áticos industriales.'},
+  {z:85 , name:'Ástato', symbol:'At', mass:'210.0', shells:[2, 8, 18, 32, 18, 7], neutrons:126, color:0x52b788, cat:'halogen', desc:'El elemento natural más escaso en la Tierra. Investigación en terapia alfa del cáncer.'},
+  {z:86 , name:'Radón', symbol:'Rn', mass:'222.0', shells:[2, 8, 18, 32, 18, 8], neutrons:136, color:0x48cae4, cat:'noble', desc:'Gas radiactivo que emana del suelo. Segunda causa de cáncer de pulmón después del tabaco.'},
+  {z:87 , name:'Francio', symbol:'Fr', mass:'223.0', shells:[2, 8, 18, 32, 18, 8, 1], neutrons:136, color:0xff6b6b, cat:'alkali', desc:'Metal alcalino más inestable. Se estudia en laboratorios de física nuclear.'},
+  {z:88 , name:'Radio', symbol:'Ra', mass:'226.0', shells:[2, 8, 18, 32, 18, 8, 2], neutrons:138, color:0xffd93d, cat:'alkaline', desc:'Radiactivo descubierto por Marie Curie. Históricamente usado en pinturas luminiscentes.'},
+  {z:89 , name:'Actinio', symbol:'Ac', mass:'227.0', shells:[2, 8, 18, 32, 18, 9, 2], neutrons:138, color:0xe76f51, cat:'actinide', desc:'Primer actínido. Fuente de neutrones en reactores y terapia del cáncer.'},
+  {z:90 , name:'Torio', symbol:'Th', mass:'232.0', shells:[2, 8, 18, 32, 18, 10, 2], neutrons:142, color:0xe76f51, cat:'actinide', desc:'Combustible nuclear alternativo al uranio. Muy abundante. Mantos de lámparas de gas.'},
+  {z:91 , name:'Protactinio', symbol:'Pa', mass:'231.0', shells:[2, 8, 18, 32, 20, 9, 2], neutrons:140, color:0xe76f51, cat:'actinide', desc:'Radiactivo y tóxico. Producto intermediario en la desintegración del uranio-235.'},
+  {z:92 , name:'Uranio', symbol:'U', mass:'238.0', shells:[2, 8, 18, 32, 21, 9, 2], neutrons:146, color:0xe76f51, cat:'actinide', desc:'Combustible principal de reactores nucleares. Su fisión libera energía nuclear.'},
+  {z:93 , name:'Neptunio', symbol:'Np', mass:'237.0', shells:[2, 8, 18, 32, 22, 9, 2], neutrons:144, color:0xe76f51, cat:'actinide', desc:'Primer transurá­nico sintético. Producto en reactores nucleares.'},
+  {z:94 , name:'Plutonio', symbol:'Pu', mass:'244.0', shells:[2, 8, 18, 32, 24, 8, 2], neutrons:150, color:0xe76f51, cat:'actinide', desc:'Combustible de armas nucleares y generadores RTG de sondas espaciales (Voyager).'},
+  {z:95 , name:'Americio', symbol:'Am', mass:'243.0', shells:[2, 8, 18, 32, 25, 8, 2], neutrons:148, color:0xe76f51, cat:'actinide', desc:'En detectores de humo domésticos (Am-241). Fuente alfa industrial.'},
+  {z:96 , name:'Curio', symbol:'Cm', mass:'247.0', shells:[2, 8, 18, 32, 25, 9, 2], neutrons:151, color:0xe76f51, cat:'actinide', desc:'Radiactivo. Usado como fuente de energía en sondas espaciales y marcapasos.'},
+  {z:97 , name:'Berkelio', symbol:'Bk', mass:'247.0', shells:[2, 8, 18, 32, 27, 8, 2], neutrons:150, color:0xe76f51, cat:'actinide', desc:'Solo existe en aceleradores de partículas. Se usa para sintetizar elementos más pesados.'},
+  {z:98 , name:'Californio', symbol:'Cf', mass:'251.0', shells:[2, 8, 18, 32, 28, 8, 2], neutrons:153, color:0xe76f51, cat:'actinide', desc:'Fuente de neutrones para inspección de materiales y tratamiento de tumores cerebrales.'},
+  {z:99 , name:'Einstenio', symbol:'Es', mass:'252.0', shells:[2, 8, 18, 32, 29, 8, 2], neutrons:153, color:0xe76f51, cat:'actinide', desc:'Descubierto en restos de la primera prueba termonuclear (1952). Solo microgramos.'},
+  {z:100, name:'Fermio', symbol:'Fm', mass:'257.0', shells:[2, 8, 18, 32, 30, 8, 2], neutrons:157, color:0xe76f51, cat:'actinide', desc:'Sintetizado en aceleradores. Solo existe por microsegundos. Investiga­ción pura.'},
+  {z:101, name:'Mendelevio', symbol:'Md', mass:'258.0', shells:[2, 8, 18, 32, 31, 8, 2], neutrons:157, color:0xe76f51, cat:'actinide', desc:'Sintetizado en 1955 bombardeando einstenio. Investiga­ción en física nuclear.'},
+  {z:102, name:'Nobelio', symbol:'No', mass:'259.0', shells:[2, 8, 18, 32, 32, 8, 2], neutrons:157, color:0xe76f51, cat:'actinide', desc:'Elemento sintético de vida muy corta. Investigación en propiedades de actínidos.'},
+  {z:103, name:'Lawrencio', symbol:'Lr', mass:'266.0', shells:[2, 8, 18, 32, 32, 8, 3], neutrons:163, color:0xe76f51, cat:'actinide', desc:'Último actínido. Sintetizado en el Lawrence Berkeley National Laboratory (1961).'},
+  {z:104, name:'Rutherfordio', symbol:'Rf', mass:'267.0', shells:[2, 8, 18, 32, 32, 10, 2], neutrons:163, color:0x6bcb77, cat:'transition', desc:'Primer transactínido. Análogo químico del hafnio. Vida media: 1.3 horas.'},
+  {z:105, name:'Dubnio', symbol:'Db', mass:'268.0', shells:[2, 8, 18, 32, 32, 11, 2], neutrons:163, color:0x6bcb77, cat:'transition', desc:'Análogo del tántalo. Sintetizado en Dubna (Rusia) y Berkeley (EE.UU.). Vida: 28 horas.'},
+  {z:106, name:'Seaborgio', symbol:'Sg', mass:'269.0', shells:[2, 8, 18, 32, 32, 12, 2], neutrons:163, color:0x6bcb77, cat:'transition', desc:'Análogo del wolframio. Tiene comportamiento químico inesperadamente similar al Mo.'},
+  {z:107, name:'Bohrio', symbol:'Bh', mass:'270.0', shells:[2, 8, 18, 32, 32, 13, 2], neutrons:163, color:0x6bcb77, cat:'transition', desc:'Análogo del renio. Solo unos pocos átomos sintetizados. Vida media: 61 segundos.'},
+  {z:108, name:'Hassio', symbol:'Hs', mass:'277.0', shells:[2, 8, 18, 32, 32, 14, 2], neutrons:169, color:0x6bcb77, cat:'transition', desc:'Análogo del osmio. Forma OsO₄ volátil. Sintetizado en 1984 en Darmstadt, Alemania.'},
+  {z:109, name:'Meitnerio', symbol:'Mt', mass:'278.0', shells:[2, 8, 18, 32, 32, 15, 2], neutrons:169, color:0x6bcb77, cat:'transition', desc:'Análogo del iridio. Solo unos pocos átomos en aceleradores. Nombre en honor a Lise Meitner.'},
+  {z:110, name:'Darmstadtio', symbol:'Ds', mass:'281.0', shells:[2, 8, 18, 32, 32, 17, 1], neutrons:171, color:0x6bcb77, cat:'transition', desc:'Análogo del platino. Sintetizado en el GSI de Darmstadt en 1994.'},
+  {z:111, name:'Roentgenio', symbol:'Rg', mass:'282.0', shells:[2, 8, 18, 32, 32, 18, 1], neutrons:171, color:0x6bcb77, cat:'transition', desc:'Análogo del oro. Nombre en honor a Wilhelm Röntgen. Vida media: 26 segundos.'},
+  {z:112, name:'Copernicio', symbol:'Cn', mass:'285.0', shells:[2, 8, 18, 32, 32, 18, 2], neutrons:173, color:0x6bcb77, cat:'transition', desc:'Se comporta como gas noble según predicciones relativistas. Nombre en honor a Copérnico.'},
+  {z:113, name:'Nihonio', symbol:'Nh', mass:'286.0', shells:[2, 8, 18, 32, 32, 18, 3], neutrons:173, color:0x4d96ff, cat:'post-transition', desc:'Primer elemento descubierto en Asia (Japón, RIKEN 2004). Nombre del japonés "Nihon" (Japón).'},
+  {z:114, name:'Flerovio', symbol:'Fl', mass:'289.0', shells:[2, 8, 18, 32, 32, 18, 4], neutrons:175, color:0x4d96ff, cat:'post-transition', desc:'Análogo del plomo. Sorprendentemente volátil. Nombre en honor al físico Flerov.'},
+  {z:115, name:'Moscovio', symbol:'Mc', mass:'290.0', shells:[2, 8, 18, 32, 32, 18, 5], neutrons:175, color:0x4d96ff, cat:'post-transition', desc:'Análogo del bismuto. Sintetizado en Dubna, Rusia. Nombre en honor a la región de Moscú.'},
+  {z:116, name:'Livermorio', symbol:'Lv', mass:'293.0', shells:[2, 8, 18, 32, 32, 18, 6], neutrons:177, color:0x4d96ff, cat:'post-transition', desc:'Análogo del polonio. Sintetizado en colaboración Dubna–Livermore (2000).'},
+  {z:117, name:'Tenesino', symbol:'Ts', mass:'294.0', shells:[2, 8, 18, 32, 32, 18, 7], neutrons:177, color:0x52b788, cat:'halogen', desc:'Análogo del ástato. Sintetizado en 2010. Nombre en honor al estado de Tennessee, EE.UU.'},
+  {z:118, name:'Oganesón', symbol:'Og', mass:'294.0', shells:[2, 8, 18, 32, 32, 18, 8], neutrons:176, color:0x48cae4, cat:'noble', desc:'Elemento más pesado conocido. Gas noble superpesado. Vida media: 0.89 milisegundos.'},
+];
+
+const MOLECULES = [
+  // ── Gases diatómicos ──
+  {formula:'H₂',    name:'Hidrógeno molecular',    atoms:{H:2},           desc:'Gas inflamable y combustible limpio del futuro. Enlace covalente simple.'},
+  {formula:'O₂',    name:'Oxígeno molecular',      atoms:{O:2},           desc:'El oxígeno que respiramos. Enlace doble muy estable.'},
+  {formula:'N₂',    name:'Nitrógeno molecular',    atoms:{N:2},           desc:'78% de la atmósfera. Triple enlace, el más fuerte entre no metales.'},
+  {formula:'F₂',    name:'Flúor molecular',        atoms:{F:2},           desc:'Gas amarillo muy reactivo. El halógeno más electronegativo.'},
+  {formula:'Cl₂',   name:'Cloro molecular',        atoms:{Cl:2},          desc:'Gas verde-amarillento tóxico. Usado como desinfectante industrial.'},
+
+  // ── Óxidos ──
+  {formula:'H₂O',   name:'Agua',                   atoms:{H:2,O:1},       desc:'La molécula de la vida. Solvente universal. Molécula polar con geometría angular.'},
+  {formula:'H₂O₂',  name:'Peróxido de hidrógeno',  atoms:{H:2,O:2},       desc:'Agua oxigenada. Antiséptico y blanqueador. Enlace O–O débil.'},
+  {formula:'CO₂',   name:'Dióxido de carbono',     atoms:{C:1,O:2},       desc:'Gas de efecto invernadero. Producto de respiración y combustión. Geometría lineal.'},
+  {formula:'CO',    name:'Monóxido de carbono',    atoms:{C:1,O:1},       desc:'Gas inodoro muy tóxico. Se une a la hemoglobina bloqueando el oxígeno.'},
+  {formula:'SO₂',   name:'Dióxido de azufre',      atoms:{S:1,O:2},       desc:'Gas contaminante causante de lluvia ácida. Geometría angular.'},
+  {formula:'SO₃',   name:'Trióxido de azufre',     atoms:{S:1,O:3},       desc:'Precursor del ácido sulfúrico. Geometría trigonal plana.'},
+  {formula:'NO',    name:'Óxido nítrico',          atoms:{N:1,O:1},       desc:'Molécula señalizadora en el cuerpo. Radical libre con electrón impar.'},
+  {formula:'NO₂',   name:'Dióxido de nitrógeno',   atoms:{N:1,O:2},       desc:'Gas marrón tóxico. Componente del smog urbano. Geometría angular.'},
+  {formula:'N₂O',   name:'Óxido nitroso',          atoms:{N:2,O:1},       desc:'Gas de la risa. Anestésico y propulsor de cremas batidas.'},
+  {formula:'MgO',   name:'Óxido de magnesio',      atoms:{Mg:1,O:1},      desc:'Refractario de alto punto de fusión. Antiácido y laxante.'},
+  {formula:'Na₂O',  name:'Óxido de sodio',         atoms:{Na:2,O:1},      desc:'Óxido básico que reacciona violentamente con el agua formando NaOH.'},
+  {formula:'Li₂O',  name:'Óxido de litio',         atoms:{Li:2,O:1},      desc:'Óxido iónico básico. Usado en cerámica especial y baterías de litio.'},
+  {formula:'Al₂O₃', name:'Óxido de aluminio',      atoms:{Al:2,O:3},      desc:'Alúmina. Muy duro, base del corindón, rubí y zafiro. Refractario.'},
+  {formula:'SiO₂',  name:'Dióxido de silicio',     atoms:{Si:1,O:2},      desc:'Sílice. Cuarzo y arena. Base del vidrio y la fibra óptica.'},
+  {formula:'P₂O₅',  name:'Pentóxido de fósforo',   atoms:{P:2,O:5},       desc:'Agente desecante muy potente. Reacciona con agua formando H₃PO₄.'},
+
+  // ── Hidróxidos y ácidos ──
+  {formula:'NaOH',  name:'Hidróxido de sodio',     atoms:{Na:1,O:1,H:1},  desc:'Sosa cáustica. Base fuerte usada en jabones y en papel. Muy corrosivo.'},
+  {formula:'LiOH',  name:'Hidróxido de litio',     atoms:{Li:1,O:1,H:1},  desc:'Base fuerte. Usado en purificadores de CO₂ en submarinos y naves.'},
+  {formula:'Mg(OH)₂',name:'Hidróxido de magnesio', atoms:{Mg:1,O:2,H:2},  desc:'Leche de magnesia. Antiácido y laxante suave.'},
+  {formula:'Al(OH)₃',name:'Hidróxido de aluminio', atoms:{Al:1,O:3,H:3},  desc:'Hidróxido anfótero. Antiácido y base de vacunas como adyuvante.'},
+  {formula:'HF',    name:'Fluoruro de hidrógeno',  atoms:{H:1,F:1},       desc:'Ácido fluorhídrico. Muy corrosivo, graba el vidrio. Ácido débil.'},
+  {formula:'HCl',   name:'Ácido clorhídrico',      atoms:{H:1,Cl:1},      desc:'Ácido fuerte. Presente en jugo gástrico. Industrial y de laboratorio.'},
+  {formula:'H₂S',   name:'Sulfuro de hidrógeno',   atoms:{H:2,S:1},       desc:'Olor a huevo podrido. Gas tóxico presente en volcanes y pozos.'},
+
+  // ── Sales ──
+  {formula:'NaCl',  name:'Cloruro de sodio',       atoms:{Na:1,Cl:1},     desc:'Sal de mesa. Compuesto iónico esencial para la vida y la cocina.'},
+  {formula:'LiCl',  name:'Cloruro de litio',       atoms:{Li:1,Cl:1},     desc:'Sal higroscópica. Usado en sistemas de aire acondicionado y fundición.'},
+  {formula:'MgCl₂', name:'Cloruro de magnesio',    atoms:{Mg:1,Cl:2},     desc:'Sal soluble. Presente en el agua de mar. Antihielo para carreteras.'},
+  {formula:'AlCl₃', name:'Cloruro de aluminio',    atoms:{Al:1,Cl:3},     desc:'Ácido de Lewis fuerte. Catalizador en reacciones Friedel-Crafts.'},
+  {formula:'NaF',   name:'Fluoruro de sodio',      atoms:{Na:1,F:1},      desc:'Sal iónica. Componente de pastas dentales para prevenir caries.'},
+  {formula:'MgF₂',  name:'Fluoruro de magnesio',   atoms:{Mg:1,F:2},      desc:'Sal iónica. Recubrimiento óptico antirreflectante de alta calidad.'},
+  {formula:'AlF₃',  name:'Fluoruro de aluminio',   atoms:{Al:1,F:3},      desc:'Sal iónica muy estable. Usado en electrólisis del aluminio (Hall).'},
+  {formula:'Na₂S',  name:'Sulfuro de sodio',       atoms:{Na:2,S:1},      desc:'Sal inorgánica. Usado en curtido de cueros y procesos papeleros.'},
+  {formula:'MgS',   name:'Sulfuro de magnesio',    atoms:{Mg:1,S:1},      desc:'Compuesto iónico. Se hidroliza fácilmente con agua.'},
+  {formula:'Na₂SO₄',name:'Sulfato de sodio',       atoms:{Na:2,S:1,O:4},  desc:'Sal de Glauber. Laxante, fabricación de vidrio y detergentes.'},
+  {formula:'MgSO₄', name:'Sulfato de magnesio',    atoms:{Mg:1,S:1,O:4},  desc:'Sal de Epsom. Laxante y suplemento de magnesio. Relajante muscular.'},
+  {formula:'Na₂CO₃',name:'Carbonato de sodio',     atoms:{Na:2,C:1,O:3},  desc:'Soda ash. Fabricación de vidrio, papel y detergentes. Sal básica.'},
+  {formula:'MgCO₃', name:'Carbonato de magnesio',  atoms:{Mg:1,C:1,O:3},  desc:'Magnesita. Antiácido y componente de polvos para las manos en gimnasia.'},
+  {formula:'NaHCO₃',name:'Bicarbonato de sodio',   atoms:{Na:1,H:1,C:1,O:3}, desc:'Levadura química. Antiácido doméstico y base de extintores de CO₂.'},
+
+  // ── Compuestos covalentes (orgánicos simples) ──
+  {formula:'NH₃',   name:'Amoníaco',               atoms:{N:1,H:3},       desc:'Gas de olor fuerte. Base nitrogenada clave en fertilizantes (Haber).'},
+  {formula:'CH₄',   name:'Metano',                 atoms:{C:1,H:4},       desc:'Gas natural, el alcano más simple. Tetrahédrico. Combustible fósil.'},
+  {formula:'C₂H₂',  name:'Acetileno',              atoms:{C:2,H:2},       desc:'Gas para soldadura oxiacetilénica. Triple enlace C≡C. Muy energético.'},
+  {formula:'C₂H₄',  name:'Etileno',               atoms:{C:2,H:4},       desc:'Doble enlace C=C. Hormona vegetal que madura frutas. Plástico base.'},
+  {formula:'C₂H₆',  name:'Etano',                 atoms:{C:2,H:6},       desc:'Segundo alcano. Componente del gas natural. Enlace C–C simple.'},
+  {formula:'SiH₄',  name:'Silano',                atoms:{Si:1,H:4},      desc:'Hidruro de silicio. Análogo al metano. Usado en fabricación de chips.'},
+
+  // ── Elementos gaseosos nobles ──
+  {formula:'He',    name:'Helio',                  atoms:{He:1},          desc:'Gas noble monoatómico. No forma compuestos. Segundo más abundante del cosmos.'},
+  {formula:'Ne',    name:'Neón',                   atoms:{Ne:1},          desc:'Gas noble monoatómico. Usado en letreros luminosos de neón.'},
+  {formula:'Ar',    name:'Argón',                  atoms:{Ar:1},          desc:'Gas noble más abundante en la atmósfera. Soldadura y bombillas.'},
+
+  // ── Fósforo y azufre ──
+  {formula:'P₄',    name:'Fósforo blanco',         atoms:{P:4},           desc:'Estructura tetrahédrica P₄. Muy reactivo y tóxico. Arde espontáneamente.'},
+  {formula:'S₈',    name:'Azufre rombico',         atoms:{S:8},           desc:'Forma estable del azufre. Anillo de 8 átomos. Amarillo cristalino.'},
+];
+
+// ── COORDENADAS 3D DE MOLÉCULAS ──
+
+// ─────────────────────────────────────────────
+// THREE.JS — ÁTOMO 3D
+// ─────────────────────────────────────────────
+let aScene, aCamera, aRenderer;
+let aGroup, aMeshes = [];
+let aDragging = false, aDragStart = {x:0, y:0};
+let aRot = {x:0.2, y:0};
+let aView = 'bohr';
+let aT = 0;
+let mpControlActive = false;  // ← MediaPipe toma el control
+let rotFrozen = false;        // puño → congelar
+
+let curEl = ELEMENTS[0];
+
+function initAtom() {
+  const canvas = document.getElementById('atomCanvas');
+  const cont = canvas.parentElement;
+  const w = cont.offsetWidth - 230 - 290;
+  const h = cont.offsetHeight;
+  canvas.width = w; canvas.height = h;
+
+  aScene = new THREE.Scene();
+  aCamera = new THREE.PerspectiveCamera(60, w/h, 0.1, 1000);
+  aCamera.position.z = 8;
+
+  aRenderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  aRenderer.setSize(w, h);
+  aRenderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  aRenderer.setClearColor(0x000000, 0);
+
+  aScene.add(new THREE.AmbientLight(0x223355, 1.3));
+  const p1 = new THREE.PointLight(0x00c8ff, 2, 30); p1.position.set(5,5,5); aScene.add(p1);
+  const p2 = new THREE.PointLight(0x8b5cf6, 1, 30); p2.position.set(-5,-3,-5); aScene.add(p2);
+
+  aGroup = new THREE.Group();
+  aScene.add(aGroup);
+  buildAtom(curEl, aView);
+
+  // Mouse drag
+  canvas.addEventListener('mousedown', e => { if(mpControlActive) return; aDragging=true; aDragStart={x:e.clientX,y:e.clientY}; });
+  window.addEventListener('mouseup', () => aDragging=false);
+  window.addEventListener('mousemove', e => {
+    if(!aDragging || mpControlActive) return;
+    aRot.y += (e.clientX - aDragStart.x) * 0.008;
+    aRot.x += (e.clientY - aDragStart.y) * 0.008;
+    aDragStart = {x:e.clientX, y:e.clientY};
+  });
+
+  animateAtom();
+}
+
+function buildAtom(el, view) {
+  while(aGroup.children.length) aGroup.remove(aGroup.children[0]);
+  aMeshes = [];
+
+  // Núcleo
+  const nGeo = new THREE.SphereGeometry(0.55, 32, 32);
+  const nMat = new THREE.MeshPhongMaterial({color:el.color, emissive:el.color, emissiveIntensity:0.38, shininess:90});
+  const nucleus = new THREE.Mesh(nGeo, nMat);
+  aGroup.add(nucleus);
+
+  const hGeo = new THREE.SphereGeometry(0.72, 32, 32);
+  const hMat = new THREE.MeshBasicMaterial({color:el.color, transparent:true, opacity:0.1, side:THREE.BackSide});
+  aGroup.add(new THREE.Mesh(hGeo, hMat));
+
+  if (view === 'bohr') {
+    el.shells.forEach((count, si) => {
+      const r = 1.4 + si * 1.1;
+      // Anillo
+      const pts = [];
+      for(let a=0; a<=80; a++) pts.push(new THREE.Vector3(r*Math.cos(a*Math.PI*2/80), r*Math.sin(a*Math.PI*2/80), 0));
+      const ringGeo = new THREE.BufferGeometry().setFromPoints(pts);
+      const ring = new THREE.Line(ringGeo, new THREE.LineBasicMaterial({color:0x00c8ff, transparent:true, opacity:0.22}));
+      ring.rotation.x = si * 0.52 + 0.2;
+      ring.userData.type = 'ring';
+      aGroup.add(ring); aMeshes.push(ring);
+
+      // Electrones
+      for(let ei=0; ei<count; ei++) {
+        const eM = new THREE.Mesh(
+          new THREE.SphereGeometry(0.15, 16, 16),
+          new THREE.MeshPhongMaterial({color:0x00c8ff, emissive:0x00c8ff, emissiveIntensity:0.85, shininess:100})
+        );
+        eM.userData = {type:'electron', r, si, ei, count, tilt: si*0.52+0.2};
+        aGroup.add(eM); aMeshes.push(eM);
+      }
+    });
+
+  } else if (view === 'cloud') {
+    const totalE = el.shells.reduce((a,b)=>a+b,0);
+    const N = totalE * 220;
+    const pos = new Float32Array(N*3);
+    for(let i=0; i<N; i++) {
+      const si = Math.floor(Math.random()*el.shells.length);
+      const r = 1.2 + si*1.0 + (Math.random()-0.5)*1.3;
+      const theta = Math.random()*Math.PI*2;
+      const phi = Math.acos(2*Math.random()-1);
+      pos[i*3]   = r*Math.sin(phi)*Math.cos(theta);
+      pos[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
+      pos[i*3+2] = r*Math.cos(phi);
+    }
+    const cGeo = new THREE.BufferGeometry();
+    cGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const cloud = new THREE.Points(cGeo, new THREE.PointsMaterial({color:0x00c8ff, size:0.058, transparent:true, opacity:0.72}));
+    cloud.userData.type = 'cloud';
+    aGroup.add(cloud); aMeshes.push(cloud);
+
+  } else { // orbital
+    el.shells.forEach((count, si) => {
+      const r = 1.2 + si*1.0;
+      const sph = new THREE.Mesh(
+        new THREE.SphereGeometry(r, 32, 32),
+        new THREE.MeshBasicMaterial({color:0x00c8ff, transparent:true, opacity:0.055, side:THREE.DoubleSide})
+      );
+      sph.userData.type = 'cloud';
+      aGroup.add(sph); aMeshes.push(sph);
+
+      if(si > 0 && count > 1) {
+        const cols = [0xff4d6d, 0x8b5cf6, 0x10b981];
+        const axes = [[1,0,0],[0,1,0],[0,0,1]];
+        axes.slice(0, Math.min(3,count-1)).forEach((ax,ai)=>{
+          const lobe = new THREE.Mesh(
+            new THREE.TorusGeometry(r*0.75, r*0.28, 8, 32),
+            new THREE.MeshBasicMaterial({color:cols[ai], transparent:true, opacity:0.1, side:THREE.DoubleSide})
+          );
+          if(ax[0]) lobe.rotation.y = Math.PI/2;
+          if(ax[2]) lobe.rotation.x = Math.PI/2;
+          lobe.userData.type = 'cloud';
+          aGroup.add(lobe); aMeshes.push(lobe);
+        });
+      }
+    });
+  }
+}
+
+function animateAtom() {
+  requestAnimationFrame(animateAtom);
+  aT += 0.012;
+
+  aMeshes.forEach(m => {
+    if(m.userData.type === 'electron') {
+      const {r, si, ei, count, tilt} = m.userData;
+      const angle = (2*Math.PI/count)*ei + aT*(1/(si+1));
+      m.position.x = r * Math.cos(angle);
+      m.position.y = r * Math.sin(angle) * Math.cos(tilt);
+      m.position.z = r * Math.sin(angle) * Math.sin(tilt);
+    }
+    if(m.userData.type === 'cloud') { m.rotation.y += 0.004; m.rotation.x += 0.0025; }
+  });
+
+  if(!rotFrozen) {
+    aGroup.rotation.y = aRot.y;
+    aGroup.rotation.x = aRot.x;
+  }
+  aRenderer.render(aScene, aCamera);
+}
+
+function setView(v, btn) {
+  aView = v;
+  document.querySelectorAll('.vbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildAtom(curEl, v);
+}
+
+// Sidebar atoms
+// ── Category colors map ──
+const CAT_COLORS_MAP = {
+  'alkali':         {hex:'#ff6b6b', label:'Alcalino'},
+  'alkaline':       {hex:'#ffd93d', label:'Alcalinotérreo'},
+  'transition':     {hex:'#6bcb77', label:'Transición'},
+  'post-transition':{hex:'#4d96ff', label:'Post-trans.'},
+  'metalloid':      {hex:'#c77dff', label:'Metaloide'},
+  'nonmetal':       {hex:'#ff9f1c', label:'No Metal'},
+  'halogen':        {hex:'#52b788', label:'Halógeno'},
+  'noble':          {hex:'#48cae4', label:'Noble'},
+  'lanthanide':     {hex:'#f4a261', label:'Lantánido'},
+  'actinide':       {hex:'#e76f51', label:'Actínido'},
+};
+
+let activeCat = null;
+
+// Build category filter chips
+const catFilter = document.getElementById('catFilter');
+Object.entries(CAT_COLORS_MAP).forEach(([cat, info]) => {
+  const chip = document.createElement('button');
+  chip.className = 'cat-chip';
+  chip.textContent = info.label;
+  chip.style.color = info.hex;
+  chip.style.background = info.hex + '18';
+  chip.dataset.cat = cat;
+  chip.onclick = () => {
+    activeCat = (activeCat === cat) ? null : cat;
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    if(activeCat) chip.classList.add('active');
+    filterElements(document.getElementById('elSearch').value);
+  };
+  catFilter.appendChild(chip);
+});
+
+// Build element buttons
+const elListEl = document.getElementById('elList');
+let elBtns = [];
+
+function buildElList() {
+  elListEl.innerHTML = '';
+  elBtns = [];
+  ELEMENTS.forEach((el, i) => {
+    const catInfo = CAT_COLORS_MAP[el.cat] || {hex:'#aaa'};
+    const btn = document.createElement('button');
+    btn.className = 'el-btn' + (i===0?' active':'');
+    btn.dataset.z = el.z;
+    btn.dataset.cat = el.cat || '';
+    btn.dataset.name = el.name.toLowerCase();
+    btn.dataset.symbol = el.symbol.toLowerCase();
+    btn.innerHTML = `<span class="el-z">${String(el.z).padStart(3,'0')}</span>
+      <span class="cat-dot" style="background:${catInfo.hex}"></span>
+      <span class="el-sym">${el.symbol}</span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${el.name}</span>`;
+    btn.onclick = () => {
+      document.querySelectorAll('.el-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      curEl = el; updateInfo(el); buildAtom(el, aView);
+    };
+    elListEl.appendChild(btn);
+    elBtns.push(btn);
+  });
+}
+
+function filterElements(query) {
+  const q = (query||'').toLowerCase().trim();
+  elBtns.forEach(btn => {
+    const matchText = !q || btn.dataset.name.includes(q) || btn.dataset.symbol.includes(q) || btn.dataset.z.includes(q);
+    const matchCat  = !activeCat || btn.dataset.cat === activeCat;
+    btn.style.display = (matchText && matchCat) ? '' : 'none';
+  });
+}
+
+buildElList();
+
+function updateInfo(el) {
+  document.getElementById('iName').textContent = el.name;
+  document.getElementById('iSub').textContent = `Z = ${el.z} · ${el.symbol}`;
+  // Update category badge
+  const catI = CAT_COLORS_MAP[el.cat] || {hex:'#aaa', label: el.cat || ''};
+  const catBadge = document.getElementById('iCatBadge');
+  if(catBadge) {
+    catBadge.textContent = catI.label;
+    catBadge.style.color = catI.hex;
+    catBadge.style.background = catI.hex + '18';
+    catBadge.style.border = '1px solid ' + catI.hex + '44';
+  }
+  document.getElementById('iBig').textContent = el.symbol;
+  document.getElementById('sZ').textContent = el.z;
+  document.getElementById('sMass').textContent = el.mass;
+  document.getElementById('sP').textContent = el.z;
+  document.getElementById('sN').textContent = el.neutrons;
+  document.getElementById('iDesc').textContent = el.desc;
+  const names=['K','L','M','N'];
+  document.getElementById('shellsList').innerHTML = el.shells.map((n,i)=>
+    `<div class="shell-row"><span class="shell-lbl">Capa ${names[i]} (n=${i+1})</span><span class="shell-val">${n} e⁻</span></div>`
+  ).join('');
+}
+updateInfo(ELEMENTS[0]);
+
+// ─────────────────────────────────────────────
+// THREE.JS — MOLÉCULA 3D
+// ─────────────────────────────────────────────
+let mScene, mCamera, mRenderer, mGroup;
+let mDrag=false, mDragStart={x:0,y:0};
+let mRot={x:0.3,y:0};
+let mT=0;
+let builderAtoms={};
+
+const MOL_COORDS = {
+  // ── Diatómicas ──
+  'H₂':    {atoms:[{sym:'H',p:[-0.75,0,0]},{sym:'H',p:[0.75,0,0]}], bonds:[[0,1]]},
+  'O₂':    {atoms:[{sym:'O',p:[-0.65,0,0]},{sym:'O',p:[0.65,0,0]}], bonds:[[0,1]]},
+  'N₂':    {atoms:[{sym:'N',p:[-0.6,0,0]},{sym:'N',p:[0.6,0,0]}],   bonds:[[0,1]]},
+  'F₂':    {atoms:[{sym:'F',p:[-0.7,0,0]},{sym:'F',p:[0.7,0,0]}],   bonds:[[0,1]]},
+  'Cl₂':   {atoms:[{sym:'Cl',p:[-0.85,0,0]},{sym:'Cl',p:[0.85,0,0]}],bonds:[[0,1]]},
+  'CO':    {atoms:[{sym:'C',p:[-0.6,0,0]},{sym:'O',p:[0.6,0,0]}],   bonds:[[0,1]]},
+  'NO':    {atoms:[{sym:'N',p:[-0.6,0,0]},{sym:'O',p:[0.6,0,0]}],   bonds:[[0,1]]},
+  'HF':    {atoms:[{sym:'H',p:[-0.7,0,0]},{sym:'F',p:[0.7,0,0]}],   bonds:[[0,1]]},
+  'HCl':   {atoms:[{sym:'H',p:[-0.7,0,0]},{sym:'Cl',p:[0.7,0,0]}],  bonds:[[0,1]]},
+  'MgO':   {atoms:[{sym:'Mg',p:[-0.85,0,0]},{sym:'O',p:[0.85,0,0]}],bonds:[[0,1]]},
+  'MgS':   {atoms:[{sym:'Mg',p:[-0.85,0,0]},{sym:'S',p:[0.85,0,0]}],bonds:[[0,1]]},
+  'NaCl':  {atoms:[{sym:'Na',p:[-0.9,0,0]},{sym:'Cl',p:[0.9,0,0]}], bonds:[[0,1]]},
+  'LiCl':  {atoms:[{sym:'Li',p:[-0.85,0,0]},{sym:'Cl',p:[0.85,0,0]}],bonds:[[0,1]]},
+  'NaF':   {atoms:[{sym:'Na',p:[-0.85,0,0]},{sym:'F',p:[0.85,0,0]}],bonds:[[0,1]]},
+  'MgF₂':  {atoms:[{sym:'F',p:[-1.3,0,0]},{sym:'Mg',p:[0,0,0]},{sym:'F',p:[1.3,0,0]}],bonds:[[0,1],[1,2]]},
+  'AlF₃':  {atoms:[{sym:'Al',p:[0,0,0]},{sym:'F',p:[-1.3,0,0]},{sym:'F',p:[0.65,1.13,0]},{sym:'F',p:[0.65,-1.13,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'Na₂S':  {atoms:[{sym:'Na',p:[-1.2,0,0]},{sym:'S',p:[0,0,0]},{sym:'Na',p:[1.2,0,0]}],bonds:[[0,1],[1,2]]},
+
+  // ── Angulares (triátomicas) ──
+  'H₂O':   {atoms:[{sym:'O',p:[0,0,0]},{sym:'H',p:[-1,0.8,0]},{sym:'H',p:[1,0.8,0]}],bonds:[[0,1],[0,2]]},
+  'SO₂':   {atoms:[{sym:'S',p:[0,0.2,0]},{sym:'O',p:[-1.1,0.6,0]},{sym:'O',p:[1.1,0.6,0]}],bonds:[[0,1],[0,2]]},
+  'NO₂':   {atoms:[{sym:'N',p:[0,0.2,0]},{sym:'O',p:[-1.1,0.6,0]},{sym:'O',p:[1.1,0.6,0]}],bonds:[[0,1],[0,2]]},
+  'H₂S':   {atoms:[{sym:'S',p:[0,0,0]},{sym:'H',p:[-1,0.8,0]},{sym:'H',p:[1,0.8,0]}],bonds:[[0,1],[0,2]]},
+  'Li₂O':  {atoms:[{sym:'Li',p:[-1.2,0,0]},{sym:'O',p:[0,0,0]},{sym:'Li',p:[1.2,0,0]}],bonds:[[0,1],[1,2]]},
+  'Na₂O':  {atoms:[{sym:'Na',p:[-1.3,0,0]},{sym:'O',p:[0,0,0]},{sym:'Na',p:[1.3,0,0]}],bonds:[[0,1],[1,2]]},
+  'MgCl₂': {atoms:[{sym:'Cl',p:[-1.4,0,0]},{sym:'Mg',p:[0,0,0]},{sym:'Cl',p:[1.4,0,0]}],bonds:[[0,1],[1,2]]},
+  'SiO₂':  {atoms:[{sym:'O',p:[-1.2,0,0]},{sym:'Si',p:[0,0,0]},{sym:'O',p:[1.2,0,0]}],bonds:[[0,1],[1,2]]},
+  'SO₃':   {atoms:[{sym:'S',p:[0,0,0]},{sym:'O',p:[0,1.3,0]},{sym:'O',p:[-1.12,-0.65,0]},{sym:'O',p:[1.12,-0.65,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'N₂O':   {atoms:[{sym:'N',p:[-0.65,0,0]},{sym:'N',p:[0.65,0,0]},{sym:'O',p:[1.8,0,0]}],bonds:[[0,1],[1,2]]},
+  'H₂O₂':  {atoms:[{sym:'O',p:[-0.72,0,0]},{sym:'O',p:[0.72,0,0]},{sym:'H',p:[-1.55,0.7,0]},{sym:'H',p:[1.55,0.7,0]}],bonds:[[0,1],[0,2],[1,3]]},
+
+  // ── Lineales ──
+  'CO₂':   {atoms:[{sym:'O',p:[-1.3,0,0]},{sym:'C',p:[0,0,0]},{sym:'O',p:[1.3,0,0]}],bonds:[[0,1],[1,2]]},
+  'C₂H₂':  {atoms:[{sym:'H',p:[-1.9,0,0]},{sym:'C',p:[-0.6,0,0]},{sym:'C',p:[0.6,0,0]},{sym:'H',p:[1.9,0,0]}],bonds:[[0,1],[1,2],[2,3]]},
+
+  // ── Piramidales ──
+  'NH₃':   {atoms:[{sym:'N',p:[0,0.3,0]},{sym:'H',p:[-1,-0.5,0.5]},{sym:'H',p:[1,-0.5,0.5]},{sym:'H',p:[0,-0.5,-1]}],bonds:[[0,1],[0,2],[0,3]]},
+  'NaOH':  {atoms:[{sym:'Na',p:[-1.3,0,0]},{sym:'O',p:[0,0,0]},{sym:'H',p:[1,0.6,0]}],bonds:[[0,1],[1,2]]},
+  'LiOH':  {atoms:[{sym:'Li',p:[-1.2,0,0]},{sym:'O',p:[0,0,0]},{sym:'H',p:[1,0.6,0]}],bonds:[[0,1],[1,2]]},
+
+  // ── Tetraédricas ──
+  'CH₄':   {atoms:[{sym:'C',p:[0,0,0]},{sym:'H',p:[1,1,1]},{sym:'H',p:[-1,-1,1]},{sym:'H',p:[1,-1,-1]},{sym:'H',p:[-1,1,-1]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'SiH₄':  {atoms:[{sym:'Si',p:[0,0,0]},{sym:'H',p:[1.2,1.2,1.2]},{sym:'H',p:[-1.2,-1.2,1.2]},{sym:'H',p:[1.2,-1.2,-1.2]},{sym:'H',p:[-1.2,1.2,-1.2]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'AlCl₃': {atoms:[{sym:'Al',p:[0,0,0]},{sym:'Cl',p:[-1.4,0,0]},{sym:'Cl',p:[0.7,1.21,0]},{sym:'Cl',p:[0.7,-1.21,0]}],bonds:[[0,1],[0,2],[0,3]]},
+
+  // ── Etano / Etileno ──
+  'C₂H₄':  {atoms:[{sym:'C',p:[-0.65,0,0]},{sym:'C',p:[0.65,0,0]},{sym:'H',p:[-1.3,0.9,0]},{sym:'H',p:[-1.3,-0.9,0]},{sym:'H',p:[1.3,0.9,0]},{sym:'H',p:[1.3,-0.9,0]}],bonds:[[0,1],[0,2],[0,3],[1,4],[1,5]]},
+  'C₂H₆':  {atoms:[{sym:'C',p:[-0.75,0,0]},{sym:'C',p:[0.75,0,0]},{sym:'H',p:[-1.4,0.9,0.4]},{sym:'H',p:[-1.4,-0.9,0.4]},{sym:'H',p:[-1.4,0,-1]},{sym:'H',p:[1.4,0.9,0.4]},{sym:'H',p:[1.4,-0.9,0.4]},{sym:'H',p:[1.4,0,-1]}],bonds:[[0,1],[0,2],[0,3],[0,4],[1,5],[1,6],[1,7]]},
+
+  // ── Poliatómicas ──
+  'AlCl₃': {atoms:[{sym:'Al',p:[0,0,0]},{sym:'Cl',p:[-1.4,0,0]},{sym:'Cl',p:[0.7,1.21,0]},{sym:'Cl',p:[0.7,-1.21,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'Al₂O₃': {atoms:[{sym:'O',p:[-1.8,0.7,0]},{sym:'Al',p:[-0.7,0,0]},{sym:'O',p:[0,0.8,0]},{sym:'Al',p:[0.7,0,0]},{sym:'O',p:[1.8,0.7,0]},{sym:'O',p:[0,-0.9,0]}],bonds:[[0,1],[1,2],[1,5],[2,3],[3,4],[3,5]]},
+  'P₂O₅':  {atoms:[{sym:'P',p:[-1,0,0]},{sym:'P',p:[1,0,0]},{sym:'O',p:[0,0,0]},{sym:'O',p:[-1.8,1,0]},{sym:'O',p:[-1.8,-1,0]},{sym:'O',p:[1.8,1,0]},{sym:'O',p:[1.8,-1,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[1,2],[1,5],[1,6]]},
+  'Na₂SO₄':{atoms:[{sym:'Na',p:[-2,0.5,0]},{sym:'Na',p:[-2,-0.5,0]},{sym:'S',p:[0,0,0]},{sym:'O',p:[0,1.3,0]},{sym:'O',p:[0,-1.3,0]},{sym:'O',p:[1.1,0,0.8]},{sym:'O',p:[1.1,0,-0.8]}],bonds:[[0,2],[1,2],[2,3],[2,4],[2,5],[2,6]]},
+  'MgSO₄': {atoms:[{sym:'Mg',p:[-1.8,0,0]},{sym:'S',p:[0.4,0,0]},{sym:'O',p:[0.4,1.3,0]},{sym:'O',p:[0.4,-1.3,0]},{sym:'O',p:[1.5,0,0.8]},{sym:'O',p:[1.5,0,-0.8]}],bonds:[[0,1],[1,2],[1,3],[1,4],[1,5]]},
+  'Na₂CO₃':{atoms:[{sym:'Na',p:[-2,0.6,0]},{sym:'Na',p:[-2,-0.6,0]},{sym:'C',p:[0,0,0]},{sym:'O',p:[0,1.3,0]},{sym:'O',p:[-1.1,-0.65,0]},{sym:'O',p:[1.1,-0.65,0]}],bonds:[[0,2],[1,2],[2,3],[2,4],[2,5]]},
+  'MgCO₃': {atoms:[{sym:'Mg',p:[-1.9,0,0]},{sym:'C',p:[0.2,0,0]},{sym:'O',p:[0.2,1.3,0]},{sym:'O',p:[-0.9,-0.65,0]},{sym:'O',p:[1.3,-0.65,0]}],bonds:[[0,1],[1,2],[1,3],[1,4]]},
+  'NaHCO₃':{atoms:[{sym:'Na',p:[-2,0.5,0]},{sym:'H',p:[-0.5,1.2,0]},{sym:'O',p:[0.3,0.9,0]},{sym:'C',p:[0.3,0,0]},{sym:'O',p:[1.5,0.3,0]},{sym:'O',p:[0.3,-1.2,0]}],bonds:[[0,2],[1,2],[2,3],[3,4],[3,5]]},
+  'Mg(OH)₂':{atoms:[{sym:'Mg',p:[0,0,0]},{sym:'O',p:[-1.3,0.5,0]},{sym:'O',p:[1.3,0.5,0]},{sym:'H',p:[-1.9,1.2,0]},{sym:'H',p:[1.9,1.2,0]}],bonds:[[0,1],[0,2],[1,3],[2,4]]},
+  'Al(OH)₃':{atoms:[{sym:'Al',p:[0,0,0]},{sym:'O',p:[-1.2,0.8,0]},{sym:'O',p:[1.2,0.8,0]},{sym:'O',p:[0,-1.4,0]},{sym:'H',p:[-1.8,1.4,0]},{sym:'H',p:[1.8,1.4,0]},{sym:'H',p:[0.7,-1.9,0]}],bonds:[[0,1],[0,2],[0,3],[1,4],[2,5],[3,6]]},
+
+  // ── Nobles monoatómicos ──
+  'He':    {atoms:[{sym:'He',p:[0,0,0]}], bonds:[]},
+  'Ne':    {atoms:[{sym:'Ne',p:[0,0,0]}], bonds:[]},
+  'Ar':    {atoms:[{sym:'Ar',p:[0,0,0]}], bonds:[]},
+
+  // ── Poliatómicos ──
+  'P₄':   {atoms:[{sym:'P',p:[0,1.2,0]},{sym:'P',p:[-1.04,-0.6,0]},{sym:'P',p:[1.04,-0.6,0]},{sym:'P',p:[0,0,1.4]}],bonds:[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]},
+  'S₈':   {atoms:[
+    {sym:'S',p:[2,0,0]},{sym:'S',p:[1.41,1.41,0]},{sym:'S',p:[0,2,0]},{sym:'S',p:[-1.41,1.41,0]},
+    {sym:'S',p:[-2,0,0]},{sym:'S',p:[-1.41,-1.41,0]},{sym:'S',p:[0,-2,0]},{sym:'S',p:[1.41,-1.41,0]}
+  ], bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0]]},
+};
+
+const elMap = {}; ELEMENTS.forEach(e=>elMap[e.symbol]=e);
+
+function initMol() {
+  const canvas = document.getElementById('molCanvas');
+  const cont = canvas.parentElement;
+  const w = cont.offsetWidth - 270;
+  const h = cont.offsetHeight;
+  canvas.width=w; canvas.height=h;
+
+  mScene = new THREE.Scene();
+  mCamera = new THREE.PerspectiveCamera(60, w/h, 0.1, 1000);
+  mCamera.position.z = 10;
+
+  mRenderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  mRenderer.setSize(w,h);
+  mRenderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  mRenderer.setClearColor(0x000000,0);
+
+  mScene.add(new THREE.AmbientLight(0x334466,1.5));
+  const mp1=new THREE.PointLight(0x00c8ff,2,30); mp1.position.set(5,5,5); mScene.add(mp1);
+  const mp2=new THREE.PointLight(0x8b5cf6,1,30); mp2.position.set(-5,-3,-5); mScene.add(mp2);
+
+  mGroup=new THREE.Group(); mScene.add(mGroup);
+  drawEmptyMol();
+
+  canvas.addEventListener('mousedown',e=>{if(mpControlActive)return; mDrag=true; mDragStart={x:e.clientX,y:e.clientY};});
+  window.addEventListener('mouseup',()=>mDrag=false);
+  window.addEventListener('mousemove',e=>{
+    if(!mDrag||mpControlActive)return;
+    mRot.y+=(e.clientX-mDragStart.x)*0.008;
+    mRot.x+=(e.clientY-mDragStart.y)*0.008;
+    mDragStart={x:e.clientX,y:e.clientY};
+  });
+
+  canvas.addEventListener('dragover',e=>e.preventDefault());
+  canvas.addEventListener('drop',e=>{ e.preventDefault(); const s=e.dataTransfer.getData('text/plain'); if(s) addAtom(s); });
+
+  animateMol();
+}
+
+function drawEmptyMol() {
+  while(mGroup.children.length) mGroup.remove(mGroup.children[0]);
+  const grid=new THREE.GridHelper(10,10,0x0a2040,0x060f20);
+  grid.rotation.x=Math.PI/2; grid.position.z=-1;
+  mGroup.add(grid);
+}
+
+function buildMol3D(mol) {
+  while(mGroup.children.length) mGroup.remove(mGroup.children[0]);
+  const coords = MOL_COORDS[mol.formula];
+  if(!coords){drawEmptyMol();return;}
+
+  const atomMeshes = [];
+  coords.atoms.forEach(a=>{
+    const el = elMap[a.sym];
+    const col = el ? el.color : 0xffffff;
+    const r = a.sym==='H'?0.36 : a.sym==='Na'||a.sym==='Cl'||a.sym==='Al'?0.65 : 0.52;
+    const mesh=new THREE.Mesh(
+      new THREE.SphereGeometry(r,32,32),
+      new THREE.MeshPhongMaterial({color:col,emissive:col,emissiveIntensity:0.32,shininess:80})
+    );
+    mesh.position.set(...a.p);
+    mGroup.add(mesh); atomMeshes.push(mesh);
+    // halo
+    const h=new THREE.Mesh(new THREE.SphereGeometry(r+0.14,32,32),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.08,side:THREE.BackSide}));
+    h.position.set(...a.p); mGroup.add(h);
+  });
+
+  coords.bonds.forEach(([i,j])=>{
+    const from=new THREE.Vector3(...coords.atoms[i].p);
+    const to=new THREE.Vector3(...coords.atoms[j].p);
+    const dir=new THREE.Vector3().subVectors(to,from);
+    const len=dir.length();
+    const mid=new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+    const cyl=new THREE.Mesh(
+      new THREE.CylinderGeometry(0.065,0.065,len,12),
+      new THREE.MeshPhongMaterial({color:0x88bbdd,emissive:0x1a3a55,shininess:40})
+    );
+    cyl.position.copy(mid);
+    cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+    mGroup.add(cyl);
+  });
+}
+
+function animateMol() {
+  requestAnimationFrame(animateMol);
+  mT+=0.009;
+  if(!rotFrozen){
+    mGroup.rotation.y = mRot.y + mT*0.08;
+    mGroup.rotation.x = mRot.x;
+  }
+  if(mRenderer) mRenderer.render(mScene, mCamera);
+}
+
+// SHELF
+const shelfItems = document.getElementById('shelfItems');
+ELEMENTS.forEach(el=>{
+  const div=document.createElement('div');
+  div.className='shelf-el'; div.draggable=true;
+  const c='#'+el.color.toString(16).padStart(6,'0');
+  div.innerHTML=`<span class="shelf-sym" style="color:${c}">${el.symbol}</span><span class="shelf-name">${el.name}</span><span class="shelf-z">${el.z}</span>`;
+  div.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.symbol);div.style.opacity='0.5';});
+  div.addEventListener('dragend',()=>div.style.opacity='1');
+  div.addEventListener('click',()=>addAtom(el.symbol));
+  shelfItems.appendChild(div);
+});
+
+function addAtom(sym) {
+  if(!builderAtoms[sym]) builderAtoms[sym]=0;
+  builderAtoms[sym]++;
+  renderBuilder();
+  showToast(`+ ${sym} añadido`);
+  document.getElementById('resultCard').className='result-card';
+}
+function changeCount(sym,d){
+  builderAtoms[sym]=(builderAtoms[sym]||0)+d;
+  if(builderAtoms[sym]<=0) delete builderAtoms[sym];
+  renderBuilder();
+  document.getElementById('resultCard').className='result-card';
+}
+function renderBuilder(){
+  const c=document.getElementById('builderAtoms');
+  const keys=Object.keys(builderAtoms);
+  if(!keys.length){c.innerHTML='<div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:18px 0">Haz clic o arrastra elementos</div>';drawEmptyMol();return;}
+  c.innerHTML=keys.map(sym=>{
+    const el=ELEMENTS.find(e=>e.symbol===sym);
+    const col='#'+(el?el.color:0xffffff).toString(16).padStart(6,'0');
+    return `<div class="builder-atom-row">
+      <span class="b-sym" style="color:${col}">${sym}</span>
+      <span style="color:var(--muted);font-size:0.77rem">${el?el.name:''}</span>
+      <div class="cnt-ctrl">
+        <button class="cnt-btn" onclick="changeCount('${sym}',-1)">−</button>
+        <span class="cnt-num">${builderAtoms[sym]}</span>
+        <button class="cnt-btn" onclick="changeCount('${sym}',+1)">+</button>
+      </div></div>`;
+  }).join('');
+}
+// ══════════════════════════════════════════════════════════════
+//  MOTOR QUÍMICO — REGLA DEL OCTETO
+//  Valida CUALQUIER combinación de átomos sin base de datos fija.
+//  Lógica:
+//   1. Electrones de valencia (última capa) de cada elemento.
+//   2. Cada átomo necesita llegar a 8 (o 2 para H y He — regla del dueto).
+//   3. El déficit total de electrones debe ser par y coincidir
+//      con los electrones disponibles para compartir.
+//   4. Se calcula el número de enlaces, se verifica balance.
+//   5. Si la combinación es estable → válida.
+//   6. Si además coincide con una molécula de la base de datos,
+//      se muestra su nombre y descripción.
+// ══════════════════════════════════════════════════════════════
+
+// ── Electrones de valencia por símbolo ──
+const VALENCE = {
+  H:1,
+  He:2,
+  Li:1,
+  Be:2,
+  B:3,
+  C:4,
+  N:5,
+  O:6,
+  F:7,
+  Ne:8,
+  Na:1,
+  Mg:2,
+  Al:3,
+  Si:4,
+  P:5,
+  S:6,
+  Cl:7,
+  Ar:8,
+  K:1,
+  Ca:2,
+  Sc:3,
+  Ti:4,
+  V:5,
+  Cr:6,
+  Mn:7,
+  Fe:3,
+  Co:3,
+  Ni:2,
+  Cu:2,
+  Zn:2,
+  Ga:3,
+  Ge:4,
+  As:5,
+  Se:6,
+  Br:7,
+  Kr:8,
+  Rb:1,
+  Sr:2,
+  Y:3,
+  Zr:4,
+  Nb:5,
+  Mo:6,
+  Tc:7,
+  Ru:4,
+  Rh:3,
+  Pd:2,
+  Ag:1,
+  Cd:2,
+  In:3,
+  Sn:4,
+  Sb:5,
+  Te:6,
+  I:7,
+  Xe:8,
+  Cs:1,
+  Ba:2,
+  La:3,
+  Ce:4,
+  Pr:3,
+  Nd:3,
+  Pm:3,
+  Sm:3,
+  Eu:3,
+  Gd:3,
+  Tb:3,
+  Dy:3,
+  Ho:3,
+  Er:3,
+  Tm:3,
+  Yb:3,
+  Lu:3,
+  Hf:4,
+  Ta:5,
+  W:6,
+  Re:7,
+  Os:4,
+  Ir:3,
+  Pt:2,
+  Au:3,
+  Hg:2,
+  Tl:3,
+  Pb:4,
+  Bi:5,
+  Po:6,
+  At:7,
+  Rn:8,
+  Fr:1,
+  Ra:2,
+  Ac:3,
+  Th:4,
+  Pa:5,
+  U:6,
+  Np:5,
+  Pu:4,
+  Am:3,
+  Cm:3,
+  Bk:3,
+  Cf:3,
+  Es:3,
+  Fm:3,
+  Md:3,
+  No:3,
+  Lr:3,
+  Rf:4,
+  Db:5,
+  Sg:6,
+  Bh:7,
+  Hs:8,
+  Mt:6,
+  Ds:6,
+  Rg:3,
+  Cn:2,
+  Nh:3,
+  Fl:4,
+  Mc:5,
+  Lv:6,
+  Ts:7,
+  Og:8
+};
+
+// Objetivo de octeto por símbolo (H y He solo necesitan 2)
+const OCTET_TARGET = {
+  H:2,
+  He:2,
+  Li:8,
+  Be:8,
+  B:8,
+  C:8,
+  N:8,
+  O:8,
+  F:8,
+  Ne:8,
+  Na:8,
+  Mg:8,
+  Al:8,
+  Si:8,
+  P:8,
+  S:8,
+  Cl:8,
+  Ar:8,
+  K:8,
+  Ca:8,
+  Sc:8,
+  Ti:8,
+  V:8,
+  Cr:8,
+  Mn:8,
+  Fe:8,
+  Co:8,
+  Ni:8,
+  Cu:8,
+  Zn:8,
+  Ga:8,
+  Ge:8,
+  As:8,
+  Se:8,
+  Br:8,
+  Kr:8,
+  Rb:8,
+  Sr:8,
+  Y:8,
+  Zr:8,
+  Nb:8,
+  Mo:8,
+  Tc:8,
+  Ru:8,
+  Rh:8,
+  Pd:8,
+  Ag:8,
+  Cd:8,
+  In:8,
+  Sn:8,
+  Sb:8,
+  Te:8,
+  I:8,
+  Xe:8,
+  Cs:8,
+  Ba:8,
+  La:8,
+  Ce:8,
+  Pr:8,
+  Nd:8,
+  Pm:8,
+  Sm:8,
+  Eu:8,
+  Gd:8,
+  Tb:8,
+  Dy:8,
+  Ho:8,
+  Er:8,
+  Tm:8,
+  Yb:8,
+  Lu:8,
+  Hf:8,
+  Ta:8,
+  W:8,
+  Re:8,
+  Os:8,
+  Ir:8,
+  Pt:8,
+  Au:8,
+  Hg:8,
+  Tl:8,
+  Pb:8,
+  Bi:8,
+  Po:8,
+  At:8,
+  Rn:8,
+  Fr:8,
+  Ra:8,
+  Ac:8,
+  Th:8,
+  Pa:8,
+  U:8,
+  Np:8,
+  Pu:8,
+  Am:8,
+  Cm:8,
+  Bk:8,
+  Cf:8,
+  Es:8,
+  Fm:8,
+  Md:8,
+  No:8,
+  Lr:8,
+  Rf:8,
+  Db:8,
+  Sg:8,
+  Bh:8,
+  Hs:8,
+  Mt:8,
+  Ds:8,
+  Rg:8,
+  Cn:8,
+  Nh:8,
+  Fl:8,
+  Mc:8,
+  Lv:8,
+  Ts:8,
+  Og:8
+};
+
+// Tipo de enlace: 'covalente' o 'ionico'
+// Metales del grupo 1 y 2 forman enlaces iónicos con no-metales
+const METALS = new Set(['Au', 'Cr', 'Sg', 'Ra', 'Pb', 'Ag', 'K', 'Fr', 'Ir', 'Rf', 'Eu', 'Ti', 'Re', 'W', 'Ta', 'Sm', 'Cf', 'Es', 'Fm', 'Ds', 'Hs', 'Tm', 'Db', 'Ru', 'Dy', 'Bi', 'Be', 'Co', 'Fe', 'Zn', 'Nb', 'Ba', 'Mc', 'Pu', 'Ca', 'Er', 'Sr', 'Bh', 'In', 'Lu', 'Tb', 'Ts', 'Os', 'Na', 'Ac', 'Th', 'Cn', 'Sc', 'Ce', 'Mn', 'Am', 'Cu', 'Po', 'Pm', 'Zr', 'Cs', 'Yb', 'Nd', 'Tl', 'Pd', 'Lv', 'Rg', 'Mg', 'La', 'Md', 'V', 'Y', 'Hg', 'U', 'Ga', 'Li', 'Pr', 'Pa', 'Nh', 'Pt', 'Mt', 'Sn', 'No', 'Cd', 'Tc', 'Ho', 'Np', 'Lr', 'Bk', 'Fl', 'Mo', 'Cm', 'Rb', 'Ni', 'Al', 'Rh', 'Hf', 'Gd']);
+const NONMETALS = new Set(['Po', 'I', 'Se', 'C', 'F', 'Sb', 'Ge', 'At', 'S', 'H', 'P', 'N', 'Ts', 'As', 'Si', 'O', 'Br', 'Cl', 'Te']);
+const NOBLES = new Set(['Ne', 'Og', 'Ar', 'Rn', 'Xe', 'Kr', 'He']);
+
+// ── Función principal: octet engine ──
+function octetEngine(userAtoms) {
+  const keys = Object.keys(userAtoms);
+
+  // ── Gases nobles solitarios ──
+  if(keys.length === 1 && NOBLES.has(keys[0]) && userAtoms[keys[0]] === 1) {
+    return {
+      valid: true,
+      type: 'noble',
+      bonds: 0,
+      analysis: [{sym:keys[0], valence:VALENCE[keys[0]], need:0, shared:0, lone:VALENCE[keys[0]]/2}],
+      explanation: `${keys[0]} es un gas noble con octeto completo. No forma enlaces.`
+    };
+  }
+
+  // ── Detectar si es compuesto iónico (metal + no-metal) ──
+  const hasMetal    = keys.some(k => METALS.has(k));
+  const hasNonMetal = keys.some(k => NONMETALS.has(k));
+  const isAllMetal  = keys.every(k => METALS.has(k));
+
+  if(hasMetal && hasNonMetal) {
+    return octetIonic(userAtoms, keys);
+  } else {
+    return octetCovalent(userAtoms, keys);
+  }
+}
+
+// ── Validación IÓNICA: metal da electrones, no-metal los recibe ──
+function octetIonic(userAtoms, keys) {
+  // Electrones cedidos por metales
+  let given = 0;
+  let received = 0;
+  const analysis = [];
+
+  for(const sym of keys) {
+    const count = userAtoms[sym];
+    const v = VALENCE[sym];
+    if(!v) return {valid:false, reason:`Elemento '${sym}' no reconocido.`};
+
+    if(METALS.has(sym)) {
+      // El metal cede todos sus electrones de valencia
+      given += v * count;
+      analysis.push({sym, count, valence:v, role:'dona', electrons: v*count});
+    } else if(NONMETALS.has(sym)) {
+      // El no-metal necesita (8-v) electrones para completar octeto
+      const need = (OCTET_TARGET[sym] || 8) - v;
+      received += need * count;
+      analysis.push({sym, count, valence:v, role:'recibe', electrons: need*count});
+    }
+  }
+
+  const balanced = given === received;
+  const explanation = balanced
+    ? `Enlace iónico: los metales ceden ${given}e⁻ y los no-metales reciben ${received}e⁻. Todos los átomos completan el octeto.`
+    : `Desequilibrio iónico: metales ceden ${given}e⁻ pero no-metales necesitan ${received}e⁻. ${given > received ? 'Sobran ' + (given-received) : 'Faltan ' + (received-given)}e⁻.`;
+
+  return {valid: balanced, type:'ionic', analysis, explanation,
+    given, received, bonds: Math.min(given,received)};
+}
+
+// ── Validación COVALENTE: electrones compartidos ──
+function octetCovalent(userAtoms, keys) {
+  // Total de electrones de valencia aportados
+  let totalVE = 0;
+  const analysis = [];
+
+  for(const sym of keys) {
+    const count = userAtoms[sym];
+    const v = VALENCE[sym];
+    if(v === undefined) return {valid:false, reason:`Elemento '${sym}' no reconocido.`};
+    totalVE += v * count;
+    analysis.push({sym, count, valence:v});
+  }
+
+  // Total de electrones necesarios para que TODOS completen octeto
+  let totalNeeded = 0;
+  for(const sym of keys) {
+    const count = userAtoms[sym];
+    const target = OCTET_TARGET[sym] || 8;
+    totalNeeded += target * count;
+  }
+
+  // Electrones compartidos = (totalNeeded - totalVE)
+  // Cada enlace simple comparte 2 electrones, cada enlace aporta 2 al pool
+  const sharedElectrons = totalNeeded - totalVE;
+
+  // sharedElectrons debe ser positivo, par, y sharedElectrons/2 = número de pares enlazantes
+  if(sharedElectrons < 0) {
+    // Más electrones de los que se necesitan → exceso
+    return {
+      valid: false, type:'covalent', analysis,
+      explanation: `Exceso de ${-sharedElectrons} electrones de valencia. ` +
+        `La molécula tendría ${-sharedElectrons/2} pares solitarios sin usar: estructura inestable.`
+    };
+  }
+  if(sharedElectrons % 2 !== 0) {
+    // Número impar → radical libre (casos especiales como NO, NO₂)
+    const radicalName = buildFormula(userAtoms);
+    return {
+      valid: true, type:'radical', analysis,
+      totalVE, totalNeeded,
+      sharedElectrons,
+      explanation: `Radical libre: ${sharedElectrons} electrones de enlace con 1 electrón desapareado. ` +
+        `Es una especie reactiva (radical). Ejemplos reales: NO, NO₂.`
+    };
+  }
+
+  const bondPairs = sharedElectrons / 2;  // número de enlaces totales (contando dobles/triples)
+  const lonePairs = (totalVE - sharedElectrons) / 2;
+
+  // ── Verificar que los octetos individuales cierran ──
+  // Para cada átomo, sus electrones de valencia + los que recibe del enlace deben = target
+  // Usamos una verificación simplificada: si sharedElectrons se puede distribuir equitativamente
+  const valid = sharedElectrons >= 0 && lonePairs >= 0;
+
+  const explanation = valid
+    ? `Enlace covalente: ${bondPairs} par(es) de enlace, ${lonePairs} par(es) solitario(s). ` +
+      `Total de e⁻ de valencia: ${totalVE}. Todos los átomos satisfacen el octeto/dueto.`
+    : `No es posible completar el octeto con esta combinación.`;
+
+  // Enriquecer analysis con desglose individual
+  analysis.forEach(a => {
+    const target = OCTET_TARGET[a.sym] || 8;
+    a.need = target - a.valence;
+    a.lone = Math.max(0, Math.floor((a.valence * a.count - a.need * a.count) / (2 * a.count)));
+  });
+
+  return {valid, type:'covalent', analysis, totalVE, totalNeeded, bondPairs, lonePairs, sharedElectrons, explanation};
+}
+
+// ── Helpers ──
+const SUB = {'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'};
+function toSub(n){ return String(n).split('').map(c=>SUB[c]||c).join(''); }
+
+function buildFormula(atoms) {
+  // Orden Hill: C primero, H segundo, luego alfabético
+  const keys = Object.keys(atoms);
+  const order = [...keys].sort((a,b) => {
+    if(a==='C' && b!=='C') return -1;
+    if(b==='C' && a!=='C') return 1;
+    if(a==='H' && b!=='H') return -1;
+    if(b==='H' && a!=='H') return 1;
+    return a.localeCompare(b);
+  });
+  return order.map(k => k + (atoms[k]>1 ? toSub(atoms[k]) : '')).join('');
+}
+
+// ── Buscar nombre en base de datos ──
+function findInDB(userAtoms) {
+  return MOLECULES.find(mol => {
+    const mk = Object.keys(mol.atoms);
+    const uk = Object.keys(userAtoms);
+    if(mk.length !== uk.length) return false;
+    for(const k of mk) { if(mol.atoms[k] !== userAtoms[k]) return false; }
+    for(const k of uk) { if(!(k in mol.atoms)) return false; }
+    return true;
+  });
+}
+
+// ── Renderizar análisis de octeto en la UI ──
+function renderOctetAnalysis(result, userAtoms) {
+  const analysisDiv = document.getElementById('octetAnalysis');
+  const rowsDiv = document.getElementById('octetRows');
+  const summaryDiv = document.getElementById('octetSummary');
+  analysisDiv.style.display = 'block';
+
+  const typeLabels = {ionic:'Iónico', covalent:'Covalente', noble:'Gas Noble', radical:'Radical Libre'};
+
+  rowsDiv.innerHTML = result.analysis.map(a => {
+    const el = ELEMENTS.find(e=>e.symbol===a.sym);
+    const col = el ? '#'+el.color.toString(16).padStart(6,'0') : '#aaa';
+    const target = OCTET_TARGET[a.sym] || 8;
+    const v = VALENCE[a.sym] || 0;
+
+    // Barra de progreso: cuántos e⁻ tiene → target
+    const pct = Math.min(100, Math.round((v / target)*100));
+    const roleLabel = a.role === 'dona' ? '⬆ cede' : a.role === 'recibe' ? '⬇ recibe' : '⇄ comparte';
+
+    return `<div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:6px 10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <span style="font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;color:${col}">${a.sym}</span>
+        <span style="font-size:0.72rem;color:var(--muted)">${a.count} átomo${a.count>1?'s':''}</span>
+        <span style="font-size:0.7rem;color:var(--accent2)">${roleLabel}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--muted);margin-bottom:4px;">
+        <span>Valencia: <b style="color:var(--text)">${v}e⁻</b></span>
+        <span>→</span>
+        <span>Objetivo: <b style="color:var(--accent)">${target}e⁻</b></span>
+        <span>→</span>
+        <span>Necesita: <b style="color:${target-v>0?'#f59e0b':'var(--accent4)'}">${Math.max(0,target-v)}e⁻</b></span>
+      </div>
+      <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${col},var(--accent));border-radius:2px;transition:width 0.4s;"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const isValid = result.valid;
+  const bgColor = isValid ? 'rgba(16,185,129,0.08)' : 'rgba(244,63,94,0.08)';
+  const borderColor = isValid ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)';
+  const textColor = isValid ? 'var(--accent4)' : 'var(--accent3)';
+
+  let extraInfo = '';
+  if(result.type === 'covalent' && result.bondPairs !== undefined) {
+    extraInfo = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">
+      <span style="padding:2px 8px;background:rgba(0,200,255,0.1);border-radius:4px;font-size:0.7rem;">⚡ ${result.totalVE} e⁻ totales</span>
+      <span style="padding:2px 8px;background:rgba(139,92,246,0.1);border-radius:4px;font-size:0.7rem;">🔗 ${result.bondPairs} enlaces</span>
+      <span style="padding:2px 8px;background:rgba(16,185,129,0.1);border-radius:4px;font-size:0.7rem;">• ${result.lonePairs} pares solos</span>
+      <span style="padding:2px 8px;background:rgba(0,200,255,0.1);border-radius:4px;font-size:0.7rem;">📐 ${typeLabels[result.type]}</span>
+    </div>`;
+  } else if(result.type === 'ionic') {
+    extraInfo = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">
+      <span style="padding:2px 8px;background:rgba(0,200,255,0.1);border-radius:4px;font-size:0.7rem;">⬆ Cedidos: ${result.given}e⁻</span>
+      <span style="padding:2px 8px;background:rgba(139,92,246,0.1);border-radius:4px;font-size:0.7rem;">⬇ Recibidos: ${result.received}e⁻</span>
+      <span style="padding:2px 8px;background:rgba(0,200,255,0.1);border-radius:4px;font-size:0.7rem;">📐 ${typeLabels[result.type]}</span>
+    </div>`;
+  }
+
+  summaryDiv.innerHTML = `<div style="background:${bgColor};border:1px solid ${borderColor};border-radius:6px;padding:8px 10px;">
+    <div style="color:${textColor};font-size:0.75rem;font-weight:600;margin-bottom:3px;">
+      ${isValid ? '✓ Octeto satisfecho' : '✗ Octeto no satisfecho'}
+      ${result.type==='radical' ? ' — Radical libre' : ''}
+    </div>
+    <div style="font-size:0.73rem;color:rgba(200,220,255,0.6);line-height:1.5;">${result.explanation}</div>
+    ${extraInfo}
+  </div>`;
+}
+
+// ── VALIDATE MOLECULE (nuevo motor) ──
+function validateMolecule(){
+  const card = document.getElementById('resultCard');
+  const keys = Object.keys(builderAtoms);
+  if(!keys.length){ showToast('Agrega elementos primero'); return; }
+
+  // Verificar que todos los elementos tengan valencia definida
+  for(const sym of keys) {
+    if(VALENCE[sym] === undefined) {
+      showToast(`⚠ ${sym} no tiene datos de valencia`);
+      return;
+    }
+  }
+
+  // Correr el motor del octeto
+  const result = octetEngine(builderAtoms);
+
+  // Buscar en la base de datos para obtener nombre y desc si existe
+  const dbMatch = findInDB(builderAtoms);
+
+  // Construir fórmula automática
+  const autoFormula = dbMatch ? dbMatch.formula : buildFormula(builderAtoms);
+  const autoName    = dbMatch ? dbMatch.name    : (result.valid ? 'Compuesto válido' : 'Combinación inestable');
+  const autoDesc    = dbMatch ? dbMatch.desc    : (result.valid
+    ? `Molécula con fórmula ${autoFormula} validada por la regla del octeto.`
+    : `Esta combinación no satisface la regla del octeto. ${result.explanation}`);
+
+  document.getElementById('rFormula').textContent = autoFormula;
+  document.getElementById('rName').textContent = autoName;
+  document.getElementById('rDesc').textContent = autoDesc;
+
+  if(result.valid) {
+    document.getElementById('rIcon').textContent = result.type==='radical' ? '⚡' : '✓';
+    document.getElementById('rTitle').textContent = result.type==='radical' ? 'Radical libre válido' : '¡Octeto satisfecho!';
+    card.className = 'result-card show valid';
+    // Construir molécula 3D (usa la base si existe, o genera automático)
+    if(dbMatch) {
+      buildMol3D(dbMatch);
+    } else {
+      buildMol3DFromAtoms(builderAtoms, result);
+    }
+    showToast('✓ ' + autoName);
+  } else {
+    document.getElementById('rIcon').textContent = '✗';
+    document.getElementById('rTitle').textContent = 'Octeto no satisfecho';
+    card.className = 'result-card show invalid';
+    drawEmptyMol();
+    showToast('✗ No cumple la regla del octeto');
+  }
+
+  // Siempre mostrar análisis detallado
+  renderOctetAnalysis(result, builderAtoms);
+}
+
+// ── Construir molécula 3D genérica cuando no está en MOL_COORDS ──
+function buildMol3DFromAtoms(atoms, result) {
+  while(mGroup.children.length) mGroup.remove(mGroup.children[0]);
+
+  const keys = Object.keys(atoms);
+  let allAtoms = [];
+  keys.forEach(sym => {
+    for(let i=0; i<atoms[sym]; i++) allAtoms.push(sym);
+  });
+
+  if(allAtoms.length === 1) {
+    // Monoatómico
+    const sym = allAtoms[0];
+    const el = elMap[sym];
+    const col = el ? el.color : 0xffffff;
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.6,32,32),
+      new THREE.MeshPhongMaterial({color:col,emissive:col,emissiveIntensity:0.35,shininess:80}));
+    mGroup.add(mesh); return;
+  }
+
+  // Disposición automática: átomo central = el de mayor valencia (o el único metal)
+  const metals = allAtoms.filter(s => METALS.has(s));
+  const nonmetals = allAtoms.filter(s => !METALS.has(s));
+  let centralSym = allAtoms[0];
+  if(keys.length > 1) {
+    // Elige central: mayor valencia entre no-hidrógenos
+    const candidates = allAtoms.filter(s=>s!=='H');
+    if(candidates.length > 0) {
+      centralSym = candidates.reduce((a,b) => (VALENCE[a]||0) > (VALENCE[b]||0) ? a : b);
+    }
+  }
+
+  // Posicionar: central en origen, periféricos en esfera
+  const peripheral = [...allAtoms]; 
+  const ci = peripheral.indexOf(centralSym);
+  peripheral.splice(ci, 1);
+
+  const positions = [];
+  positions.push({sym: centralSym, p: [0,0,0]});
+
+  // Distribuir periféricos uniformemente en esfera (espiral de Fibonacci)
+  const n = peripheral.length;
+  const BOND_LEN = 1.5;
+  peripheral.forEach((sym, i) => {
+    const theta = Math.acos(1 - 2*(i+0.5)/n);
+    const phi   = Math.PI * (1 + Math.sqrt(5)) * i;
+    positions.push({
+      sym,
+      p: [
+        BOND_LEN * Math.sin(theta)*Math.cos(phi),
+        BOND_LEN * Math.sin(theta)*Math.sin(phi),
+        BOND_LEN * Math.cos(theta)
+      ]
+    });
+  });
+
+  // Construir meshes
+  positions.forEach(a => {
+    const el = elMap[a.sym];
+    const col = el ? el.color : 0xffffff;
+    const r = a.sym==='H' ? 0.32 : 0.5;
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r,32,32),
+      new THREE.MeshPhongMaterial({color:col,emissive:col,emissiveIntensity:0.32,shininess:80}));
+    mesh.position.set(...a.p);
+    mGroup.add(mesh);
+    const hMesh = new THREE.Mesh(new THREE.SphereGeometry(r+0.12,32,32),
+      new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.07,side:THREE.BackSide}));
+    hMesh.position.set(...a.p); mGroup.add(hMesh);
+  });
+
+  // Bonds desde central a cada periférico
+  for(let i=1; i<positions.length; i++){
+    const from = new THREE.Vector3(...positions[0].p);
+    const to   = new THREE.Vector3(...positions[i].p);
+    const dir  = new THREE.Vector3().subVectors(to,from);
+    const len  = dir.length();
+    const mid  = new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+    const cyl  = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06,0.06,len,12),
+      new THREE.MeshPhongMaterial({color:0x88bbdd,emissive:0x1a3a55,shininess:40})
+    );
+    cyl.position.copy(mid);
+    cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir.normalize());
+    mGroup.add(cyl);
+  }
+}
+function clearBuilder(){
+  builderAtoms={};renderBuilder();
+  document.getElementById('resultCard').className='result-card';
+  drawEmptyMol();
+}
+
+// ─────────────────────────────────────────────
+// MEDIAPIPE HANDS — DETECCIÓN REAL
+// ─────────────────────────────────────────────
+let mpHands = null;
+let mpCamera = null;
+let cameraStream = null;
+let mpRunning = false;
+let handCursor = document.getElementById('handCursor');
+
+// Métricas en vivo
+let mpFPS = 0, mpFPSt = 0, mpFPSc = 0;
+
+// Estado de gestos
+let prevGesture = '';
+let pinchDist = 0;
+let lastHandX = 0, lastHandY = 0;
+let smoothX = 0.5, smoothY = 0.5;
+const SMOOTH = 0.12;
+
+// Índices de puntos clave en MediaPipe Hands
+const IDX_WRIST = 0;
+const IDX_THUMB_TIP = 4;
+const IDX_INDEX_TIP = 8;
+const IDX_MIDDLE_TIP = 12;
+const IDX_RING_TIP = 16;
+const IDX_PINKY_TIP = 20;
+const IDX_THUMB_MCP = 2;
+const IDX_INDEX_MCP = 5;
+const IDX_MIDDLE_MCP = 9;
+const IDX_RING_MCP = 13;
+const IDX_PINKY_MCP = 17;
+
+function dist2D(a, b) {
+  return Math.sqrt((a.x-b.x)**2 + (a.y-b.y)**2);
+}
+
+function isFingerUp(lm, tip, mcp) {
+  return lm[tip].y < lm[mcp].y;
+}
+
+function recognizeGesture(lm) {
+  const thumbUp  = lm[IDX_THUMB_TIP].y < lm[IDX_THUMB_MCP].y;
+  const indexUp  = isFingerUp(lm, IDX_INDEX_TIP, IDX_INDEX_MCP);
+  const middleUp = isFingerUp(lm, IDX_MIDDLE_TIP, IDX_MIDDLE_MCP);
+  const ringUp   = isFingerUp(lm, IDX_RING_TIP, IDX_RING_MCP);
+  const pinkyUp  = isFingerUp(lm, IDX_PINKY_TIP, IDX_PINKY_MCP);
+
+  const upCount = [indexUp,middleUp,ringUp,pinkyUp].filter(Boolean).length;
+
+  // Pinch: pulgar e índice cercanos
+  const pd = dist2D(lm[IDX_THUMB_TIP], lm[IDX_INDEX_TIP]);
+  pinchDist = pd;
+  if(pd < 0.06) return 'PINCH';
+
+  // Puño: ningún dedo
+  if(upCount === 0) return 'FIST';
+
+  // Victoria: índice + medio
+  if(indexUp && middleUp && !ringUp && !pinkyUp) return 'VICTORY';
+
+  // Mano abierta: todos arriba
+  if(upCount >= 3) return 'OPEN';
+
+  // Apuntando: solo índice
+  if(indexUp && !middleUp && !ringUp && !pinkyUp) return 'POINT';
+
+  return 'OTHER';
+}
+
+async function initMediaPipe() {
+  if(mpHands) return; // ya inicializado
+
+  mpHands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
+
+  mpHands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.7,
+    minTrackingConfidence: 0.65,
+  });
+
+  mpHands.onResults(onHandResults);
+  showToast('Modelo MediaPipe cargado');
+}
+
+async function toggleCamera() {
+  if(!mpRunning) {
+    await startMPCamera();
+  } else {
+    stopMPCamera();
+  }
+}
+
+async function startMPCamera() {
+  const video = document.getElementById('mpVideo');
+  const placeholder = document.getElementById('mpPlaceholder');
+  const btn = document.getElementById('mpStartBtn');
+
+  try {
+    btn.textContent = '⏳ Cargando modelo...';
+    btn.disabled = true;
+
+    await initMediaPipe();
+
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: {facingMode:'user', width:640, height:480}
+    });
+    video.srcObject = cameraStream;
+    video.style.display = 'block';
+    placeholder.style.display = 'none';
+
+    // Ajustar canvas overlay al video
+    video.addEventListener('loadedmetadata', () => {
+      const oc = document.getElementById('mpOverlayCanvas');
+      oc.width = video.videoWidth;
+      oc.height = video.videoHeight;
+    }, {once:true});
+
+    // Usar Camera utility de MediaPipe para el loop de frames
+    mpCamera = new Camera(video, {
+      onFrame: async () => {
+        await mpHands.send({image: video});
+      },
+      width: 640,
+      height: 480
+    });
+    await mpCamera.start();
+
+    mpRunning = true;
+    btn.textContent = '🛑 Detener Cámara';
+    btn.classList.add('stop');
+    btn.disabled = false;
+
+    document.getElementById('liveCam').textContent = 'Activa';
+    document.getElementById('liveCam').classList.add('active');
+    showToast('✋ Cámara MediaPipe activa');
+    handCursor.style.display = 'block';
+    document.getElementById('mpIndicator').classList.add('live');
+
+  } catch(err) {
+    btn.textContent = '📷 Iniciar Cámara';
+    btn.disabled = false;
+    showToast('Error: ' + err.message);
+    console.error(err);
+    // Fallback si CDN no carga
+    fallbackMouseControl();
+  }
+}
+
+function stopMPCamera() {
+  if(mpCamera) { mpCamera.stop(); mpCamera=null; }
+  if(cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream=null; }
+  mpRunning = false;
+  document.getElementById('mpVideo').style.display = 'none';
+  document.getElementById('mpPlaceholder').style.display = 'flex';
+  document.getElementById('mpStartBtn').textContent = '📷 Iniciar Cámara';
+  document.getElementById('mpStartBtn').classList.remove('stop');
+  document.getElementById('liveCam').textContent = 'Inactiva';
+  document.getElementById('liveCam').classList.remove('active');
+  document.getElementById('liveHands').textContent = '0';
+  document.getElementById('liveGest').textContent = '—';
+  handCursor.style.display = 'none';
+  document.getElementById('mpIndicator').classList.remove('live');
+  // Limpiar canvas overlay
+  const oc = document.getElementById('mpOverlayCanvas');
+  const ctx = oc.getContext('2d');
+  ctx.clearRect(0,0,oc.width,oc.height);
+  showToast('Cámara detenida');
+}
+
+// ── PROCESAR RESULTADOS DE MEDIAPIPE ──
+function onHandResults(results) {
+  const oc = document.getElementById('mpOverlayCanvas');
+  const ctx = oc.getContext('2d');
+  ctx.save();
+  ctx.clearRect(0,0,oc.width,oc.height);
+
+  // FPS
+  mpFPSc++;
+  const now = performance.now();
+  if(now - mpFPSt > 1000) {
+    mpFPS = mpFPSc;
+    mpFPSc = 0;
+    mpFPSt = now;
+    document.getElementById('liveFPS').textContent = mpFPS + ' fps';
+  }
+
+  const numHands = results.multiHandLandmarks ? results.multiHandLandmarks.length : 0;
+  document.getElementById('liveHands').textContent = numHands;
+
+  if(!numHands) {
+    document.getElementById('liveGest').textContent = '—';
+    document.getElementById('hudHand').textContent = '—';
+    document.getElementById('hudGest').textContent = '—';
+    document.getElementById('hudConf').textContent = '—';
+    ctx.restore();
+    return;
+  }
+
+  const lm = results.multiHandLandmarks[0];
+  const handedness = results.multiHandedness?.[0]?.label || '—';
+  const conf = results.multiHandedness?.[0]?.score || 0;
+
+  // Dibujar esqueleto con drawingUtils
+  drawConnectors(ctx, lm, HAND_CONNECTIONS, {color:'rgba(0,200,255,0.6)', lineWidth:2});
+  drawLandmarks(ctx, lm, {
+    color:'rgba(139,92,246,0.9)',
+    fillColor:'rgba(0,200,255,0.6)',
+    lineWidth:1, radius:4
+  });
+
+  // Reconocer gesto
+  const gesture = recognizeGesture(lm);
+  const wrist = lm[IDX_WRIST];
+
+  // Posición de la mano (usando muñeca, invertir X por mirror)
+  const rawX = 1 - wrist.x;
+  const rawY = wrist.y;
+
+  // Suavizado exponencial
+  smoothX += (rawX - smoothX) * SMOOTH;
+  smoothY += (rawY - smoothY) * SMOOTH;
+
+  lastHandX = smoothX;
+  lastHandY = smoothY;
+
+  // Actualizar cursor visual
+  handCursor.style.left = (smoothX * window.innerWidth) + 'px';
+  handCursor.style.top  = (smoothY * window.innerHeight) + 'px';
+
+  // Aplicar gesto
+  applyGesture(gesture, smoothX, smoothY, conf);
+
+  // Actualizar UI
+  const gestLabels = {PINCH:'🤏 Pellizco', FIST:'✊ Puño', VICTORY:'✌️ Victoria', OPEN:'🖐 Abierta', POINT:'☝️ Apuntando', OTHER:'— Otro'};
+  const gl = gestLabels[gesture] || '—';
+  document.getElementById('liveGest').textContent = gl;
+  document.getElementById('liveX').textContent = smoothX.toFixed(3);
+  document.getElementById('liveY').textContent = smoothY.toFixed(3);
+  document.getElementById('livePinch').textContent = pinchDist.toFixed(3);
+  document.getElementById('hudHand').textContent = handedness;
+  document.getElementById('hudGest').textContent = gl;
+  document.getElementById('hudConf').textContent = (conf*100).toFixed(0)+'%';
+
+  ctx.restore();
+}
+
+let lastPinchTime = 0;
+let elIdx = 0; // índice del elemento actual (para cambio con Victoria)
+
+function applyGesture(gesture, nx, ny, conf) {
+  const isAtom = document.getElementById('panelAtom').classList.contains('active');
+  const isMol = document.getElementById('panelMolecule').classList.contains('active');
+
+  // Actualizar clase del cursor
+  handCursor.classList.toggle('pinch', gesture === 'PINCH');
+  handCursor.classList.toggle('grab', gesture === 'OPEN');
+
+  switch(gesture) {
+    case 'OPEN':
+      // Mano abierta → rotar la escena 3D activa
+      if(rotFrozen) { rotFrozen=false; }
+      if(!mpControlActive) return;
+      if(isAtom) {
+        aRot.y = (nx - 0.5) * Math.PI * 3;
+        aRot.x = (ny - 0.5) * Math.PI * 1.2;
+      } else if(isMol) {
+        mRot.y = (nx - 0.5) * Math.PI * 3;
+        mRot.x = (ny - 0.5) * Math.PI * 1.2;
+      }
+      break;
+
+    case 'FIST':
+      // Puño → congelar rotación
+      rotFrozen = true;
+      break;
+
+    case 'PINCH':
+      // Pellizco → acción de selección (debounce 600ms)
+      const now = Date.now();
+      if(now - lastPinchTime > 600) {
+        lastPinchTime = now;
+        // Si estamos en panel átomo, cambiar al siguiente elemento
+        if(isAtom && mpControlActive) {
+          elIdx = (elIdx+1) % ELEMENTS.length;
+          const btn = document.querySelectorAll('.el-btn')[elIdx];
+          btn.click();
+          showToast('Pellizco → '+ELEMENTS[elIdx].name);
+        }
+      }
+      break;
+
+    case 'VICTORY':
+      // Victoria → cambiar modo visual
+      if(isAtom && mpControlActive) {
+        const now2 = Date.now();
+        if(now2 - lastPinchTime > 800) {
+          lastPinchTime = now2;
+          const views = ['bohr','cloud','orbital'];
+          const ci = views.indexOf(aView);
+          const ni = (ci+1) % views.length;
+          const btn = document.querySelectorAll('.vbtn')[ni];
+          btn.click();
+          showToast('✌️ Vista: '+views[ni]);
+        }
+      }
+      break;
+  }
+
+  // Si el gesto cambió, registrar
+  if(gesture !== prevGesture) {
+    prevGesture = gesture;
+    if(gesture === 'FIST') showToast('✊ Rotación congelada');
+    if(gesture === 'OPEN' && rotFrozen) { rotFrozen=false; showToast('🖐 Rotación libre'); }
+  }
+}
+
+// ── CONTROL GLOBAL MEDIAPIPE (botón de nav) ──
+function toggleMPControl() {
+  mpControlActive = !mpControlActive;
+  const btn = document.getElementById('mpNavBtn');
+  const txt = document.getElementById('mpNavTxt');
+  document.getElementById('gestureHud').classList.toggle('show', mpControlActive);
+
+  if(mpControlActive) {
+    btn.classList.add('on');
+    txt.textContent = 'Control Activo';
+    showToast('Control de mano activado');
+    // Si no hay cámara corriendo, ir al panel MP
+    if(!mpRunning) { switchTab('MP', document.getElementById('mpTabBtn')); }
+  } else {
+    btn.classList.remove('on');
+    txt.textContent = 'Activar Control';
+    rotFrozen = false;
+    document.getElementById('gestureHud').classList.remove('show');
+    showToast('Control de mano desactivado');
+  }
+}
+
+// ── FALLBACK: si MediaPipe CDN no carga, usar mouse ──
+function fallbackMouseControl() {
+  showToast('⚠ MediaPipe no disponible — usando mouse como fallback');
+  document.getElementById('mpStartBtn').textContent = '🖱 Modo Mouse (fallback)';
+  document.getElementById('mpStartBtn').disabled = false;
+
+  // Simular con el mouse
+  document.addEventListener('mousemove', e => {
+    if(!mpControlActive) return;
+    const nx = e.clientX/window.innerWidth;
+    const ny = e.clientY/window.innerHeight;
+    handCursor.style.display='block';
+    handCursor.style.left = e.clientX+'px';
+    handCursor.style.top  = e.clientY+'px';
+
+    const isAtom = document.getElementById('panelAtom').classList.contains('active');
+    const isMol  = document.getElementById('panelMolecule').classList.contains('active');
+    if(isAtom) { aRot.y=(nx-0.5)*Math.PI*3; aRot.x=(ny-0.5)*Math.PI*1.2; }
+    else if(isMol){ mRot.y=(nx-0.5)*Math.PI*3; mRot.x=(ny-0.5)*Math.PI*1.2; }
+
+    document.getElementById('liveCam').textContent='Mouse (fallback)';
+    document.getElementById('liveX').textContent=nx.toFixed(3);
+    document.getElementById('liveY').textContent=ny.toFixed(3);
+  });
+}
+
+// ─────────────────────────────────────────────
+// TAB SWITCHING
+// ─────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel'+name).classList.add('active');
+
+  if(name==='Molecule' && !mRenderer) setTimeout(initMol, 50);
+  if(name==='MP') setTimeout(resizeMP, 50);
+}
+
+function resizeMP() {
+  const video = document.getElementById('mpVideo');
+  const oc = document.getElementById('mpOverlayCanvas');
+  if(video.videoWidth) { oc.width=video.videoWidth; oc.height=video.videoHeight; }
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+let toastTO;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTO);
+  toastTO = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+// ─────────────────────────────────────────────
+// RESIZE
+// ─────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  if(aRenderer) {
+    const canvas=document.getElementById('atomCanvas');
+    const cont=canvas.parentElement;
+    const w=cont.offsetWidth-230-290, h=cont.offsetHeight;
+    aRenderer.setSize(w,h); aCamera.aspect=w/h; aCamera.updateProjectionMatrix();
+  }
+  if(mRenderer) {
+    const canvas=document.getElementById('molCanvas');
+    const cont=canvas.parentElement;
+    const w=cont.offsetWidth-270, h=cont.offsetHeight;
+    mRenderer.setSize(w,h); mCamera.aspect=w/h; mCamera.updateProjectionMatrix();
+  }
+});
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+window.addEventListener('load', () => {
+  initAtom();
+  // Pre-cargar modelo MediaPipe en background
+  setTimeout(()=>initMediaPipe().catch(()=>{}), 2000);
+});
+</script>
+</body>
+</html>
