@@ -57,8 +57,8 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
 .el-btn.active { border-color:var(--accent); }
 .el-z { font-family:'Orbitron',sans-serif; font-size:0.62rem; color:var(--accent); min-width:20px; opacity:.55; }
 .el-sym { font-family:'Orbitron',sans-serif; font-size:0.78rem; color:var(--accent2); font-weight:700; min-width:24px; }
-#atomCanvas { flex:1; display:block; touch-action:none; }
-.info-panel { width:290px; background:var(--panel); border-left:1px solid var(--border); padding:18px 16px; overflow-y:auto; flex-shrink:0; display:flex; flex-direction:column; gap:16px; }
+#atomCanvas { flex:1; min-width:0; max-width:calc(100% - 290px - 230px); display:block; touch-action:none; }
+.info-panel { width:290px; background:var(--panel); border-left:1px solid var(--border); padding:18px 16px; overflow-y:auto; overflow-x:hidden; flex-shrink:0; display:flex; flex-direction:column; gap:16px; }
 .info-name { font-family:'Orbitron',sans-serif; font-size:1.5rem; font-weight:900; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.1; }
 .info-sub { font-size:0.82rem; color:var(--muted); margin-top:3px; }
 .big-sym { position:absolute; right:0; top:-4px; font-family:'Orbitron',sans-serif; font-size:3.2rem; font-weight:900; color:rgba(255,255,255,0.04); line-height:1; pointer-events:none; }
@@ -255,6 +255,7 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
 @media (max-width:1024px) {
   .sidebar       { width:190px; }
   .info-panel    { width:240px; }
+  #atomCanvas    { max-width:calc(100% - 240px - 190px); }
   .mol-side      { width:240px; }
   .eq-right      { width:300px; }
   .pt-grid       { min-width:700px; min-height:400px; }
@@ -284,12 +285,13 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
   }
   .sidebar-lbl::after { content:'▾'; font-size:0.8rem; color:var(--accent); transition:transform 0.25s; }
   .sidebar.open .sidebar-lbl::after { transform:rotate(180deg); }
-  #atomCanvas { min-height:240px; }
+  #atomCanvas { min-height:240px; max-width:100%; }
   .info-panel {
-    width:100%; height:auto; max-height:240px;
+    width:100%; height:auto; max-height:230px;
     border-left:none; border-top:1px solid var(--border);
     flex-direction:column; flex-wrap:nowrap; gap:10px;
     padding:12px 14px; overflow-y:auto; overflow-x:hidden;
+    flex-shrink:0;
   }
   .info-panel > * { min-width:unset; flex:none; width:100%; }
   .big-sym { font-size:2rem; }
