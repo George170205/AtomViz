@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AtomViz 3D — Química Interactiva</title>
+<link rel="icon" href="Img/LogoAtom_v3X2.png" type="image/x-icon">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
@@ -239,7 +240,7 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
 <body>
 
 <nav>
-  <div class="logo">⚛ ATOMVIZ 3D</div>
+  <div class="logo"><img src="Img/LogoAtom_v3X2.png" width="30px" height="30px"> ATOMVIZ 3D</div>
   <button class="tab-btn active" onclick="switchTab('Atom',this)"><span class="dot"></span>Explorador</button>
   <button class="tab-btn" onclick="switchTab('Molecule',this)"><span class="dot" style="background:var(--accent3)"></span>Moléculas</button>
   <button class="tab-btn" onclick="switchTab('PT',this)"><span class="dot orange"></span>Tabla Periódica</button>
@@ -327,10 +328,34 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
     <canvas id="molCanvas"></canvas>
     <div class="mol-side">
       <div class="mol-title">Constructor de Moléculas</div>
+
+      <!-- ── Campo de fórmula directa ── -->
+      <div style="margin-bottom:10px;">
+        <div class="sec-lbl" style="margin-bottom:5px;">Fórmula directa</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div style="position:relative;flex:1;">
+            <input id="formulaInput" type="text" placeholder="Ej: Fe₂(SO₄)₃ o Fe2(SO4)3"
+              style="width:100%;box-sizing:border-box;background:rgba(0,200,255,0.05);border:1px solid rgba(0,200,255,0.25);border-radius:8px;padding:7px 10px 7px 10px;color:#dbeafe;font-size:0.78rem;font-family:'Orbitron',sans-serif;letter-spacing:0.5px;outline:none;transition:border-color 0.2s;"
+              oninput="onFormulaInput(this.value)"
+              onkeydown="if(event.key==='Enter')applyFormulaInput()"
+              onfocus="this.style.borderColor='rgba(0,200,255,0.6)'"
+              onblur="this.style.borderColor='rgba(0,200,255,0.25)'"
+            />
+            <div id="formulaPreview" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:rgba(0,200,255,0.5);pointer-events:none;"></div>
+          </div>
+          <button onclick="applyFormulaInput()"
+            style="flex-shrink:0;padding:7px 11px;border-radius:8px;border:1px solid rgba(0,200,255,0.35);background:rgba(0,200,255,0.08);color:var(--accent);font-family:'Orbitron',sans-serif;font-size:0.6rem;letter-spacing:1px;cursor:pointer;transition:all 0.18s;white-space:nowrap;"
+            onmouseover="this.style.background='rgba(0,200,255,0.18)'" onmouseout="this.style.background='rgba(0,200,255,0.08)'">
+            CARGAR
+          </button>
+        </div>
+        <div id="formulaFeedback" style="margin-top:4px;font-size:0.67rem;min-height:14px;transition:all 0.2s;"></div>
+      </div>
+
       <div>
         <div class="sec-lbl">Átomos añadidos</div>
         <div id="builderAtoms" style="display:flex;flex-direction:column;gap:5px;min-height:70px;">
-          <div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:18px 0">Haz clic o arrastra elementos</div>
+          <div style="color:var(--muted);font-size:0.78rem;text-align:center;padding:18px 0">Haz clic, arrastra o escribe una fórmula</div>
         </div>
       </div>
       <button class="val-btn" onclick="validateMolecule()">⚡ Validar Molécula</button>
@@ -525,8 +550,8 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
     <!-- Botón cerrar -->
     <button onclick="closeCredits()" style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--muted);font-size:1rem;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <!-- Logo -->
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:Orbitron,sans-serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:4px;">⚛ ATOMVIZ 3D</div>
+    <div style="text-align:center;margin-bottom:24px;"><img src="Img/LogoAtom_v3X2.png" width="50px" height="50px">
+      <div style="font-family:Orbitron,sans-serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:4px;">ATOMVIZ 3D</div>
       <div style="font-size:0.72rem;color:var(--muted);letter-spacing:3px;font-family:Orbitron,sans-serif;">QUÍMICA INTERACTIVA</div>
     </div>
     <!-- Separador -->
@@ -534,50 +559,58 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
     <!-- Descripción -->
     <div style="text-align:center;font-size:0.82rem;color:rgba(180,210,255,0.6);line-height:1.7;margin-bottom:24px;">
       Plataforma interactiva de visualización y análisis químico 3D.<br>
-      Desarrollada con pasión por el equipo de <b style="color:var(--accent);">Química Computacional</b>.
+      Desarrollada con pasión por <b style="color:var(--accent);">Nosotros</b>.
     </div>
     <!-- Equipo -->
     <div style="font-family:Orbitron,sans-serif;font-size:0.62rem;color:var(--accent2);letter-spacing:3px;text-align:center;margin-bottom:16px;">👥 EQUIPO DESARROLLADOR</div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
       <!-- Jorge Alberto - Líder -->
       <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:linear-gradient(135deg,rgba(0,200,255,0.08),rgba(0,200,255,0.03));border:1px solid rgba(0,200,255,0.2);border-radius:12px;">
-        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">👑</div>
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;"></div>
         <div>
           <div style="font-family:Orbitron,sans-serif;font-size:0.72rem;color:var(--accent);letter-spacing:1px;">Jorge Alberto Ruiz Rodríguez</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Diseño & Desarrollo Principal</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Project Lead · Lead Software Developer</div>
         </div>
         <div style="margin-left:auto;font-size:0.6rem;color:var(--accent);background:rgba(0,200,255,0.1);border:1px solid rgba(0,200,255,0.2);padding:2px 8px;border-radius:10px;font-family:Orbitron,sans-serif;letter-spacing:1px;">LEAD</div>
       </div>
       <!-- Ainy -->
       <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.15);border-radius:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),#c4b5fd);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;">⚗</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),#c4b5fd);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;"></div>
         <div>
           <div style="font-family:Orbitron,sans-serif;font-size:0.7rem;color:#c4b5fd;letter-spacing:1px;">Ainy Contreras Mendoza</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Química & Contenido Educativo</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">UX Designer</div>
         </div>
       </div>
       <!-- Daniel -->
       <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),#6ee7b7);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;">🔬</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent4),#6ee7b7);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;"></div>
         <div>
           <div style="font-family:Orbitron,sans-serif;font-size:0.7rem;color:#6ee7b7;letter-spacing:1px;">Daniel Tornero Solano</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Investigación & Base de Datos</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Back-end Developer</div>
         </div>
       </div>
       <!-- Juan Carlos -->
       <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.15);border-radius:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#fbbf24);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;">🧪</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#fbbf24);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;"></div>
         <div>
           <div style="font-family:Orbitron,sans-serif;font-size:0.7rem;color:#fbbf24;letter-spacing:1px;">Juan Carlos Cruz Hernández</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Validación & Testing Científico</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Database Developer · Contributor</div>
         </div>
       </div>
       <!-- Josue -->
       <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.15);border-radius:12px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),#fca5a5);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;">💡</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),#fca5a5);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;"></div>
         <div>
           <div style="font-family:Orbitron,sans-serif;font-size:0.7rem;color:#fca5a5;letter-spacing:1px;">Josue Fernando Robledo Zúñiga</div>
-          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">UX & Experiencia de Usuario</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Database Developer · Contributor</div>
+        </div>
+      </div>
+      <!-- Dario -->
+      <div style="display:flex;align-items:center;gap:14px;padding:11px 16px;background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.15);border-radius:12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),#F97316);display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:Orbitron,sans-serif;font-size:0.7rem;color:#F97316;letter-spacing:1px;">Juan Daniel Gonzales Reyes</div>
+          <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">Tester</div>
         </div>
       </div>
     </div>
@@ -943,6 +976,121 @@ const MOLECULES = [
   {formula:'NiO',name:'Óxido de níquel(II)',atoms:{Ni:1,O:1},desc:'Catalizador. Pigmento verde-negro en vidrio. Pilas Ni-Cd.'},
   {formula:'C₁₂H₂₂O₁₁',name:'Sacarosa (azúcar de mesa)',atoms:{C:12,H:22,O:11},desc:'Disacárido: glucosa + fructosa. El azúcar común. Fórmula molecular C₁₂H₂₂O₁₁. Energía rápida para el metabolismo.'},
   {formula:'C₆H₁₂O₆',name:'Glucosa',atoms:{C:6,H:12,O:6},desc:'Monosacárido. Fuente principal de energía celular. Anillo piranosa. Base de la fotosíntesis.'},
+  {formula:'O₃',name:'Ozono',atoms:{O:3},desc:'Alótropo del oxígeno. Geometría angular (117.8°). Capa protectora en la estratosfera. Oxidante potente.'},
+  {formula:'Cl₂',name:'Cloro molecular',atoms:{Cl:2},desc:'Gas amarillo-verdoso tóxico. Desinfectante. Industria química y fabricación de PVC.'},
+  {formula:'F₂',name:'Flúor molecular',atoms:{F:2},desc:'Gas más electronegativo. Altamente reactivo. Se usa en la industria del teflón.'},
+  {formula:'Br₂',name:'Bromo molecular',atoms:{Br:2},desc:'Único no-metal líquido a temperatura ambiente. Color rojo oscuro. Retardantes de llama.'},
+  {formula:'I₂',name:'Yodo molecular',atoms:{I:2},desc:'Sólido negro-violeta. Antiséptico. Indicador de almidón. Suplemento tiroidal.'},
+  {formula:'C₂H₂',name:'Acetileno (etino)',atoms:{C:2,H:2},desc:'Triple enlace C≡C. Geometría lineal. Gas para soldadura oxiacetilénica. Precursor del PVC.'},
+  {formula:'C₂H₆',name:'Etano',atoms:{C:2,H:6},desc:'Segundo alcano. Componente del gas natural. Geometría escalonada.'},
+  {formula:'H₂S',name:'Sulfuro de hidrógeno',atoms:{H:2,S:1},desc:'Gas tóxico de olor a huevo podrido. Geometría angular (92°). Presente en aguas termales.'},
+  {formula:'PH₃',name:'Fosfina',atoms:{P:1,H:3},desc:'Gas tóxico e inflamable. Geometría piramidal. Se usa en semiconductores.'},
+  {formula:'SF₆',name:'Hexafluoruro de azufre',atoms:{S:1,F:6},desc:'Gas inerte octaédrico. Aislante eléctrico en transformadores. Muy estable y no tóxico.'},
+  {formula:'PCl₅',name:'Pentacloruro de fósforo',atoms:{P:1,Cl:5},desc:'Geometría bipiramidal trigonal. Agente clorante en síntesis orgánica.'},
+  // ── Alcanos ──
+  {formula:'C₃H₈',name:'Propano',atoms:{C:3,H:8},desc:'Gas LP. Combustible doméstico e industrial. Tercer alcano.'},
+  {formula:'C₄H₁₀',name:'Butano',atoms:{C:4,H:10},desc:'Gas en encendedores y camping. Cuarto alcano. Isómeros: n-butano e isobutano.'},
+  {formula:'C₅H₁₂',name:'Pentano',atoms:{C:5,H:12},desc:'Líquido volátil. Disolvente. Componente de la gasolina. Punto de ebullición 36°C.'},
+  {formula:'C₆H₁₄',name:'Hexano',atoms:{C:6,H:14},desc:'Disolvente industrial. Extracción de aceites vegetales. Tóxico crónico.'},
+  {formula:'C₈H₁₈',name:'Octano (iso-octano)',atoms:{C:8,H:18},desc:'Referencia del índice de octano en gasolinas. Combustible de alto rendimiento.'},
+  // ── Alquenos y alquinos ──
+  {formula:'C₃H₆',name:'Propileno (propeno)',atoms:{C:3,H:6},desc:'Monómero del polipropileno. Segunda olefina más producida. Plásticos y fibras.'},
+  {formula:'C₄H₆',name:'1,3-Butadieno',atoms:{C:4,H:6},desc:'Dieno conjugado. Monómero del caucho sintético SBR y neopreno.'},
+  // ── Compuestos oxigenados ──
+  {formula:'CH₂O',name:'Formaldehído (metanal)',atoms:{C:1,H:2,O:1},desc:'Conservante biológico. Resinas de urea-formaldehído. Cancerígeno potencial.'},
+  {formula:'C₂H₄O',name:'Acetaldehído (etanal)',atoms:{C:2,H:4,O:1},desc:'Metabolito del etanol. Intermediario industrial. Precursor del ácido acético.'},
+  {formula:'C₃H₆O',name:'Acetona (propanona)',atoms:{C:3,H:6,O:1},desc:'Disolvente universal. Quitaesmalte. Producida en cetosis metabólica.'},
+  {formula:'CH₃OH',name:'Metanol (alcohol metílico)',atoms:{C:1,H:4,O:1},desc:'Alcohol más simple. Combustible, anticongelante. Muy tóxico: causa ceguera y muerte.'},
+  {formula:'C₂H₅OH',name:'Etanol (alcohol etílico)',atoms:{C:2,H:6,O:1},desc:'Bebidas alcohólicas. Combustible (bioetanol). Desinfectante. Produc. por fermentación.'},
+  {formula:'C₃H₈O',name:'Propanol (1-propanol)',atoms:{C:3,H:8,O:1},desc:'Disolvente. Antiséptico. Combustible. Menos tóxico que el metanol.'},
+  {formula:'C₄H₁₀O',name:'Dietil éter',atoms:{C:4,H:10,O:1},desc:'Primer anestésico general (1846). Disolvente orgánico muy inflamable.'},
+  {formula:'CH₃COOH',name:'Ácido acético (etanoico)',atoms:{C:2,H:4,O:2},desc:'Componente del vinagre (5%). Disolvente industrial. Fabricación de acetato de celulosa.'},
+  {formula:'HCOOH',name:'Ácido fórmico (metanoico)',atoms:{C:1,H:2,O:2},desc:'El ácido de las hormigas. Conservante alimentario (E236). Agente reductor.'},
+  {formula:'C₆H₅OH',name:'Fenol',atoms:{C:6,H:6,O:1},desc:'Primer antiséptico quirúrgico (Lister, 1865). Precursor de resinas fenólicas y nylon.'},
+  // ── Compuestos nitrogenados ──
+  {formula:'CH₃NH₂',name:'Metilamina',atoms:{C:1,H:5,N:1},desc:'Amina primaria. Olor a pescado podrido. Síntesis de pesticidas y fármacos.'},
+  {formula:'C₆H₅NH₂',name:'Anilina',atoms:{C:6,H:7,N:1},desc:'Amina aromática. Precursora de colorantes azo, fármacos y poliuretanos.'},
+  {formula:'CO(NH₂)₂',name:'Urea',atoms:{C:1,H:4,N:2,O:1},desc:'Principal producto de excreción nitrogenada. Fertilizante más usado del mundo.'},
+  {formula:'HCN',name:'Ácido cianhídrico',atoms:{H:1,C:1,N:1},desc:'Veneno letal — inhibe la cadena respiratoria. Gas de guerra. Triple enlace C≡N.'},
+  {formula:'NO',name:'Óxido nítrico',atoms:{N:1,O:1},desc:'Radical libre biológico. Vasodilatador. Molécula mensajera (Premio Nobel 1998).'},
+  // ── Haluros orgánicos ──
+  {formula:'CH₃Cl',name:'Clorometano',atoms:{C:1,H:3,Cl:1},desc:'Gas refrigerante. Agente metilante en síntesis orgánica.'},
+  {formula:'CHCl₃',name:'Cloroformo (triclorometano)',atoms:{C:1,H:1,Cl:3},desc:'Anestésico histórico. Disolvente. Precursor del PTFE (teflón).'},
+  {formula:'CCl₄',name:'Tetracloruro de carbono',atoms:{C:1,Cl:4},desc:'Extinguidor antiguo. Disolvente industrial. Muy tóxico y hepatotóxico.'},
+  {formula:'CF₄',name:'Tetrafluoruro de carbono',atoms:{C:1,F:4},desc:'Gas de efecto invernadero extremo. Usado en grabado de semiconductores.'},
+  // ── Ácidos y bases importantes ──
+  {formula:'HBr',name:'Ácido bromhídrico',atoms:{H:1,Br:1},desc:'Ácido fuerte. Síntesis de bromuros. Catalizador en química orgánica.'},
+  {formula:'HI',name:'Ácido yodhídrico',atoms:{H:1,I:1},desc:'Ácido fuerte. Agente reductor potente. Síntesis de yoduros orgánicos.'},
+  {formula:'HClO₄',name:'Ácido perclórico',atoms:{H:1,Cl:1,O:4},desc:'El ácido oxácido más fuerte conocido. Oxidante peligroso. Sales usadas como oxidante en cohetes.'},
+  {formula:'HClO',name:'Ácido hipocloroso',atoms:{H:1,Cl:1,O:1},desc:'Desinfectante activo del cloro en agua. Se forma en solución acuosa de Cl₂.'},
+  {formula:'H₂CO₃',name:'Ácido carbónico',atoms:{H:2,C:1,O:3},desc:'Ácido débil. Equilibrio CO₂ + H₂O ⇌ H₂CO₃. Responsable del sabor picante de refrescos.'},
+  // ── Compuestos de silicio ──
+  {formula:'SiH₄',name:'Silano',atoms:{Si:1,H:4},desc:'Análogo del metano. Gas espontáneamente inflamable. Depósito de silicio en chips.'},
+  {formula:'Si₂H₆',name:'Disilano',atoms:{Si:2,H:6},desc:'Análogo del etano con silicio. Precursor CVD para semiconductores avanzados.'},
+  // ── Sales y minerales importantes ──
+  {formula:'KMnO₄',name:'Permanganato de potasio',atoms:{K:1,Mn:1,O:4},desc:'Cristales violeta intenso. Oxidante potente. Desinfectante. Antídoto de intoxicaciones.'},
+  {formula:'K₂Cr₂O₇',name:'Dicromato de potasio',atoms:{K:2,Cr:2,O:7},desc:'Cristales naranja. Oxidante. Curtido de cuero. Cancerígeno — en desuso.'},
+  {formula:'Na₂SO₃',name:'Sulfito de sodio',atoms:{Na:2,S:1,O:3},desc:'Antioxidante alimentario (E221). Revelado fotográfico. Reductor industrial.'},
+  {formula:'NaClO',name:'Hipoclorito de sodio',atoms:{Na:1,Cl:1,O:1},desc:'Lejía doméstica (3-8%). Desinfectante potente. Blanqueador textil.'},
+  {formula:'Ca(ClO)₂',name:'Hipoclorito de calcio',atoms:{Ca:1,Cl:2,O:2},desc:'Cloruro de cal. Desinfección de piscinas. Purificación de agua potable.'},
+  {formula:'NH₄Cl',name:'Cloruro de amonio',atoms:{N:1,H:4,Cl:1},desc:'Sal de amonio. Fertilizante nitrogenado. Pilas zinc-carbono. Leche condensada.'},
+  {formula:'NH₄NO₃',name:'Nitrato de amonio',atoms:{N:2,H:4,O:3},desc:'Fertilizante más producido. Explosivo industrial (ANFO). Precursor de N₂O.'},
+  {formula:'NH₄OH',name:'Hidróxido de amonio',atoms:{N:1,H:5,O:1},desc:'Amoníaco en solución acuosa. Base débil. Limpiador doméstico. Estabilizador de látex.'},
+  {formula:'Ca₃N₂',name:'Nitruro de calcio',atoms:{Ca:3,N:2},desc:'Sólido rojo-pardo. Reacciona con agua liberando NH₃. Síntesis de nitrógeno reactivo.'},
+  {formula:'AlN',name:'Nitruro de aluminio',atoms:{Al:1,N:1},desc:'Semiconductor. Alta conductividad térmica. Sustratos para electrónica de potencia.'},
+  {formula:'Si₃N₄',name:'Nitruro de silicio',atoms:{Si:3,N:4},desc:'Cerámica avanzada. Rodamientos de alta velocidad. Recubrimientos resistentes al calor.'},
+  // ── Compuestos de azufre ──
+  {formula:'H₂SO₃',name:'Ácido sulfuroso',atoms:{H:2,S:1,O:3},desc:'Ácido débil. Formado al disolver SO₂ en agua. Conservante alimentario (E220).'},
+  {formula:'Na₂S₂O₃',name:'Tiosulfato de sodio',atoms:{Na:2,S:2,O:3},desc:'Fijador fotográfico ("hipo"). Antídoto del envenenamiento por cianuro y cloro.'},
+  {formula:'FeS',name:'Sulfuro de hierro(II)',atoms:{Fe:1,S:1},desc:'Mineral troilita. Semiconductor. Reacciona con HCl generando H₂S.'},
+  // ── Compuestos de fósforo ──
+  {formula:'PCl₃',name:'Tricloruro de fósforo',atoms:{P:1,Cl:3},desc:'Geometría piramidal. Intermediario en síntesis de pesticidas, fármacos y agentes nerviosos.'},
+  {formula:'H₃PO₃',name:'Ácido fosforoso',atoms:{H:3,P:1,O:3},desc:'Ácido dibásico. Reductor fuerte. Síntesis de fosfonatos y retardantes de llama.'},
+  // ── Compuestos biológicamente relevantes ──
+  {formula:'C₃H₇NO₂',name:'Alanina (aminoácido)',atoms:{C:3,H:7,N:1,O:2},desc:'Aminoácido no esencial. Componente de proteínas. Gluconeogénico. Fuente de energía muscular.'},
+  {formula:'C₂H₅NO₂',name:'Glicina (aminoácido)',atoms:{C:2,H:5,N:1,O:2},desc:'El aminoácido más simple. No quiral. Componente del colágeno. Neurotransmisor inhibidor.'},
+  {formula:'C₃H₆O₃',name:'Ácido láctico',atoms:{C:3,H:6,O:3},desc:'Producto de la glucólisis anaeróbica. Responsable del dolor muscular. Conservante (E270).'},
+  {formula:'C₆H₈O₇',name:'Ácido cítrico',atoms:{C:6,H:8,O:7},desc:'Ciclo de Krebs. Acidulante natural de frutas. Antioxidante y conservante (E330).'},
+  {formula:'C₁₀H₁₄N₂',name:'Nicotina',atoms:{C:10,H:14,N:2},desc:'Alcaloide del tabaco. Agonista nicotínico. Altamente adictivo. Insecticida histórico.'},
+  {formula:'C₈H₁₀N₄O₂',name:'Cafeína',atoms:{C:8,H:10,N:4,O:2},desc:'Alcaloide xantínico. Antagonista de adenosina. Estimulante del SNC. En café, té y cacao.'},
+  {formula:'C₉H₈O₄',name:'Ácido acetilsalicílico (aspirina)',atoms:{C:9,H:8,O:4},desc:'AINE más vendido. Antiagregante plaquetario. Sintetizado por Bayer en 1897.'},
+  {formula:'C₆H₁₂O₆',name:'Fructosa',atoms:{C:6,H:12,O:6},desc:'Azúcar de frutas y miel. El más dulce de los monosacáridos. Anillo furanosa.'},
+  // ── Polímeros base ──
+  {formula:'C₂H₄',name:'Etileno (eteno)',atoms:{C:2,H:4},desc:'Monómero del polietileno (plástico más producido). Hormona vegetal. Doble enlace C=C.'},
+  // ── Gases industriales ──
+  {formula:'CO',name:'Monóxido de carbono',atoms:{C:1,O:1},desc:'Gas inodoro muy tóxico. Bloquea la hemoglobina. Combustible (gas de síntesis). Triple enlace.'},
+  {formula:'N₂O₄',name:'Tetróxido de dinitrógeno',atoms:{N:2,O:4},desc:'Dímero del NO₂. Oxidante en motores de cohetes. Equilibrio N₂O₄ ⇌ 2NO₂.'},
+  {formula:'N₂O₅',name:'Pentóxido de dinitrógeno',atoms:{N:2,O:5},desc:'Anhídrido nítrico. Muy inestable. Precursor del HNO₃. Agente nitrante en explosivos.'},
+  {formula:'Cl₂O',name:'Óxido de cloro(I)',atoms:{Cl:2,O:1},desc:'Gas amarillo-parduzco. Precursor del HClO. Blanqueante de papel y textiles.'},
+  // ── Compuestos inorgánicos varios ──
+  {formula:'B₂O₃',name:'Trióxido de boro',atoms:{B:2,O:3},desc:'Vidrio de borosilicato (Pyrex). Fundente cerámico. Deshidratante. Semiconduct. óptico.'},
+  {formula:'H₃BO₃',name:'Ácido bórico',atoms:{H:3,B:1,O:3},desc:'Antiséptico suave. Conservante alimentario. Neutrónico — absorbente en reactores nucleares.'},
+  {formula:'BF₃',name:'Trifluoruro de boro',atoms:{B:1,F:3},desc:'Ácido de Lewis fuerte (geometría trigonal plana, electrón deficiente). Catalizador orgánico.'},
+  {formula:'BCl₃',name:'Tricloruro de boro',atoms:{B:1,Cl:3},desc:'Ácido de Lewis. Precursor del boro puro. Deposición de capas en semiconductores (CVD).'},
+  {formula:'AsCl₃',name:'Tricloruro de arsénico',atoms:{As:1,Cl:3},desc:'Líquido oleoso tóxico. Piramidal. Síntesis de compuestos organoarseniales.'},
+  {formula:'SbCl₃',name:'Tricloruro de antimonio',atoms:{Sb:1,Cl:3},desc:'Manteca de antimonio. Mordiente textil. Retardante de llama.'},
+  {formula:'SnCl₄',name:'Tetracloruro de estaño',atoms:{Sn:1,Cl:4},desc:'Líquido fumante. Catalizador de Friedel-Crafts. Recubrimientos conductores (ITO precursor).'},
+  {formula:'GaCl₃',name:'Tricloruro de galio',atoms:{Ga:1,Cl:3},desc:'Ácido de Lewis. Catalizador orgánico. Precursor del GaAs para LEDs y semiconductores III-V.'},
+  {formula:'TiCl₄',name:'Tetracloruro de titanio',atoms:{Ti:1,Cl:4},desc:'Humo blanco con agua. Precursor del TiO₂ (proceso de cloruro). Catalizador de Ziegler-Natta.'},
+  {formula:'VCl₃',name:'Tricloruro de vanadio',atoms:{V:1,Cl:3},desc:'Sólido violeta. Precursor de catalizadores de vanadio para poliolefinas.'},
+  {formula:'MnCl₂',name:'Cloruro de manganeso(II)',atoms:{Mn:1,Cl:2},desc:'Sal rosa. Catalizador. Nutriente en fertilizantes. Electrolito en pilas de Mn.'},
+  {formula:'NiCl₂',name:'Cloruro de níquel(II)',atoms:{Ni:1,Cl:2},desc:'Sal verde. Galvanoplastia de níquel. Catalizador de acoplamiento (Ni-catalysis).'},
+  {formula:'CoCl₂',name:'Cloruro de cobalto(II)',atoms:{Co:1,Cl:2},desc:'Indicador de humedad (azul→rosa). Catalizador. Tinta invisible.'},
+  {formula:'CrCl₃',name:'Tricloruro de cromo(III)',atoms:{Cr:1,Cl:3},desc:'Sólido violeta. Catalizador de polimerización. Curtido de cuero (cromo III).'},
+  {formula:'FeBr₃',name:'Tribromuro de hierro',atoms:{Fe:1,Br:3},desc:'Catalizador de halogenación aromática electrofílica. Regenerado in situ con Br₂.'},
+  {formula:'AgNO₃',name:'Nitrato de plata',atoms:{Ag:1,N:1,O:3},desc:'Reactivo analítico clave. Cauterización médica. Revelado fotográfico. Precipita haluros.'},
+  {formula:'KI',name:'Yoduro de potasio',atoms:{K:1,I:1},desc:'Suplemento tiroidal. Antídoto de radiación nuclear. Reactivo de Lugol con I₂.'},
+  {formula:'KBr',name:'Bromuro de potasio',atoms:{K:1,Br:1},desc:'Antiepiléptico histórico. Sedante veterinario. Emulsión fotográfica en blanco y negro.'},
+  {formula:'NaI',name:'Yoduro de sodio',atoms:{Na:1,I:1},desc:'Fuente de yodo radiactivo en medicina nuclear. Síntesis orgánica (react. de Finkelstein).'},
+  {formula:'MgSO₄',name:'Sulfato de magnesio (sal Epsom)',atoms:{Mg:1,S:1,O:4},desc:'Laxante. Relajante muscular en baños. Fertilizante. Eclosión de huevos de brine shrimp.'},
+  {formula:'FeSO₄',name:'Sulfato de hierro(II)',atoms:{Fe:1,S:1,O:4},desc:'Suplemento de hierro contra anemia. Tinta ferrogálica histórica. Clarificante de agua.'},
+  {formula:'Al₂(SO₄)₃',name:'Sulfato de aluminio',atoms:{Al:2,S:3,O:12},desc:'Floculante en potabilización de agua. Mordiente en teñido. Papel satinado.'},
+  // ── Fosfatos importantes ──
+  {formula:'Ca₃(PO₄)₂',name:'Fosfato tricálcico',atoms:{Ca:3,P:2,O:8},desc:'Mineral apatita. Componente principal de huesos y dientes. Fertilizante fosfatado.'},
+  {formula:'Na₃PO₄',name:'Fosfato trisódico',atoms:{Na:3,P:1,O:4},desc:'Limpiador industrial potente. Suavizante de agua. Aditivo alimentario E339.'},
+  {formula:'K₃PO₄',name:'Fosfato tripotásico',atoms:{K:3,P:1,O:4},desc:'Fertilizante potásico-fosfatado. Aditivo alimentario. Base fuerte.'},
+  {formula:'AlPO₄',name:'Fosfato de aluminio',atoms:{Al:1,P:1,O:4},desc:'Antiácido. Ligante cerámico. Catalizador. Estructura similar al SiO₂.'},
+  {formula:'FePO₄',name:'Fosfato de hierro(III)',atoms:{Fe:1,P:1,O:4},desc:'Cátodo de baterías LiFePO₄ (LFP). Pigmento. Suplemento de hierro.'},
 ];
 
 const MOL_COORDS = {
@@ -1010,6 +1158,267 @@ const MOL_COORDS = {
   'SnO₂': {atoms:[{sym:'Sn',p:[0,0,0]},{sym:'O',p:[-1.4,0,0]},{sym:'O',p:[1.4,0,0]}],bonds:[[0,1],[0,2]]},
   'NiO':  {atoms:[{sym:'Ni',p:[-0.9,0,0]},{sym:'O',p:[0.9,0,0]}],bonds:[[0,1]]},
   'C₂H₄': {atoms:[{sym:'C',p:[-0.65,0,0]},{sym:'C',p:[0.65,0,0]},{sym:'H',p:[-1.3,0.9,0]},{sym:'H',p:[-1.3,-0.9,0]},{sym:'H',p:[1.3,0.9,0]},{sym:'H',p:[1.3,-0.9,0]}],bonds:[[0,1],[0,2],[0,3],[1,4],[1,5]]},
+  // Moléculas homoatómicas y especiales con geometría correcta
+  'Cl₂':  {atoms:[{sym:'Cl',p:[-1.0,0,0]},{sym:'Cl',p:[1.0,0,0]}],bonds:[[0,1]]},
+  'F₂':   {atoms:[{sym:'F',p:[-0.72,0,0]},{sym:'F',p:[0.72,0,0]}],bonds:[[0,1]]},
+  'Br₂':  {atoms:[{sym:'Br',p:[-1.14,0,0]},{sym:'Br',p:[1.14,0,0]}],bonds:[[0,1]]},
+  'I₂':   {atoms:[{sym:'I',p:[-1.33,0,0]},{sym:'I',p:[1.33,0,0]}],bonds:[[0,1]]},
+  // O3 — geometría angular (117.8°), átomo central O con 2 O terminales
+  'O₃':   {atoms:[{sym:'O',p:[0,0.2,0]},{sym:'O',p:[-1.2,-0.6,0]},{sym:'O',p:[1.2,-0.6,0]}],bonds:[[0,1],[0,2]]},
+  // N2O — lineal N=N=O
+  'N₂O':  {atoms:[{sym:'N',p:[-0.6,0,0]},{sym:'N',p:[0.6,0,0]},{sym:'O',p:[1.7,0,0]}],bonds:[[0,1],[1,2]]},
+  // NO2 — angular (134°)
+  'NO₂':  {atoms:[{sym:'N',p:[0,0.2,0]},{sym:'O',p:[-1.1,-0.55,0]},{sym:'O',p:[1.1,-0.55,0]}],bonds:[[0,1],[0,2]]},
+  // SO3 — trigonal plana
+  'SO₃':  {atoms:[{sym:'S',p:[0,0,0]},{sym:'O',p:[0,1.4,0]},{sym:'O',p:[-1.21,-0.7,0]},{sym:'O',p:[1.21,-0.7,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  // C2H2 — lineal (acetileno)
+  'C₂H₂': {atoms:[{sym:'H',p:[-2.0,0,0]},{sym:'C',p:[-0.6,0,0]},{sym:'C',p:[0.6,0,0]},{sym:'H',p:[2.0,0,0]}],bonds:[[0,1],[1,2],[2,3]]},
+  // C2H6 — etano, escalonado
+  'C₂H₆': {atoms:[{sym:'C',p:[-0.76,0,0]},{sym:'C',p:[0.76,0,0]},{sym:'H',p:[-1.2,0.9,0.5]},{sym:'H',p:[-1.2,0.9,-0.5]},{sym:'H',p:[-1.2,-1.0,0]},{sym:'H',p:[1.2,0.9,-0.5]},{sym:'H',p:[1.2,0.9,0.5]},{sym:'H',p:[1.2,-1.0,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[1,5],[1,6],[1,7]]},
+  // PCl5 — bipiramidal trigonal
+  'PCl₅': {atoms:[{sym:'P',p:[0,0,0]},{sym:'Cl',p:[0,2.0,0]},{sym:'Cl',p:[0,-2.0,0]},{sym:'Cl',p:[1.9,0,0]},{sym:'Cl',p:[-0.95,0,1.65]},{sym:'Cl',p:[-0.95,0,-1.65]}],bonds:[[0,1],[0,2],[0,3],[0,4],[0,5]]},
+  // SF6 — octaédrico
+  'SF₆':  {atoms:[{sym:'S',p:[0,0,0]},{sym:'F',p:[1.6,0,0]},{sym:'F',p:[-1.6,0,0]},{sym:'F',p:[0,1.6,0]},{sym:'F',p:[0,-1.6,0]},{sym:'F',p:[0,0,1.6]},{sym:'F',p:[0,0,-1.6]}],bonds:[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]]},
+  // H2S — angular (92°)
+  'H₂S':  {atoms:[{sym:'S',p:[0,0,0]},{sym:'H',p:[-1.0,0.8,0]},{sym:'H',p:[1.0,0.8,0]}],bonds:[[0,1],[0,2]]},
+  // PH3 — piramidal trigonal
+  'PH₃':  {atoms:[{sym:'P',p:[0,0.2,0]},{sym:'H',p:[-1.0,-0.5,0.5]},{sym:'H',p:[1.0,-0.5,0.5]},{sym:'H',p:[0,-0.5,-1.0]}],bonds:[[0,1],[0,2],[0,3]]},
+  // ClF3 — forma T
+  'ClF₃': {atoms:[{sym:'Cl',p:[0,0,0]},{sym:'F',p:[0,1.7,0]},{sym:'F',p:[0,-1.7,0]},{sym:'F',p:[1.6,0,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  // XeF4 — cuadrado plano
+  'XeF₄': {atoms:[{sym:'Xe',p:[0,0,0]},{sym:'F',p:[1.9,0,0]},{sym:'F',p:[-1.9,0,0]},{sym:'F',p:[0,1.9,0]},{sym:'F',p:[0,-1.9,0]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  // ── Alcanos ──
+  'C₃H₈': {atoms:[{sym:'C',p:[-1.26,0,0]},{sym:'C',p:[0,0,0]},{sym:'C',p:[1.26,0,0]},{sym:'H',p:[-1.85,0.9,0.4]},{sym:'H',p:[-1.85,0.9,-0.4]},{sym:'H',p:[-1.85,-1.0,0]},{sym:'H',p:[0,0.72,1.0]},{sym:'H',p:[0,-0.72,1.0]},{sym:'H',p:[1.85,0.9,0.4]},{sym:'H',p:[1.85,0.9,-0.4]},{sym:'H',p:[1.85,-1.0,0]}],bonds:[[0,1],[1,2],[0,3],[0,4],[0,5],[1,6],[1,7],[2,8],[2,9],[2,10]]},
+  'C₄H₁₀':{atoms:[{sym:'C',p:[-1.9,0,0]},{sym:'C',p:[-0.63,0,0]},{sym:'C',p:[0.63,0,0]},{sym:'C',p:[1.9,0,0]},{sym:'H',p:[-2.5,0.9,0.4]},{sym:'H',p:[-2.5,-0.5,0.6]},{sym:'H',p:[-2.5,-0.4,-0.7]},{sym:'H',p:[-0.63,0.7,1.0]},{sym:'H',p:[-0.63,-0.7,1.0]},{sym:'H',p:[0.63,0.7,1.0]},{sym:'H',p:[0.63,-0.7,1.0]},{sym:'H',p:[2.5,0.9,0.4]},{sym:'H',p:[2.5,-0.5,0.6]},{sym:'H',p:[2.5,-0.4,-0.7]}],bonds:[[0,1],[1,2],[2,3],[0,4],[0,5],[0,6],[1,7],[1,8],[2,9],[2,10],[3,11],[3,12],[3,13]]},
+  // ── Compuestos C1 ──
+  'CH₂O': {atoms:[{sym:'C',p:[0,0,0]},{sym:'O',p:[0,1.2,0]},{sym:'H',p:[-1.0,-0.5,0]},{sym:'H',p:[1.0,-0.5,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'HCN':  {atoms:[{sym:'H',p:[-1.9,0,0]},{sym:'C',p:[-0.5,0,0]},{sym:'N',p:[0.65,0,0]}],bonds:[[0,1],[1,2]]},
+  'CO':   {atoms:[{sym:'C',p:[-0.57,0,0]},{sym:'O',p:[0.57,0,0]}],bonds:[[0,1]]},
+  'CCl₄': {atoms:[{sym:'C',p:[0,0,0]},{sym:'Cl',p:[1.1,1.1,1.1]},{sym:'Cl',p:[-1.1,-1.1,1.1]},{sym:'Cl',p:[1.1,-1.1,-1.1]},{sym:'Cl',p:[-1.1,1.1,-1.1]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'CF₄':  {atoms:[{sym:'C',p:[0,0,0]},{sym:'F',p:[1.0,1.0,1.0]},{sym:'F',p:[-1.0,-1.0,1.0]},{sym:'F',p:[1.0,-1.0,-1.0]},{sym:'F',p:[-1.0,1.0,-1.0]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'CHCl₃':{atoms:[{sym:'C',p:[0,0.4,0]},{sym:'H',p:[0,1.5,0]},{sym:'Cl',p:[1.4,-0.3,0.9]},{sym:'Cl',p:[-1.4,-0.3,0.9]},{sym:'Cl',p:[0,-0.3,-1.4]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'CH₃Cl':{atoms:[{sym:'C',p:[0,0,0]},{sym:'Cl',p:[1.8,0,0]},{sym:'H',p:[-0.7,0.9,0.5]},{sym:'H',p:[-0.7,0.9,-0.5]},{sym:'H',p:[-0.7,-1.0,0]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  // ── Alcoholes y cetonas ──
+  'CH₃OH':{atoms:[{sym:'C',p:[-0.7,0,0]},{sym:'O',p:[0.7,0,0]},{sym:'H',p:[1.4,0.7,0]},{sym:'H',p:[-1.1,0.9,0.5]},{sym:'H',p:[-1.1,0.9,-0.5]},{sym:'H',p:[-1.1,-1.0,0]}],bonds:[[0,1],[1,2],[0,3],[0,4],[0,5]]},
+  'C₂H₅OH':{atoms:[{sym:'C',p:[-1.2,0,0]},{sym:'C',p:[0.2,0,0]},{sym:'O',p:[1.3,0.8,0]},{sym:'H',p:[1.9,0.2,0]},{sym:'H',p:[-1.6,0.9,0.4]},{sym:'H',p:[-1.6,0.9,-0.4]},{sym:'H',p:[-1.6,-1.0,0]},{sym:'H',p:[0.5,-0.5,0.9]},{sym:'H',p:[0.5,-0.5,-0.9]}],bonds:[[0,1],[1,2],[2,3],[0,4],[0,5],[0,6],[1,7],[1,8]]},
+  'C₃H₆O':{atoms:[{sym:'C',p:[0,0.5,0]},{sym:'O',p:[0,1.7,0]},{sym:'C',p:[-1.3,-0.2,0]},{sym:'C',p:[1.3,-0.2,0]},{sym:'H',p:[-1.3,-1.1,0.5]},{sym:'H',p:[-1.3,-1.1,-0.5]},{sym:'H',p:[-2.1,0.4,0]},{sym:'H',p:[1.3,-1.1,0.5]},{sym:'H',p:[1.3,-1.1,-0.5]},{sym:'H',p:[2.1,0.4,0]}],bonds:[[0,1],[0,2],[0,3],[2,4],[2,5],[2,6],[3,7],[3,8],[3,9]]},
+  // ── Ácidos orgánicos ──
+  'HCOOH':{atoms:[{sym:'C',p:[0,0,0]},{sym:'O',p:[0,1.2,0]},{sym:'O',p:[1.3,-0.3,0]},{sym:'H',p:[1.9,0.5,0]},{sym:'H',p:[-1.0,-0.5,0]}],bonds:[[0,1],[0,2],[2,3],[0,4]]},
+  // ── NO monóxido ──
+  'NO':   {atoms:[{sym:'N',p:[-0.58,0,0]},{sym:'O',p:[0.58,0,0]}],bonds:[[0,1]]},
+  // ── Compuestos de boro ──
+  'BF₃':  {atoms:[{sym:'B',p:[0,0,0]},{sym:'F',p:[0,1.3,0]},{sym:'F',p:[-1.13,-0.65,0]},{sym:'F',p:[1.13,-0.65,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'BCl₃': {atoms:[{sym:'B',p:[0,0,0]},{sym:'Cl',p:[0,1.75,0]},{sym:'Cl',p:[-1.52,-0.87,0]},{sym:'Cl',p:[1.52,-0.87,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'B₂O₃': {atoms:[{sym:'B',p:[-1.3,0,0]},{sym:'B',p:[1.3,0,0]},{sym:'O',p:[0,0,0]},{sym:'O',p:[-2.4,0.8,0]},{sym:'O',p:[2.4,0.8,0]}],bonds:[[0,2],[1,2],[0,3],[1,4]]},
+  'H₃BO₃':{atoms:[{sym:'B',p:[0,0,0]},{sym:'O',p:[0,1.37,0]},{sym:'O',p:[-1.19,-0.68,0]},{sym:'O',p:[1.19,-0.68,0]},{sym:'H',p:[0.7,1.9,0]},{sym:'H',p:[-1.9,-0.4,0]},{sym:'H',p:[1.2,-1.5,0]}],bonds:[[0,1],[0,2],[0,3],[1,4],[2,5],[3,6]]},
+  // ── Compuestos inorgánicos varios ──
+  'SiH₄': {atoms:[{sym:'Si',p:[0,0,0]},{sym:'H',p:[1.1,1.1,1.1]},{sym:'H',p:[-1.1,-1.1,1.1]},{sym:'H',p:[1.1,-1.1,-1.1]},{sym:'H',p:[-1.1,1.1,-1.1]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'PCl₃': {atoms:[{sym:'P',p:[0,0.3,0]},{sym:'Cl',p:[-1.6,-0.6,0.6]},{sym:'Cl',p:[1.6,-0.6,0.6]},{sym:'Cl',p:[0,-0.6,-1.4]}],bonds:[[0,1],[0,2],[0,3]]},
+  'AsCl₃':{atoms:[{sym:'As',p:[0,0.3,0]},{sym:'Cl',p:[-1.65,-0.6,0.6]},{sym:'Cl',p:[1.65,-0.6,0.6]},{sym:'Cl',p:[0,-0.6,-1.4]}],bonds:[[0,1],[0,2],[0,3]]},
+  'NaClO':{atoms:[{sym:'Na',p:[-1.8,0,0]},{sym:'Cl',p:[0.2,0,0]},{sym:'O',p:[1.5,0,0]}],bonds:[[0,1],[1,2]]},
+  'NH₄Cl':{atoms:[{sym:'N',p:[0,0,0]},{sym:'H',p:[0.8,0.8,0.8]},{sym:'H',p:[-0.8,-0.8,0.8]},{sym:'H',p:[0.8,-0.8,-0.8]},{sym:'H',p:[-0.8,0.8,-0.8]},{sym:'Cl',p:[0,-2.5,0]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'KMnO₄':{atoms:[{sym:'K',p:[-2.3,0,0]},{sym:'Mn',p:[0.3,0,0]},{sym:'O',p:[0.3,1.5,0]},{sym:'O',p:[0.3,-1.5,0]},{sym:'O',p:[1.8,0,0]},{sym:'O',p:[-1.1,0,0]}],bonds:[[1,2],[1,3],[1,4],[1,5]]},
+  'AgNO₃':{atoms:[{sym:'Ag',p:[-2.2,0,0]},{sym:'N',p:[0.3,0,0]},{sym:'O',p:[0.3,1.3,0]},{sym:'O',p:[1.5,-0.65,0]},{sym:'O',p:[-0.9,-0.65,0]}],bonds:[[0,4],[1,2],[1,3],[1,4]]},
+  'KI':   {atoms:[{sym:'K',p:[-1.6,0,0]},{sym:'I',p:[1.6,0,0]}],bonds:[[0,1]]},
+  'KBr':  {atoms:[{sym:'K',p:[-1.4,0,0]},{sym:'Br',p:[1.4,0,0]}],bonds:[[0,1]]},
+  'NaI':  {atoms:[{sym:'Na',p:[-1.35,0,0]},{sym:'I',p:[1.35,0,0]}],bonds:[[0,1]]},
+  'HBr':  {atoms:[{sym:'H',p:[-0.7,0,0]},{sym:'Br',p:[0.7,0,0]}],bonds:[[0,1]]},
+  'HI':   {atoms:[{sym:'H',p:[-0.8,0,0]},{sym:'I',p:[0.8,0,0]}],bonds:[[0,1]]},
+  'HClO₄':{atoms:[{sym:'Cl',p:[0,0,0]},{sym:'O',p:[0,1.4,0]},{sym:'O',p:[-1.1,-0.5,0.7]},{sym:'O',p:[1.1,-0.5,0.7]},{sym:'O',p:[0,-0.5,-1.1]},{sym:'H',p:[0.7,1.9,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[1,5]]},
+  'HClO': {atoms:[{sym:'H',p:[-1.7,0,0]},{sym:'Cl',p:[-0.3,0,0]},{sym:'O',p:[1.1,0,0]}],bonds:[[0,1],[1,2]]},
+  'H₂CO₃':{atoms:[{sym:'C',p:[0,0,0]},{sym:'O',p:[0,1.3,0]},{sym:'O',p:[-1.2,-0.6,0]},{sym:'O',p:[1.2,-0.6,0]},{sym:'H',p:[-1.8,0.1,0]},{sym:'H',p:[1.8,0.1,0]}],bonds:[[0,1],[0,2],[0,3],[2,4],[3,5]]},
+  'N₂O₄': {atoms:[{sym:'N',p:[-0.65,0,0]},{sym:'N',p:[0.65,0,0]},{sym:'O',p:[-1.7,0.9,0]},{sym:'O',p:[-1.7,-0.9,0]},{sym:'O',p:[1.7,0.9,0]},{sym:'O',p:[1.7,-0.9,0]}],bonds:[[0,1],[0,2],[0,3],[1,4],[1,5]]},
+  'Cl₂O': {atoms:[{sym:'O',p:[0,0.5,0]},{sym:'Cl',p:[-1.3,-0.4,0]},{sym:'Cl',p:[1.3,-0.4,0]}],bonds:[[0,1],[0,2]]},
+  'MgSO₄':{atoms:[{sym:'Mg',p:[-2.1,0,0]},{sym:'S',p:[0.8,0,0]},{sym:'O',p:[0.8,1.4,0]},{sym:'O',p:[0.8,-1.4,0]},{sym:'O',p:[2.2,0,0]},{sym:'O',p:[-0.6,0,0]}],bonds:[[0,5],[1,2],[1,3],[1,4],[1,5]]},
+  'FeSO₄':{atoms:[{sym:'Fe',p:[-2.1,0,0]},{sym:'S',p:[0.8,0,0]},{sym:'O',p:[0.8,1.4,0]},{sym:'O',p:[0.8,-1.4,0]},{sym:'O',p:[2.2,0,0]},{sym:'O',p:[-0.6,0,0]}],bonds:[[0,5],[1,2],[1,3],[1,4],[1,5]]},
+  'NiCl₂':{atoms:[{sym:'Ni',p:[0,0,0]},{sym:'Cl',p:[-1.9,0,0]},{sym:'Cl',p:[1.9,0,0]}],bonds:[[0,1],[0,2]]},
+  'CoCl₂':{atoms:[{sym:'Co',p:[0,0,0]},{sym:'Cl',p:[-1.9,0,0]},{sym:'Cl',p:[1.9,0,0]}],bonds:[[0,1],[0,2]]},
+  'MnCl₂':{atoms:[{sym:'Mn',p:[0,0,0]},{sym:'Cl',p:[-1.9,0,0]},{sym:'Cl',p:[1.9,0,0]}],bonds:[[0,1],[0,2]]},
+  'CrCl₃':{atoms:[{sym:'Cr',p:[0,0,0]},{sym:'Cl',p:[0,1.9,0]},{sym:'Cl',p:[-1.65,-0.95,0]},{sym:'Cl',p:[1.65,-0.95,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'FeBr₃':{atoms:[{sym:'Fe',p:[0,0,0]},{sym:'Br',p:[0,2.0,0]},{sym:'Br',p:[-1.73,-1.0,0]},{sym:'Br',p:[1.73,-1.0,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'GaCl₃':{atoms:[{sym:'Ga',p:[0,0,0]},{sym:'Cl',p:[0,1.85,0]},{sym:'Cl',p:[-1.6,-0.92,0]},{sym:'Cl',p:[1.6,-0.92,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'VCl₃': {atoms:[{sym:'V',p:[0,0,0]},{sym:'Cl',p:[0,1.8,0]},{sym:'Cl',p:[-1.56,-0.9,0]},{sym:'Cl',p:[1.56,-0.9,0]}],bonds:[[0,1],[0,2],[0,3]]},
+  'SnCl₄':{atoms:[{sym:'Sn',p:[0,0,0]},{sym:'Cl',p:[1.2,1.2,1.2]},{sym:'Cl',p:[-1.2,-1.2,1.2]},{sym:'Cl',p:[1.2,-1.2,-1.2]},{sym:'Cl',p:[-1.2,1.2,-1.2]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'AlN':  {atoms:[{sym:'Al',p:[-0.9,0,0]},{sym:'N',p:[0.9,0,0]}],bonds:[[0,1]]},
+  'Ca₃N₂':{atoms:[{sym:'N',p:[-1.0,0,0]},{sym:'N',p:[1.0,0,0]},{sym:'Ca',p:[0,2.0,0]},{sym:'Ca',p:[-1.73,-1.0,0]},{sym:'Ca',p:[1.73,-1.0,0]}],bonds:[[0,3],[0,4],[1,3],[1,4],[0,2],[1,2]]},
+  'Na₂SO₃':{atoms:[{sym:'Na',p:[-2.3,0.5,0]},{sym:'Na',p:[2.3,0.5,0]},{sym:'S',p:[0,0,0]},{sym:'O',p:[0,1.4,0]},{sym:'O',p:[-1.2,-0.7,0]},{sym:'O',p:[1.2,-0.7,0]}],bonds:[[0,4],[1,5],[2,3],[2,4],[2,5]]},
+  'NaHCO₃':{atoms:[{sym:'Na',p:[-2.1,0.5,0]},{sym:'C',p:[0.3,0,0]},{sym:'O',p:[0.3,1.35,0]},{sym:'O',p:[1.55,-0.65,0]},{sym:'O',p:[-0.95,-0.65,0]},{sym:'H',p:[-1.6,-0.65,0]}],bonds:[[0,4],[1,2],[1,3],[1,4],[4,5]]},
+  // ── Fosfatos ──
+  // Ca₃(PO₄)₂: 2 grupos PO₄ tetraédricos + 3 Ca²⁺ alrededor
+  'Ca₃(PO₄)₂':{atoms:[
+    {sym:'P',p:[-1.6,0,0]},{sym:'P',p:[1.6,0,0]},
+    {sym:'O',p:[-1.6,1.5,0]},{sym:'O',p:[-2.8,-0.6,0.8]},{sym:'O',p:[-2.8,-0.6,-0.8]},{sym:'O',p:[-0.4,-0.6,0]},
+    {sym:'O',p:[1.6,1.5,0]},{sym:'O',p:[2.8,-0.6,0.8]},{sym:'O',p:[2.8,-0.6,-0.8]},{sym:'O',p:[0.4,-0.6,0]},
+    {sym:'Ca',p:[0,2.4,0]},{sym:'Ca',p:[-2.5,-2.0,0]},{sym:'Ca',p:[2.5,-2.0,0]}
+  ],bonds:[[0,2],[0,3],[0,4],[0,5],[1,6],[1,7],[1,8],[1,9],[10,2],[10,6],[11,3],[11,4],[11,5],[12,7],[12,8],[12,9]]},
+  'Na₃PO₄':{atoms:[{sym:'P',p:[0,0,0]},{sym:'O',p:[0,1.5,0]},{sym:'O',p:[-1.3,-0.75,0.7]},{sym:'O',p:[1.3,-0.75,0.7]},{sym:'O',p:[0,-0.75,-1.3]},{sym:'Na',p:[0,3.0,0]},{sym:'Na',p:[-2.6,-1.5,1.4]},{sym:'Na',p:[2.6,-1.5,1.4]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'K₃PO₄': {atoms:[{sym:'P',p:[0,0,0]},{sym:'O',p:[0,1.5,0]},{sym:'O',p:[-1.3,-0.75,0.7]},{sym:'O',p:[1.3,-0.75,0.7]},{sym:'O',p:[0,-0.75,-1.3]},{sym:'K',p:[0,3.2,0]},{sym:'K',p:[-2.8,-1.5,1.4]},{sym:'K',p:[2.8,-1.5,1.4]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  'AlPO₄': {atoms:[{sym:'Al',p:[-1.8,0,0]},{sym:'P',p:[1.0,0,0]},{sym:'O',p:[1.0,1.5,0]},{sym:'O',p:[2.3,-0.75,0.7]},{sym:'O',p:[2.3,-0.75,-0.7]},{sym:'O',p:[0.0,-0.75,0]}],bonds:[[0,5],[1,2],[1,3],[1,4],[1,5]]},
+  'FePO₄': {atoms:[{sym:'Fe',p:[-1.8,0,0]},{sym:'P',p:[1.0,0,0]},{sym:'O',p:[1.0,1.5,0]},{sym:'O',p:[2.3,-0.75,0.7]},{sym:'O',p:[2.3,-0.75,-0.7]},{sym:'O',p:[0.0,-0.75,0]}],bonds:[[0,5],[1,2],[1,3],[1,4],[1,5]]},
+  // ── Alcanos cadena larga ──
+  'C₅H₁₂': {atoms:[{sym:'C',p:[-2.52,0,0]},{sym:'C',p:[-1.26,0,0]},{sym:'C',p:[0,0,0]},{sym:'C',p:[1.26,0,0]},{sym:'C',p:[2.52,0,0]},{sym:'H',p:[-3.1,0.9,0.4]},{sym:'H',p:[-3.1,0.9,-0.4]},{sym:'H',p:[-3.1,-1.0,0]},{sym:'H',p:[-1.26,0.7,1.0]},{sym:'H',p:[-1.26,-0.7,1.0]},{sym:'H',p:[0,0.7,1.0]},{sym:'H',p:[0,-0.7,1.0]},{sym:'H',p:[1.26,0.7,1.0]},{sym:'H',p:[1.26,-0.7,1.0]},{sym:'H',p:[3.1,0.9,0.4]},{sym:'H',p:[3.1,0.9,-0.4]},{sym:'H',p:[3.1,-1.0,0]}],bonds:[[0,1],[1,2],[2,3],[3,4],[0,5],[0,6],[0,7],[1,8],[1,9],[2,10],[2,11],[3,12],[3,13],[4,14],[4,15],[4,16]]},
+  // ── Alquenos ──
+  'C₃H₆': {atoms:[{sym:'C',p:[-1.3,0,0]},{sym:'C',p:[0,0,0]},{sym:'C',p:[1.3,0.6,0]},{sym:'H',p:[-1.8,0.9,0.3]},{sym:'H',p:[-1.8,-0.9,0.3]},{sym:'H',p:[-1.3,-0.3,-1.0]},{sym:'H',p:[0,-0.9,-0.5]},{sym:'H',p:[1.8,1.5,0.2]},{sym:'H',p:[1.8,-0.1,0.8]}],bonds:[[0,1],[1,2],[0,3],[0,4],[0,5],[1,6],[2,7],[2,8]]},
+  'C₄H₆': {atoms:[{sym:'C',p:[-1.9,0,0]},{sym:'C',p:[-0.65,0,0]},{sym:'C',p:[0.65,0,0]},{sym:'C',p:[1.9,0,0]},{sym:'H',p:[-2.5,0.9,0.3]},{sym:'H',p:[-2.5,-0.9,0.3]},{sym:'H',p:[-0.65,-0.9,-0.5]},{sym:'H',p:[0.65,-0.9,-0.5]},{sym:'H',p:[2.5,0.9,0.3]},{sym:'H',p:[2.5,-0.9,0.3]}],bonds:[[0,1],[1,2],[2,3],[0,4],[0,5],[1,6],[2,7],[3,8],[3,9]]},
+  // ── Compuestos oxigenados ──
+  'C₂H₄O': {atoms:[{sym:'C',p:[-0.7,0,0]},{sym:'C',p:[0.7,0.3,0]},{sym:'O',p:[1.7,0.3,0]},{sym:'H',p:[-1.3,0.9,0.3]},{sym:'H',p:[-1.3,-0.9,0.3]},{sym:'H',p:[-0.7,-0.3,-1.0]},{sym:'H',p:[0.7,1.2,0.5]}],bonds:[[0,1],[1,2],[0,3],[0,4],[0,5],[1,6]]},
+  'C₃H₈O': {atoms:[{sym:'C',p:[-1.9,0,0]},{sym:'C',p:[-0.6,0,0]},{sym:'C',p:[0.7,0,0]},{sym:'O',p:[1.8,0.8,0]},{sym:'H',p:[2.5,0.2,0]},{sym:'H',p:[-2.5,0.9,0.4]},{sym:'H',p:[-2.5,-0.9,0.4]},{sym:'H',p:[-1.9,-0.3,-1.0]},{sym:'H',p:[-0.6,0.7,1.0]},{sym:'H',p:[-0.6,-0.7,1.0]},{sym:'H',p:[0.7,0.7,1.0]},{sym:'H',p:[0.7,-0.7,1.0]}],bonds:[[0,1],[1,2],[2,3],[3,4],[0,5],[0,6],[0,7],[1,8],[1,9],[2,10],[2,11]]},
+  'C₄H₁₀O':{atoms:[{sym:'C',p:[-2.4,0,0]},{sym:'C',p:[-1.2,0,0]},{sym:'O',p:[0,0.7,0]},{sym:'C',p:[1.2,0,0]},{sym:'C',p:[2.4,0,0]},{sym:'H',p:[-3.0,0.9,0.4]},{sym:'H',p:[-3.0,-1.0,0]},{sym:'H',p:[-3.0,0.9,-0.4]},{sym:'H',p:[-1.2,0.7,1.0]},{sym:'H',p:[-1.2,-0.7,1.0]},{sym:'H',p:[1.2,0.7,1.0]},{sym:'H',p:[1.2,-0.7,1.0]},{sym:'H',p:[3.0,0.9,0.4]},{sym:'H',p:[3.0,-1.0,0]},{sym:'H',p:[3.0,0.9,-0.4]}],bonds:[[0,1],[1,2],[2,3],[3,4],[0,5],[0,6],[0,7],[1,8],[1,9],[3,10],[3,11],[4,12],[4,13],[4,14]]},
+  'CH₃COOH':{atoms:[{sym:'C',p:[-1.2,0,0]},{sym:'C',p:[0.3,0,0]},{sym:'O',p:[0.9,1.2,0]},{sym:'O',p:[1.1,-1.0,0]},{sym:'H',p:[1.9,-0.6,0]},{sym:'H',p:[-1.6,1.0,0.4]},{sym:'H',p:[-1.6,-1.0,0.4]},{sym:'H',p:[-1.6,-0.1,-1.0]}],bonds:[[0,1],[1,2],[1,3],[3,4],[0,5],[0,6],[0,7]]},
+  // ── Biomoléculas ──
+  'CO(NH₂)₂':{atoms:[{sym:'C',p:[0,0,0]},{sym:'O',p:[0,1.2,0]},{sym:'N',p:[-1.3,-0.7,0]},{sym:'N',p:[1.3,-0.7,0]},{sym:'H',p:[-1.3,-1.7,0.5]},{sym:'H',p:[-2.1,-0.2,0.3]},{sym:'H',p:[1.3,-1.7,0.5]},{sym:'H',p:[2.1,-0.2,0.3]}],bonds:[[0,1],[0,2],[0,3],[2,4],[2,5],[3,6],[3,7]]},
+  'CH₃NH₂':{atoms:[{sym:'C',p:[-0.8,0,0]},{sym:'N',p:[0.8,0,0]},{sym:'H',p:[1.2,0.9,0.3]},{sym:'H',p:[1.2,-0.9,0.3]},{sym:'H',p:[1.2,0,-1.0]},{sym:'H',p:[-1.2,1.0,0.4]},{sym:'H',p:[-1.2,-1.0,0.4]},{sym:'H',p:[-1.2,0,-1.0]}],bonds:[[0,1],[1,2],[1,3],[1,4],[0,5],[0,6],[0,7]]},
+  'C₂H₅NO₂':{atoms:[{sym:'C',p:[0,0,0]},{sym:'C',p:[1.5,0,0]},{sym:'N',p:[2.3,1.1,0]},{sym:'O',p:[1.6,1.9,0.5]},{sym:'O',p:[3.5,1.0,0]},{sym:'H',p:[-0.5,0.9,0.4]},{sym:'H',p:[-0.5,-0.9,0.4]},{sym:'H',p:[-0.5,0,-1.0]},{sym:'H',p:[1.9,-0.5,0.9]},{sym:'H',p:[1.9,-0.5,-0.9]}],bonds:[[0,1],[1,2],[2,3],[2,4],[0,5],[0,6],[0,7],[1,8],[1,9]]},
+  'C₃H₇NO₂':{atoms:[{sym:'C',p:[-1.5,0,0]},{sym:'C',p:[0,0,0]},{sym:'C',p:[1.5,0,0]},{sym:'N',p:[-2.3,-1.1,0]},{sym:'O',p:[1.9,1.2,0]},{sym:'O',p:[2.4,-0.8,0]},{sym:'H',p:[2.0,-1.8,0.3]},{sym:'H',p:[0,-0.7,1.0]},{sym:'H',p:[0,0.7,1.0]},{sym:'H',p:[-1.8,0.5,0.9]},{sym:'H',p:[-2.2,-2.0,0.4]},{sym:'H',p:[-2.2,-2.0,-0.4]},{sym:'H',p:[-3.3,-0.8,0]},{sym:'H',p:[-1.9,0.5,-0.9]}],bonds:[[0,1],[1,2],[0,3],[2,4],[2,5],[5,6],[1,7],[1,8],[0,9],[3,10],[3,11],[3,12],[0,13]]},
+  'C₃H₆O₃':{atoms:[{sym:'C',p:[0,0,0]},{sym:'C',p:[1.5,0,0]},{sym:'C',p:[3.0,0,0]},{sym:'O',p:[-0.8,1.1,0]},{sym:'O',p:[1.5,-1.2,0]},{sym:'O',p:[3.8,1.1,0]},{sym:'H',p:[-0.3,1.9,0.4]},{sym:'H',p:[0.9,-1.7,0.3]},{sym:'H',p:[4.7,0.8,0.3]},{sym:'H',p:[0,0.7,-1.0]},{sym:'H',p:[1.5,0.7,-1.0]},{sym:'H',p:[3.0,0.7,-1.0]}],bonds:[[0,1],[1,2],[0,3],[1,4],[2,5],[3,6],[4,7],[5,8],[0,9],[1,10],[2,11]]},
+  // ── Compuestos inorgánicos restantes ──
+  'K₂Cr₂O₇':{atoms:[{sym:'K',p:[-3.5,0.5,0]},{sym:'K',p:[3.5,0.5,0]},{sym:'Cr',p:[-1.5,0,0]},{sym:'Cr',p:[1.5,0,0]},{sym:'O',p:[0,0,0]},{sym:'O',p:[-1.5,1.4,0]},{sym:'O',p:[-2.8,-0.8,0.7]},{sym:'O',p:[-2.8,-0.8,-0.7]},{sym:'O',p:[1.5,1.4,0]},{sym:'O',p:[2.8,-0.8,0.7]},{sym:'O',p:[2.8,-0.8,-0.7]}],bonds:[[2,4],[3,4],[2,5],[2,6],[2,7],[3,8],[3,9],[3,10]]},
+  'Ca(ClO)₂':{atoms:[{sym:'Ca',p:[0,0,0]},{sym:'Cl',p:[-1.8,1.2,0]},{sym:'Cl',p:[1.8,1.2,0]},{sym:'O',p:[-2.8,0.2,0]},{sym:'O',p:[2.8,0.2,0]}],bonds:[[0,1],[0,2],[1,3],[2,4]]},
+  'NH₄NO₃':{atoms:[{sym:'N',p:[-1.5,0,0]},{sym:'H',p:[-2.0,0.8,0.5]},{sym:'H',p:[-2.0,0.8,-0.5]},{sym:'H',p:[-2.0,-0.9,0.5]},{sym:'H',p:[-2.0,-0.9,-0.5]},{sym:'N',p:[1.5,0,0]},{sym:'O',p:[1.5,1.4,0]},{sym:'O',p:[2.7,-0.7,0]},{sym:'O',p:[0.3,-0.7,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[5,6],[5,7],[5,8]]},
+  'NH₄OH': {atoms:[{sym:'N',p:[-1.5,0,0]},{sym:'H',p:[-2.0,0.9,0.5]},{sym:'H',p:[-2.0,0.9,-0.5]},{sym:'H',p:[-2.0,-0.9,0.5]},{sym:'H',p:[-2.0,-0.9,-0.5]},{sym:'O',p:[0.8,0.6,0]},{sym:'H',p:[1.6,0,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[5,6]]},
+  'Si₂H₆': {atoms:[{sym:'Si',p:[-1.1,0,0]},{sym:'Si',p:[1.1,0,0]},{sym:'H',p:[-1.8,1.1,0.6]},{sym:'H',p:[-1.8,1.1,-0.6]},{sym:'H',p:[-1.8,-1.2,0]},{sym:'H',p:[1.8,1.1,-0.6]},{sym:'H',p:[1.8,1.1,0.6]},{sym:'H',p:[1.8,-1.2,0]}],bonds:[[0,1],[0,2],[0,3],[0,4],[1,5],[1,6],[1,7]]},
+  'Si₃N₄': {atoms:[{sym:'Si',p:[-2.0,0.8,0]},{sym:'Si',p:[2.0,0.8,0]},{sym:'Si',p:[0,-1.6,0]},{sym:'N',p:[0,2.0,0]},{sym:'N',p:[-1.7,-0.5,0]},{sym:'N',p:[1.7,-0.5,0]},{sym:'N',p:[0,0.5,1.2]}],bonds:[[0,3],[1,3],[0,4],[2,4],[1,5],[2,5],[0,6],[1,6],[2,6]]},
+  'H₂SO₃': {atoms:[{sym:'S',p:[0,0,0]},{sym:'O',p:[0,1.4,0]},{sym:'O',p:[-1.3,-0.5,0.6]},{sym:'O',p:[1.3,-0.5,0.6]},{sym:'H',p:[-1.9,0.2,0.8]},{sym:'H',p:[1.9,0.2,0.8]}],bonds:[[0,1],[0,2],[0,3],[2,4],[3,5]]},
+  'Na₂S₂O₃':{atoms:[{sym:'Na',p:[-3.0,0.5,0]},{sym:'Na',p:[3.0,0.5,0]},{sym:'S',p:[-0.7,0,0]},{sym:'S',p:[0.7,0,0]},{sym:'O',p:[0.7,1.4,0]},{sym:'O',p:[2.0,-0.5,0.6]},{sym:'O',p:[2.0,-0.5,-0.6]}],bonds:[[2,3],[3,4],[3,5],[3,6]]},
+  'FeS':   {atoms:[{sym:'Fe',p:[-0.9,0,0]},{sym:'S',p:[0.9,0,0]}],bonds:[[0,1]]},
+  'H₃PO₃': {atoms:[{sym:'P',p:[0,0,0]},{sym:'O',p:[0,1.5,0]},{sym:'O',p:[-1.4,-0.5,0.7]},{sym:'O',p:[1.4,-0.5,0.7]},{sym:'H',p:[0,-0.8,-1.2]},{sym:'H',p:[-2.1,0.2,0.8]},{sym:'H',p:[2.1,0.2,0.8]}],bonds:[[0,1],[0,2],[0,3],[0,4],[2,5],[3,6]]},
+  'N₂O₅':  {atoms:[{sym:'N',p:[-1.4,0,0]},{sym:'N',p:[1.4,0,0]},{sym:'O',p:[0,0.5,0]},{sym:'O',p:[-1.4,1.3,0]},{sym:'O',p:[-2.6,-0.7,0]},{sym:'O',p:[1.4,1.3,0]},{sym:'O',p:[2.6,-0.7,0]}],bonds:[[0,2],[1,2],[0,3],[0,4],[1,5],[1,6]]},
+  'SbCl₃': {atoms:[{sym:'Sb',p:[0,0.3,0]},{sym:'Cl',p:[-1.7,-0.6,0.7]},{sym:'Cl',p:[1.7,-0.6,0.7]},{sym:'Cl',p:[0,-0.6,-1.5]}],bonds:[[0,1],[0,2],[0,3]]},
+  'TiCl₄': {atoms:[{sym:'Ti',p:[0,0,0]},{sym:'Cl',p:[1.3,1.3,1.3]},{sym:'Cl',p:[-1.3,-1.3,1.3]},{sym:'Cl',p:[1.3,-1.3,-1.3]},{sym:'Cl',p:[-1.3,1.3,-1.3]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  // ── Orgánicos complejos con anillo aromático ──
+  // Hexano C6H14 — cadena lineal
+  'C₆H₁₄': {atoms:[
+    {sym:'C',p:[-3.15,0,0]},{sym:'C',p:[-1.89,0,0]},{sym:'C',p:[-0.63,0,0]},
+    {sym:'C',p:[0.63,0,0]},{sym:'C',p:[1.89,0,0]},{sym:'C',p:[3.15,0,0]},
+    {sym:'H',p:[-3.75,0.9,0.4]},{sym:'H',p:[-3.75,0.9,-0.4]},{sym:'H',p:[-3.75,-1.0,0]},
+    {sym:'H',p:[-1.89,0.7,1.0]},{sym:'H',p:[-1.89,-0.7,1.0]},
+    {sym:'H',p:[-0.63,0.7,1.0]},{sym:'H',p:[-0.63,-0.7,1.0]},
+    {sym:'H',p:[0.63,0.7,1.0]},{sym:'H',p:[0.63,-0.7,1.0]},
+    {sym:'H',p:[1.89,0.7,1.0]},{sym:'H',p:[1.89,-0.7,1.0]},
+    {sym:'H',p:[3.75,0.9,0.4]},{sym:'H',p:[3.75,0.9,-0.4]},{sym:'H',p:[3.75,-1.0,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[0,6],[0,7],[0,8],[1,9],[1,10],[2,11],[2,12],[3,13],[3,14],[4,15],[4,16],[5,17],[5,18],[5,19]]},
+  // Octano C8H18 — cadena lineal compacta
+  'C₈H₁₈': {atoms:[
+    {sym:'C',p:[-4.4,0,0]},{sym:'C',p:[-3.15,0,0]},{sym:'C',p:[-1.9,0,0]},{sym:'C',p:[-0.63,0,0]},
+    {sym:'C',p:[0.63,0,0]},{sym:'C',p:[1.9,0,0]},{sym:'C',p:[3.15,0,0]},{sym:'C',p:[4.4,0,0]},
+    {sym:'H',p:[-5.0,0.9,0.4]},{sym:'H',p:[-5.0,-0.5,0.6]},{sym:'H',p:[-5.0,-0.4,-0.7]},
+    {sym:'H',p:[-3.15,0.7,1.0]},{sym:'H',p:[-3.15,-0.7,1.0]},
+    {sym:'H',p:[-1.9,0.7,1.0]},{sym:'H',p:[-1.9,-0.7,1.0]},
+    {sym:'H',p:[-0.63,0.7,1.0]},{sym:'H',p:[-0.63,-0.7,1.0]},
+    {sym:'H',p:[0.63,0.7,1.0]},{sym:'H',p:[0.63,-0.7,1.0]},
+    {sym:'H',p:[1.9,0.7,1.0]},{sym:'H',p:[1.9,-0.7,1.0]},
+    {sym:'H',p:[3.15,0.7,1.0]},{sym:'H',p:[3.15,-0.7,1.0]},
+    {sym:'H',p:[5.0,0.9,0.4]},{sym:'H',p:[5.0,-0.5,0.6]},{sym:'H',p:[5.0,-0.4,-0.7]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[0,8],[0,9],[0,10],[1,11],[1,12],[2,13],[2,14],[3,15],[3,16],[4,17],[4,18],[5,19],[5,20],[6,21],[6,22],[7,23],[7,24],[7,25]]},
+  // Fenol C6H5OH — anillo bencénico + OH
+  'C₆H₅OH': {atoms:[
+    {sym:'C',p:[0,1.4,0]},{sym:'C',p:[1.21,0.7,0]},{sym:'C',p:[1.21,-0.7,0]},
+    {sym:'C',p:[0,-1.4,0]},{sym:'C',p:[-1.21,-0.7,0]},{sym:'C',p:[-1.21,0.7,0]},
+    {sym:'O',p:[0,2.75,0]},{sym:'H',p:[0,3.5,0]},
+    {sym:'H',p:[2.15,1.25,0]},{sym:'H',p:[2.15,-1.25,0]},
+    {sym:'H',p:[0,-2.45,0]},{sym:'H',p:[-2.15,-1.25,0]},{sym:'H',p:[-2.15,1.25,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,6],[6,7],[1,8],[2,9],[3,10],[4,11],[5,12]]},
+  // Anilina C6H5NH2 — anillo + NH2
+  'C₆H₅NH₂': {atoms:[
+    {sym:'C',p:[0,1.4,0]},{sym:'C',p:[1.21,0.7,0]},{sym:'C',p:[1.21,-0.7,0]},
+    {sym:'C',p:[0,-1.4,0]},{sym:'C',p:[-1.21,-0.7,0]},{sym:'C',p:[-1.21,0.7,0]},
+    {sym:'N',p:[0,2.75,0]},{sym:'H',p:[0.8,3.35,0]},{sym:'H',p:[-0.8,3.35,0]},
+    {sym:'H',p:[2.15,1.25,0]},{sym:'H',p:[2.15,-1.25,0]},
+    {sym:'H',p:[0,-2.45,0]},{sym:'H',p:[-2.15,-1.25,0]},{sym:'H',p:[-2.15,1.25,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,6],[6,7],[6,8],[1,9],[2,10],[3,11],[4,12],[5,13]]},
+  // Glucosa / Fructosa C6H12O6 — representación esquemática cadena abierta
+  'C₆H₁₂O₆': {atoms:[
+    {sym:'C',p:[-2.5,1.5,0]},{sym:'C',p:[-1.25,0.5,0]},{sym:'C',p:[0,1.2,0]},
+    {sym:'C',p:[1.25,0.5,0]},{sym:'C',p:[2.5,1.2,0]},{sym:'C',p:[0,-1.0,0]},
+    {sym:'O',p:[-2.5,2.8,0]},{sym:'O',p:[-1.25,-0.8,0]},{sym:'O',p:[0,2.5,0]},
+    {sym:'O',p:[1.25,-0.8,0]},{sym:'O',p:[2.5,2.5,0]},{sym:'O',p:[0,-2.3,0]},
+    {sym:'H',p:[-3.3,1.0,0]},{sym:'H',p:[-3.2,3.3,0]},{sym:'H',p:[-2.05,0.0,0]},
+    {sym:'H',p:[-0.7,-1.3,0]},{sym:'H',p:[0.5,1.6,0.8]},{sym:'H',p:[1.8,0.0,0]},
+    {sym:'H',p:[1.8,-1.3,0]},{sym:'H',p:[3.3,0.7,0]},{sym:'H',p:[3.2,3.0,0]},
+    {sym:'H',p:[0.7,-2.7,0]},{sym:'H',p:[-0.7,-2.7,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[1,6],[0,7],[2,8],[3,9],[4,10],[5,11],[1,5],[0,12],[0,13],[1,14],[7,15],[2,16],[3,17],[9,18],[4,19],[10,20],[11,21],[11,22]]},
+  // Sacarosa C12H22O11 — representación simplificada (2 anillos unidos)
+  'C₁₂H₂₂O₁₁': {atoms:[
+    // Anillo glucosa (izq)
+    {sym:'C',p:[-3.2,0.7,0]},{sym:'C',p:[-2.0,1.4,0]},{sym:'C',p:[-0.8,0.7,0]},
+    {sym:'C',p:[-0.8,-0.7,0]},{sym:'C',p:[-2.0,-1.4,0]},{sym:'O',p:[-3.2,-0.7,0]},
+    // Anillo fructosa (der)
+    {sym:'C',p:[0.8,0.7,0]},{sym:'C',p:[2.0,1.4,0]},{sym:'C',p:[3.2,0.7,0]},
+    {sym:'C',p:[3.2,-0.7,0]},{sym:'C',p:[2.0,-1.4,0]},{sym:'O',p:[0.8,-0.7,0]},
+    // Oxígeno puente glucosídico
+    {sym:'O',p:[0,0,0]},
+    // Oxígenos hidroxilo
+    {sym:'O',p:[-2.0,2.8,0]},{sym:'O',p:[-0.8,2.0,0]},{sym:'O',p:[-0.8,-2.0,0]},{sym:'O',p:[-2.0,-2.8,0]},
+    {sym:'O',p:[2.0,2.8,0]},{sym:'O',p:[3.2,2.0,0]},{sym:'O',p:[3.2,-2.0,0]},{sym:'O',p:[2.0,-2.8,0]},
+    // CH2OH grupos
+    {sym:'C',p:[-4.4,1.4,0]},{sym:'O',p:[-5.0,0.2,0]},{sym:'C',p:[4.4,-1.4,0]},{sym:'O',p:[5.0,-0.2,0]}
+  ],bonds:[
+    [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[2,12],[6,12],
+    [6,7],[7,8],[8,9],[9,10],[10,11],[11,6],
+    [0,21],[1,13],[2,14],[3,15],[4,16],[7,17],[8,18],[9,19],[10,20],
+    [0,21],[21,22],[9,23],[23,24]
+  ]},
+  // Ácido cítrico C6H8O7 — cadena con 3 grupos COOH + 1 OH
+  'C₆H₈O₇': {atoms:[
+    {sym:'C',p:[-2.5,0,0]},{sym:'C',p:[-1.25,0,0]},{sym:'C',p:[0,0,0]},
+    {sym:'C',p:[1.25,0,0]},{sym:'C',p:[2.5,0,0]},
+    {sym:'O',p:[-3.0,1.2,0]},{sym:'O',p:[-3.0,-1.2,0]},
+    {sym:'O',p:[0,1.4,0]},{sym:'O',p:[0,-1.4,0]},
+    {sym:'O',p:[3.0,1.2,0]},{sym:'O',p:[3.0,-1.2,0]},
+    {sym:'O',p:[0,0,1.5]},
+    {sym:'H',p:[-3.8,1.1,0]},{sym:'H',p:[3.8,1.1,0]},{sym:'H',p:[0,0,2.5]},
+    {sym:'H',p:[-1.25,0.7,1.0]},{sym:'H',p:[-1.25,-0.7,1.0]},
+    {sym:'H',p:[1.25,0.7,1.0]},{sym:'H',p:[1.25,-0.7,1.0]},
+    {sym:'C',p:[0,0,-1.5]},{sym:'O',p:[-0.8,0,-2.4]},{sym:'O',p:[0.8,0,-2.4]},{sym:'H',p:[1.5,0,-2.8]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[0,5],[0,6],[2,7],[2,8],[4,9],[4,10],[2,11],[5,12],[9,13],[11,14],[1,15],[1,16],[3,17],[3,18],[2,19],[19,20],[19,21],[21,22]]},
+  // Nicotina C10H14N2 — anillo piridina + pirrolidina
+  'C₁₀H₁₄N₂': {atoms:[
+    // Piridina (anillo 6)
+    {sym:'C',p:[-1.2,2.0,0]},{sym:'C',p:[-2.4,1.2,0]},{sym:'N',p:[-2.4,-0.2,0]},
+    {sym:'C',p:[-1.2,-1.0,0]},{sym:'C',p:[0,-0.2,0]},{sym:'C',p:[0,1.2,0]},
+    // Pirrolidina (anillo 5)
+    {sym:'C',p:[1.4,-0.2,0]},{sym:'C',p:[2.2,1.0,0]},{sym:'C',p:[2.2,-1.4,0]},
+    {sym:'N',p:[3.5,0.2,0]},
+    // Metilo
+    {sym:'C',p:[4.8,-0.5,0]},
+    {sym:'H',p:[-1.2,3.1,0]},{sym:'H',p:[-3.3,1.8,0]},{sym:'H',p:[-1.2,-2.1,0]},
+    {sym:'H',p:[2.0,2.0,0]},{sym:'H',p:[2.0,-2.4,0]},
+    {sym:'H',p:[5.3,0.4,0]},{sym:'H',p:[5.4,-1.2,0.5]},{sym:'H',p:[5.4,-1.2,-0.5]},
+    {sym:'H',p:[1.4,1.8,0]},{sym:'H',p:[1.4,-1.8,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[4,6],[6,7],[7,9],[6,8],[8,9],[9,10],[0,11],[1,12],[3,13],[7,14],[8,15],[10,16],[10,17],[10,18],[5,19],[6,20]]},
+  // Cafeína C8H10N4O2
+  'C₈H₁₀N₄O₂': {atoms:[
+    // Imidazol fusionado con pirimidina (xantina base)
+    {sym:'C',p:[0,0,0]},{sym:'N',p:[1.4,0.2,0]},{sym:'C',p:[2.0,1.5,0]},
+    {sym:'N',p:[1.0,2.5,0]},{sym:'C',p:[-0.3,2.0,0]},{sym:'N',p:[-1.4,0.9,0]},
+    {sym:'C',p:[-1.0,-0.3,0]},{sym:'N',p:[1.8,-1.0,0]},
+    {sym:'O',p:[3.2,1.7,0]},{sym:'O',p:[-2.2,-0.8,0]},
+    // Metilos
+    {sym:'C',p:[0.5,3.8,0]},{sym:'C',p:[-2.7,1.2,0]},{sym:'C',p:[2.5,-2.2,0]},
+    {sym:'H',p:[0.0,4.7,0.4]},{sym:'H',p:[1.5,3.9,0.4]},{sym:'H',p:[0.5,3.8,-1.0]},
+    {sym:'H',p:[-3.2,0.3,0.4]},{sym:'H',p:[-3.2,2.1,0.4]},{sym:'H',p:[-2.7,1.2,-1.0]},
+    {sym:'H',p:[3.5,-1.9,0.4]},{sym:'H',p:[2.5,-3.1,0.4]},{sym:'H',p:[2.5,-2.2,-1.0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,6],[6,7],[7,1],[2,8],[6,9],[3,10],[5,11],[7,12],[10,13],[10,14],[10,15],[11,16],[11,17],[11,18],[12,19],[12,20],[12,21]]},
+  // Aspirina C9H8O4
+  'C₉H₈O₄': {atoms:[
+    // Anillo bencénico
+    {sym:'C',p:[0,1.4,0]},{sym:'C',p:[1.21,0.7,0]},{sym:'C',p:[1.21,-0.7,0]},
+    {sym:'C',p:[0,-1.4,0]},{sym:'C',p:[-1.21,-0.7,0]},{sym:'C',p:[-1.21,0.7,0]},
+    // Grupo COOH en pos 1
+    {sym:'C',p:[0,2.8,0]},{sym:'O',p:[-1.1,3.4,0]},{sym:'O',p:[1.1,3.4,0]},{sym:'H',p:[1.8,2.9,0]},
+    // Grupo OCOCH3 en pos 2
+    {sym:'O',p:[2.4,1.3,0]},{sym:'C',p:[3.5,2.1,0]},{sym:'O',p:[4.6,1.5,0]},
+    {sym:'C',p:[3.5,3.5,0]},
+    {sym:'H',p:[1.21,-2.1,0]},{sym:'H',p:[0,-2.45,0]},{sym:'H',p:[-2.15,-1.25,0]},{sym:'H',p:[-2.15,1.25,0]},
+    {sym:'H',p:[3.0,4.1,0.5]},{sym:'H',p:[3.0,4.1,-0.5]},{sym:'H',p:[4.5,3.9,0]}
+  ],bonds:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,6],[6,7],[6,8],[8,9],[1,10],[10,11],[11,12],[11,13],[2,14],[3,15],[4,16],[5,17],[13,18],[13,19],[13,20]]},
+  'Al₂(SO₄)₃':{atoms:[
+    {sym:'Al',p:[-3.0,0,0]},{sym:'Al',p:[3.0,0,0]},
+    {sym:'S',p:[0,2.0,0]},{sym:'S',p:[-2.0,-1.8,0]},{sym:'S',p:[2.0,-1.8,0]},
+    {sym:'O',p:[0,3.4,0]},{sym:'O',p:[-1.3,1.4,0.8]},{sym:'O',p:[1.3,1.4,0.8]},{sym:'O',p:[0,1.4,-1.3]},
+    {sym:'O',p:[-2.0,-3.2,0]},{sym:'O',p:[-3.3,-1.2,0.8]},{sym:'O',p:[-0.7,-1.2,0.8]},{sym:'O',p:[-2.0,-1.2,-1.3]},
+    {sym:'O',p:[2.0,-3.2,0]},{sym:'O',p:[3.3,-1.2,0.8]},{sym:'O',p:[0.7,-1.2,0.8]},{sym:'O',p:[2.0,-1.2,-1.3]}
+  ],bonds:[[0,7],[0,11],[0,15],[1,6],[1,10],[1,14],[2,5],[2,6],[2,7],[2,8],[3,9],[3,10],[3,11],[3,12],[4,13],[4,14],[4,15],[4,16]]},
 };
 
 // ── Atom hover tooltip state ──
@@ -1133,11 +1542,17 @@ function buildGenericMol3D(atomsObj){
   // fall back to metal if no nonmetal, then just the first entry
   const nonMetalOrder = ['C','Si','N','P','As','S','Se','O','Te','Cl','Br','I','F','H'];
   let centralSym = null;
-  for(const nm of nonMetalOrder){
-    if(atomsObj[nm]){centralSym=nm;break;}
+
+  // For homoatomic molecules (all same element), use that element as central
+  const uniqueElems = Object.keys(atomsObj);
+  if(uniqueElems.length === 1){
+    centralSym = uniqueElems[0];
+  } else {
+    for(const nm of nonMetalOrder){
+      if(atomsObj[nm]){centralSym=nm;break;}
+    }
   }
   if(!centralSym){
-    // All metals — pick the one with most atoms or alphabetically first
     centralSym = entries.sort((a,b)=>b[1]-a[1])[0][0];
   }
 
@@ -1295,19 +1710,92 @@ const KNOWN_VALID_COMPOUNDS = {
   // Compuestos de ácidos
   'HCl':true,'HBr':true,'HI':true,'HF':true,'H2SO4':true,'H2SO3':true,'HNO3':true,'HNO2':true,'H3PO4':true,'H2CO3':true,'H2S':true,'HClO4':true,'HClO3':true,'HClO2':true,'HClO':true,'H3PO3':true,
   // Moleculares comunes
-  'H2O':true,'H2O2':true,'NH3':true,'CH4':true,'C2H6':true,'C2H4':true,'C2H2':true,'C6H6':true,'C6H12O6':true,'CH3OH':true,'C2H5OH':true,'CO2':true,'N2':true,'O2':true,'H2':true,'Cl2':true,'F2':true,'Br2':true,'I2':true,'N2O4':true,'P4O10':true,'SF6':true,'PCl5':true,'IF7':true,
-  // Azúcares y orgánicos
+  'H2O':true,'H2O2':true,'NH3':true,'CH4':true,'C2H6':true,'C2H4':true,'C2H2':true,'C6H6':true,'C6H12O6':true,'CH3OH':true,'C2H5OH':true,'CO2':true,'N2':true,'O2':true,'H2':true,'Cl2':true,'F2':true,'Br2':true,'I2':true,'N2O4':true,'P4O10':true,'SF6':true,'PCl5':true,'IF7':true,'O3':true,'H2S':true,'PH3':true,'ClF3':true,'XeF4':true,'C2H2':true,'SO2':true,'NO2':true,'N2O':true,'SO3':true,
+  // Azúcares y orgánicos básicos
   'C12H22O11':true,'C6H12O6':true,'C6H6':true,'C2H5OH':true,'CH3OH':true,'C3H8':true,'C4H10':true,
+  // Alcanos extendidos
+  'C5H12':true,'C6H14':true,'C8H18':true,
+  // Alquenos y alquinos
+  'C3H6':true,'C4H6':true,'C2H4':true,
+  // Compuestos oxigenados
+  'CH2O':true,'C2H4O':true,'C3H6O':true,'C3H8O':true,'C4H10O':true,
+  'CH3COOH':true,'HCOOH':true,'C6H5OH':true,'C3H6O3':true,'C6H8O7':true,
+  // Compuestos nitrogenados
+  'CH3NH2':true,'C6H5NH2':true,'CON2H4':true,'HCN':true,'NO':true,
+  'C10H14N2':true,'C8H10N4O2':true,'C9H8O4':true,
+  // Aminoácidos
+  'C3H7NO2':true,'C2H5NO2':true,
+  // Haluros orgánicos
+  'CH3Cl':true,'CHCl3':true,'CCl4':true,'CF4':true,
+  // Ácidos halogenados
+  'HBr':true,'HI':true,'HClO4':true,'HClO':true,'H2CO3':true,
+  // Compuestos de boro
+  'B2O3':true,'H3BO3':true,'BF3':true,'BCl3':true,
+  // Compuestos de silicio
+  'SiH4':true,'Si2H6':true,
+  // Nitritos y nitratos extendidos
+  'NH4Cl':true,'NH4NO3':true,'NH4OH':true,
+  // Nitrutos
+  'Ca3N2':true,'AlN':true,'Si3N4':true,
+  // Sulfitos y tiosulfatos
+  'H2SO3':true,'Na2SO3':true,'Na2S2O3':true,
+  // Fosfuros y fosfitos
+  'PCl3':true,'H3PO3':true,
+  // Sales diversas
+  'KMnO4':true,'K2Cr2O7':true,'NaClO':true,'AgNO3':true,'KI':true,'KBr':true,'NaI':true,
+  'MgSO4':true,'FeSO4':true,'Al2SO43':true,
+  // Cloruros de metales de transición
+  'NiCl2':true,'CoCl2':true,'MnCl2':true,'CrCl3':true,'FeBr3':true,'GaCl3':true,'VCl3':true,
+  // Haluros especiales
+  'AsCl3':true,'SbCl3':true,'SnCl4':true,'TiCl4':true,
+  // Gases industriales
+  'CO':true,'N2O4':true,'N2O5':true,'Cl2O':true,
+  // Óxidos y compuestos varios
+  'HClO4':true,'HClO3':true,'HClO2':true,
   'Li2O':true,'Na2O':true,'K2O':true,'CaF2':true,'MgCl2':true,'FeCl2':true,'FeO':true,'Cu2O':true,'ZnCl2':true,'SnO2':true,'NiO':true,
   'WO2':true,'WS2':true,'WC2':true,'MoS2':true,'NiO2':true,'CoO2':true,'RuO2':true,'OsO4':true,'IrO2':true,'PdO':true,'PtO2':true,'AuCl3':true,'Hg2Cl2':true,'HgCl2':true,'HgS':true,'Hg2S':true,
 };
 
 // Parse a formula string like "CaCO3" into an atom-count object {Ca:1,C:1,O:3}
+// Parses formulas with parentheses: Ca(OH)2 → {Ca:1,O:2,H:2}, Al2(SO4)3 → {Al:2,S:3,O:12}
 function parseKnownFormula(f){
-  const result={};
-  const regex=/([A-Z][a-z]?)(\d*)/g; let m;
-  while((m=regex.exec(f))!==null){if(!m[1])continue;const s=m[1],n=parseInt(m[2]||'1');result[s]=(result[s]||0)+n;}
-  return result;
+  // Remove unicode subscripts first
+  const subMap={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+  f = f.replace(/[₀-₉]/g, c=>subMap[c]||c);
+
+  function parse(str){
+    const result={};
+    let i=0;
+    while(i<str.length){
+      if(str[i]==='('){
+        // Find matching closing paren
+        let depth=1, j=i+1;
+        while(j<str.length&&depth>0){if(str[j]==='(')depth++;else if(str[j]===')')depth--;j++;}
+        const inner=str.slice(i+1,j-1);
+        // Read multiplier after closing paren
+        let numStr='', k=j;
+        while(k<str.length&&str[k]>='0'&&str[k]<='9'){numStr+=str[k];k++;}
+        const mult=numStr?parseInt(numStr):1;
+        const innerComp=parse(inner);
+        for(const sym in innerComp) result[sym]=(result[sym]||0)+innerComp[sym]*mult;
+        i=k;
+      } else if(str[i]>='A'&&str[i]<='Z'){
+        // Read element symbol
+        let sym=str[i]; let j=i+1;
+        while(j<str.length&&str[j]>='a'&&str[j]<='z'){sym+=str[j];j++;}
+        // Read count
+        let numStr='';
+        while(j<str.length&&str[j]>='0'&&str[j]<='9'){numStr+=str[j];j++;}
+        const count=numStr?parseInt(numStr):1;
+        result[sym]=(result[sym]||0)+count;
+        i=j;
+      } else {
+        i++; // skip unknown chars
+      }
+    }
+    return result;
+  }
+  return parse(f);
 }
 
 // Pre-parse the whitelist into composition objects for order-independent matching
@@ -1444,7 +1932,65 @@ function validateMolecule(){
   const isValid=result.valid,bgColor=isValid?'rgba(16,185,129,0.08)':'rgba(244,63,94,0.08)',borderColor=isValid?'rgba(16,185,129,0.3)':'rgba(244,63,94,0.3)',textColor=isValid?'var(--accent4)':'var(--accent3)';
   summaryDiv.innerHTML=`<div style="background:${bgColor};border:1px solid ${borderColor};border-radius:6px;padding:8px 10px;"><div style="color:${textColor};font-size:0.75rem;font-weight:600;margin-bottom:3px;">${isValid?'✓ Octeto satisfecho':'✗ Octeto no satisfecho'}</div><div style="font-size:0.73rem;color:rgba(200,220,255,0.6);line-height:1.5;">${result.explanation}</div></div>`;
 }
-function clearBuilder(){builderAtoms={};renderBuilder();document.getElementById('resultCard').className='result-card';drawEmptyMol();}
+function clearBuilder(){
+  builderAtoms={};renderBuilder();
+  document.getElementById('resultCard').className='result-card';
+  drawEmptyMol();
+  // Reset formula input feedback too
+  const fb=document.getElementById('formulaFeedback');
+  const inp=document.getElementById('formulaInput');
+  if(fb) fb.textContent='';
+  if(inp){ inp.value=''; inp.style.borderColor='rgba(0,200,255,0.25)'; }
+}
+
+// Live preview as user types
+function onFormulaInput(val){
+  const fb = document.getElementById('formulaFeedback');
+  const inp = document.getElementById('formulaInput');
+  if(!val.trim()){ fb.textContent=''; inp.style.borderColor='rgba(0,200,255,0.25)'; return; }
+  const parsed = parseKnownFormula(val.trim());
+  const keys = Object.keys(parsed);
+  if(!keys.length){ 
+    fb.innerHTML = '<span style="color:rgba(244,63,94,0.8)">⚠ Fórmula no reconocida</span>';
+    inp.style.borderColor='rgba(244,63,94,0.4)';
+    return;
+  }
+  // Check all symbols exist in ELEMENTS
+  const unknown = keys.filter(k => !ELEMENTS.find(e=>e.symbol===k));
+  if(unknown.length){
+    fb.innerHTML = `<span style="color:rgba(244,63,94,0.8)">⚠ Elemento desconocido: ${unknown.join(', ')}</span>`;
+    inp.style.borderColor='rgba(244,63,94,0.4)';
+    return;
+  }
+  // Show parsed preview
+  const preview = keys.map(k=>`<span style="color:rgba(0,200,255,0.9)">${k}</span><span style="color:rgba(200,220,255,0.5)">:${parsed[k]}</span>`).join(' · ');
+  fb.innerHTML = `<span style="color:rgba(16,185,129,0.8)">✓ </span>${preview}`;
+  inp.style.borderColor='rgba(16,185,129,0.45)';
+}
+
+// Load parsed formula into builderAtoms
+function applyFormulaInput(){
+  const inp = document.getElementById('formulaInput');
+  const val = inp ? inp.value.trim() : '';
+  if(!val) return;
+  const parsed = parseKnownFormula(val);
+  const keys = Object.keys(parsed);
+  if(!keys.length){ showToast('⚠ Fórmula no reconocida'); return; }
+  const unknown = keys.filter(k => !ELEMENTS.find(e=>e.symbol===k));
+  if(unknown.length){ showToast(`⚠ Elemento desconocido: ${unknown.join(', ')}`); return; }
+  // Load into builderAtoms — merges with existing if any, replaces cleanly
+  builderAtoms = {};
+  for(const [sym, count] of Object.entries(parsed)){
+    builderAtoms[sym] = count;
+  }
+  renderBuilder();
+  document.getElementById('resultCard').className='result-card';
+  drawEmptyMol();
+  // Show success feedback
+  const fb = document.getElementById('formulaFeedback');
+  if(fb) fb.innerHTML = `<span style="color:rgba(16,185,129,0.9)">✓ Cargado — pulsa Validar Molécula</span>`;
+  showToast(`✓ Fórmula cargada: ${val}`);
+}
 
 // ══════════════════════════════════════════════════════
 //  TABLA PERIÓDICA INTERACTIVA
