@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AtomViz 3D — Química Interactiva</title>
+<link rel="icon" href="Img/LogoAtom_v3X2.png" type="image/x-icon">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <style>
@@ -285,12 +286,12 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
   .sidebar.open .sidebar-lbl::after { transform:rotate(180deg); }
   #atomCanvas { min-height:240px; }
   .info-panel {
-    width:100%; height:auto; max-height:220px;
+    width:100%; height:auto; max-height:240px;
     border-left:none; border-top:1px solid var(--border);
-    flex-direction:row; flex-wrap:wrap; gap:8px;
-    padding:10px 12px; overflow-y:auto;
+    flex-direction:column; flex-wrap:nowrap; gap:10px;
+    padding:12px 14px; overflow-y:auto; overflow-x:hidden;
   }
-  .info-panel > * { min-width:140px; flex:1; }
+  .info-panel > * { min-width:unset; flex:none; width:100%; }
   .big-sym { font-size:2rem; }
 
   /* MOLÉCULAS — panel lateral va al fondo */
@@ -427,7 +428,7 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
 <body>
 
 <nav>
-  <div class="logo">⚛ ATOMVIZ 3D</div>
+  <div class="logo"><img src="Img/LogoAtom_v3X2.png" width="30px" height="30px"> ATOMVIZ 3D</div>
   <button class="tab-btn active" onclick="switchTab('Atom',this)"><span class="dot"></span>Explorador</button>
   <button class="tab-btn" onclick="switchTab('Molecule',this)"><span class="dot" style="background:var(--accent3)"></span>Moléculas</button>
   <button class="tab-btn" onclick="switchTab('PT',this)"><span class="dot orange"></span>Tabla Periódica</button>
@@ -737,8 +738,8 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
 <div class="toast" id="toast"></div>
 
 <!-- ══ MODAL AGRADECIMIENTOS (Ctrl+A) ══ -->
-<div id="creditsModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(14px);align-items:center;justify-content:center;" onclick="if(event.target===this)closeCredits()">
-  <div style="background:linear-gradient(160deg,rgba(4,12,28,0.99),rgba(8,16,40,0.99));border:1px solid rgba(0,200,255,0.2);border-radius:20px;padding:36px 40px 32px;width:min(580px,92vw);box-shadow:0 30px 80px rgba(0,0,0,0.9),0 0 60px rgba(0,200,255,0.06);position:relative;overflow:hidden;">
+<div id="creditsModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this)closeCredits()">
+  <div style="background:linear-gradient(160deg,rgba(4,12,28,0.99),rgba(8,16,40,0.99));border:1px solid rgba(0,200,255,0.2);border-radius:20px;padding:36px 40px 32px;width:min(580px,92vw);max-height:90vh;overflow-y:auto;overflow-x:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.9),0 0 60px rgba(0,200,255,0.06);position:relative;">
     <!-- Fondo decorativo -->
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,200,255,0.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,92,246,0.04) 0%,transparent 60%);pointer-events:none;"></div>
     <!-- Partículas decorativas -->
@@ -747,8 +748,8 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
     <!-- Botón cerrar -->
     <button onclick="closeCredits()" style="position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;color:var(--muted);font-size:1rem;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <!-- Logo -->
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:Orbitron,sans-serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:4px;">⚛ ATOMVIZ 3D</div>
+    <div style="text-align:center;margin-bottom:24px;"><img src="Img/LogoAtom_v3X2.png" width="50px" height="50px">
+      <div style="font-family:Orbitron,sans-serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:4px;">ATOMVIZ 3D</div>
       <div style="font-size:0.72rem;color:var(--muted);letter-spacing:3px;font-family:Orbitron,sans-serif;">QUÍMICA INTERACTIVA</div>
     </div>
     <!-- Separador -->
@@ -756,7 +757,7 @@ nav { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-i
     <!-- Descripción -->
     <div style="text-align:center;font-size:0.82rem;color:rgba(180,210,255,0.6);line-height:1.7;margin-bottom:24px;">
       Plataforma interactiva de visualización y análisis químico 3D.<br>
-      Desarrollada con pasión por el equipo de <b style="color:var(--accent);">Química Computacional</b>.
+      Desarrollada con pasión por <b style="color:var(--accent);">Nosotros</b>.
     </div>
     <!-- Equipo -->
     <div style="font-family:Orbitron,sans-serif;font-size:0.62rem;color:var(--accent2);letter-spacing:3px;text-align:center;margin-bottom:16px;">👥 EQUIPO DESARROLLADOR</div>
