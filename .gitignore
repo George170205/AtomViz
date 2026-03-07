@@ -1,0 +1,10 @@
+# modelos de machine learning
+*.joblib
+*.pkl
+
+# python cache
+__pycache__/
+*.pyc
+
+# node
+node_modules/
