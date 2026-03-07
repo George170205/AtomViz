@@ -1,0 +1,619 @@
+﻿formula,tipo_compuesto,tipo_reaccion,patron_reaccion,descripcion_reaccion
+O₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+N₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+Cl₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+F₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+Br₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+I₂,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+S₈,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+P₄,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+H₂O,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+CO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+NH₃,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+CH₄,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+NaCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+H₂O₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+H₂SO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HCl,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HNO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₃PO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+CH₃COOH,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HF,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HBr,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+NaOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+KOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ca(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Mg(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Al(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Fe(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+NH₄OH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+CO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SO₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+NO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+NO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+N₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+P₂O₅,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Na₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CaO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Fe₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Fe₃O₄,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Al₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+MgO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+TiO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SiO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Na₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+CaCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+K₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+MgCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+NaHCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Na₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+CaSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+MgSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+CuSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+K₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+ZnSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+KCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CaCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+MgCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+FeCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+AlCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaF,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaBr,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaI,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KNO₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+NaNO₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ca(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+NaNO₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+KNO₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Na₃PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Ca₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+K₃PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Na₂S,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+FeS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+FeS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+ZnS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+PbS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+CuS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+CH₃CH₃,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+CH₃CH₂CH₃,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₄H₁₀,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₅H₁₂,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₆H₁₄,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₈H₁₈,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₂H₄,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₃H₆,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₂H₂,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₄H₆,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+CH₃OH,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₂H₅OH,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₃H₇OH,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₄H₉OH,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₆H₅OH,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+HCHO,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+CH₃CHO,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+CH₃COCH₃,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₆H₅CHO,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+CH₂(NH₂)COOH,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₃H₇NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₁₂O₆,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₁₂H₂₂O₁₁,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₆H₁₂O₆,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₅H₅N,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₁₇H₁₉NO₃,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₈H₁₁NO₂,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₉H₁₃NO₃,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+AgCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+BaSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+AgNO₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Fe(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Cu(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Zn(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+H₂CO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂S,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+PH₃,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+SiH₄,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+OF₂,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+N₂H₄,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+C₆H₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+C₇H₈,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+Na₂SiO₃,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+CaC₂,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+SiC,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Fe₃C,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Ca₃N₂,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+NaN₃,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+NH₄Cl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NH₄NO₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+(NH₄)₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+H₃BO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HClO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HMnO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+CH₂=CHCOOH,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₆H₅COOH,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+CH₃CH₂COOH,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₆H₁₂O₆,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₁₂H₂₂O₁₁,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+CH₃NH₂,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₆H₅NH₂,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₅H₉NO₄,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₁₄N₂O₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₁₁H₁₂N₂O₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₁₀H₁₃N₅O₄,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₃H₄O₃,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₂H₄O,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+LiH₂PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+NaH₂PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Na₂HPO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+KH₂PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+K₂HPO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+AlPO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+FePO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Fe₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Zn₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Cu₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Mg₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Ba₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Mn₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Pb₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Ag₃PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+(NH₄)₃PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+(NH₄)₂HPO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+NH₄H₂PO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Ca(H₂PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+CaHPO₄,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Sr₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Ni₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Co₃(PO₄)₂,Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Cr(PO₄),Fosfato,precipitación,M₃PO₄ + CaCl₂ → Ca₃(PO₄)₂↓ | M₃PO₄ + 3HA → MA + H₃PO₄,Precipitación de fosfato cálcico; neutralización
+Na₃PO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+Na₂HPO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+NaH₂PO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+K₃PO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+K₂HPO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+Ca₃(PO₃)₂,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+Mg₃(PO₃)₂,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+Fe₃(PO₃)₂,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+Zn₃(PO₃)₂,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+(NH₄)₂HPO₃,Fosfito,oxidación,M₃PO₃ + H₂O₂ → M₃PO₄ + H₂O,Fosfito se oxida a fosfato con agentes oxidantes
+H₃PO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₃PO₂,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HPO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+Na₂SO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+K₂SO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+CaSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+MgSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+BaSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+FeSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+ZnSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+CuSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+Al₂(SO₃)₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+NaHSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+KHSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+Ca(HSO₃)₂,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+(NH₄)₂SO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+NH₄HSO₃,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+Pb(SO₃),Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+H₂SO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+Li₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+Rb₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+Cs₂SO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+BeSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+SrSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+NiSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+CoSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+MnSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+Cr₂(SO₄)₃,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+Al₂(SO₄)₃,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+Fe₂(SO₄)₃,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+FeSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+CdSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+PbSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+HgSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+TiOSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+KHSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+NaHSO₄,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+(NH₄)Fe(SO₄)₂,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+KAl(SO₄)₂,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+LiOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+RbOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+CsOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ba(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Sr(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Be(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ni(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Co(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Co(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Mn(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Mn(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Cr(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Cr(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ti(OH)₄,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Sn(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Sn(OH)₄,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Pb(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Bi(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ag(OH),Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Au(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Hg(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Cd(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Cu(OH),Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+VO(OH)₂,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+In(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ga(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+La(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ce(OH)₃,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Ce(OH)₄,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+Th(OH)₄,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+FeOOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+AlOOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+MnOOH,Base/Hidróxido,precipitación,M(OH)₂ + MX₂ → M'(OH)₂↓ + MX₂ | MOH + HA → MA + H₂O,Hidróxido precipita metales; neutraliza ácidos
+FeO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CuO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Cu₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+NiO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CoO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+MnO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+ZnO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+PbO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SnO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+HgO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Ag₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+BaO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SrO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Li₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+K₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Rb₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Cs₂O,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CrO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+VO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+GeO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+InO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+GaO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+TiO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+WO,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+SnO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+PbO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+MnO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CrO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+VO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+NbO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+RuO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+IrO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+OsO₄,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CeO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+ThO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+UO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+ZrO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+HfO₂,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Cr₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Mn₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+In₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Ga₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Tl₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Bi₂O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+CrO₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+MoO₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+WO₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+V₂O₅,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Re₂O₇,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+Na₂O₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+K₂O₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+Li₂O₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+BaO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+CaO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+MgO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+SrO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+ZnO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+TiO₂(O₂),Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+PbO₂_perox,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+KO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+NaO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+RbO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+CsO₂,Peróxido,hidrólisis,M₂O₂ + H₂O → 2MOH + ½O₂↑,Peróxido + agua → base + oxígeno (generación de O₂)
+O₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+LiNO₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Mg(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Al(NO₃)₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Fe(NO₃)₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Fe(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Cu(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Zn(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Pb(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Mn(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Co(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ni(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Sr(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ba(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ag(NO₃)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Bi(NO₃)₃,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Tl(NO₃),Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+LiNO₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Mg(NO₂)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ca(NO₂)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+Ba(NO₂)₂,Nitrato/Nitrito,descomposición,2MNO₃ → 2MNO₂ + O₂ (calor) | MNO₃ + HA → MA + HNO₃,Nitrato se descompone con calor; con ácido → ácido nítrico
+LiCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+LiF,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+LiBr,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+LiI,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KF,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KBr,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KI,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+RbCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CsCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CaF₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+BaF₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+SrCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+SrBr₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+BaCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+BaBr₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+SnCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+SnCl₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+PbCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+PbBr₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+MnCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CoCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NiCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CrCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+TiCl₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+TiCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+VCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+ZrCl₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+HgCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+Hg₂Cl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+AgBr,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+AgI,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CuCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CuCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+CuBr,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+AuCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+PtCl₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+PCl₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+PCl₅,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+SOCl₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NOCl,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+Li₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+BaCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+SrCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+FeCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+MnCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+ZnCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+CuCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+PbCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+NiCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+CoCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Ag₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+CdCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Cs₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Rb₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+KHCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Ca(HCO₃)₂,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Mg(HCO₃)₂,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+NH₄HCO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+(NH₄)₂CO₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+Fe₂(CO₃)₃,Carbonato,descomposición,MCO₃ + 2HA → MA₂ + H₂O + CO₂↑ | MCO₃ → MO + CO₂,Carbonato + ácido → efervescencia CO₂; calcinación
+HClO,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HClO₂,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HClO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HBrO,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HBrO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HIO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HIO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂CrO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂Cr₂O₇,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂MoO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂WO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂SeO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂SeO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂TeO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₃AsO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₃AsO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂SiO₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₄SiO₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HBO₂,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+H₂B₄O₇,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HNO₂,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+HCOOH,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₂H₂O₄,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₄H₆O₅,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₆H₈O₇,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₄H₆O₆,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+C₃H₆O₃,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+NaCl O,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KClO,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+Ca(ClO)₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaClO₂,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaClO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KClO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KClO₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NH₄ClO₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaBrO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KBrO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KIO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+NaIO₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+KIO₄,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+K₂CrO₄,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+Na₂CrO₄,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+BaCrO₄,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+PbCrO₄,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+Ag₂CrO₄,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+K₂Cr₂O₇,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+Na₂Cr₂O₇,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+(NH₄)₂Cr₂O₇,Cromato/Dicromato,oxidación-reducción,Cr₂O₇²⁻ + 6e⁻ + 14H⁺ → 2Cr³⁺ + 7H₂O,Dicromato: oxidante fuerte; cromato⇌dicromato según pH
+KMnO₄,Permanganato,oxidación-reducción,MnO₄⁻ + 5e⁻ + 8H⁺ → Mn²⁺ + 4H₂O (ácido),Permanganato: oxidante muy fuerte (titulaciones redox)
+NaMnO₄,Permanganato,oxidación-reducción,MnO₄⁻ + 5e⁻ + 8H⁺ → Mn²⁺ + 4H₂O (ácido),Permanganato: oxidante muy fuerte (titulaciones redox)
+Ca(MnO₄)₂,Permanganato,oxidación-reducción,MnO₄⁻ + 5e⁻ + 8H⁺ → Mn²⁺ + 4H₂O (ácido),Permanganato: oxidante muy fuerte (titulaciones redox)
+Ba(MnO₄)₂,Permanganato,oxidación-reducción,MnO₄⁻ + 5e⁻ + 8H⁺ → Mn²⁺ + 4H₂O (ácido),Permanganato: oxidante muy fuerte (titulaciones redox)
+Ag MnO₄,Permanganato,oxidación-reducción,MnO₄⁻ + 5e⁻ + 8H⁺ → Mn²⁺ + 4H₂O (ácido),Permanganato: oxidante muy fuerte (titulaciones redox)
+CH₃COONa,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+CH₃COOK,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(CH₃COO)₂Ca,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(CH₃COO)₂Mg,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(CH₃COO)₂Pb,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+CH₃COOAg,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(CH₃COO)₂Cu,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(CH₃COO)₂Zn,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+(COOH)₂,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+Na₂C₂O₄,Oxalato,oxidación-reducción,C₂O₄²⁻ + MnO₄⁻ + H⁺ → CO₂ + Mn²⁺ (permanganometría),Oxalato reduce permanganato (valoración)
+K₂C₂O₄,Oxalato,oxidación-reducción,C₂O₄²⁻ + MnO₄⁻ + H⁺ → CO₂ + Mn²⁺ (permanganometría),Oxalato reduce permanganato (valoración)
+CaC₂O₄,Oxalato,oxidación-reducción,C₂O₄²⁻ + MnO₄⁻ + H⁺ → CO₂ + Mn²⁺ (permanganometría),Oxalato reduce permanganato (valoración)
+FeC₂O₄,Oxalato,oxidación-reducción,C₂O₄²⁻ + MnO₄⁻ + H⁺ → CO₂ + Mn²⁺ (permanganometría),Oxalato reduce permanganato (valoración)
+(COOAg)₂,Oxalato,oxidación-reducción,C₂O₄²⁻ + MnO₄⁻ + H⁺ → CO₂ + Mn²⁺ (permanganometría),Oxalato reduce permanganato (valoración)
+K₂SiO₃,Silicato,precipitación,MSiO₃ + 2HA → MA₂ + H₂SiO₃↓ (gel),Silicato + ácido → ácido silícico (gel)
+CaSiO₃,Silicato,precipitación,MSiO₃ + 2HA → MA₂ + H₂SiO₃↓ (gel),Silicato + ácido → ácido silícico (gel)
+MgSiO₃,Silicato,precipitación,MSiO₃ + 2HA → MA₂ + H₂SiO₃↓ (gel),Silicato + ácido → ácido silícico (gel)
+Al₂Si₂O₇,Silicato,precipitación,MSiO₃ + 2HA → MA₂ + H₂SiO₃↓ (gel),Silicato + ácido → ácido silícico (gel)
+Na₂B₄O₇,Borato,neutralización,Na₂B₄O₇ + 2HCl + 5H₂O → 4H₃BO₃ + 2NaCl,Bórax + ácido → ácido bórico
+H₃BO₃_borax,Borato,neutralización,Na₂B₄O₇ + 2HCl + 5H₂O → 4H₃BO₃ + 2NaCl,Bórax + ácido → ácido bórico
+CaB₂O₄,Borato,neutralización,Na₂B₄O₇ + 2HCl + 5H₂O → 4H₃BO₃ + 2NaCl,Bórax + ácido → ácido bórico
+MgB₂O₄,Borato,neutralización,Na₂B₄O₇ + 2HCl + 5H₂O → 4H₃BO₃ + 2NaCl,Bórax + ácido → ácido bórico
+Na₂S₂O₃,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+K₂S₂O₃,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+Na₂S₂O₅,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+K₂S₂O₅,Sulfito,desplazamiento,MSO₃ + 2HA → MA₂ + H₂O + SO₂↑,Sulfito + ácido → SO₂ (gas asfixiante)
+Na₂S₂O₈,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+K₂S₂O₈,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+(NH₄)₂S₂O₈,Sulfato,precipitación,MSO₄ + BaCl₂ → BaSO₄↓ + MCl₂,Precipitación de BaSO₄ (prueba cualitativa de sulfatos)
+NaCN,Cianuro,desplazamiento,MCN + HA → MA + HCN↑ (¡GAS LETAL!),Cianuro + ácido → HCN (extremadamente tóxico)
+KCN,Cianuro,desplazamiento,MCN + HA → MA + HCN↑ (¡GAS LETAL!),Cianuro + ácido → HCN (extremadamente tóxico)
+HCN,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+AgCN,Cianuro,desplazamiento,MCN + HA → MA + HCN↑ (¡GAS LETAL!),Cianuro + ácido → HCN (extremadamente tóxico)
+Fe₄[Fe(CN)₆]₃,Cianuro,desplazamiento,MCN + HA → MA + HCN↑ (¡GAS LETAL!),Cianuro + ácido → HCN (extremadamente tóxico)
+NaH,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+LiH,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+CaH₂,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+LiAlH₄,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+NaBH₄,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+MgH₂,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+TiH₂,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+PdH₀·₆,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+KH,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+BaH₂,Hidruro,hidrólisis,MH + H₂O → MOH + H₂↑,Hidruro activo + agua → base + hidrógeno gas
+As₂S₃,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+As₂S₅,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+Sb₂S₃,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+Bi₂S₃,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+In₂S₃,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+SnS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+SnS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+MoS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+WS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+Ag₂S,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+HgS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+CoS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+NiS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+CuFeS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+Na₂S₄,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+CaS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+BaS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+MnS,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+NiS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+TiS₂,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+C₅H₁₀O₅,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₅H₁₀O₄,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₆H₁₂O₆_man,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₁₂H₂₂O₁₁_lac,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₁₂H₂₂O₁₁_cel,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₆H₁₂O₆_sor,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₅H₁₂O₅,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₁₂H₂₂O₁₁_tre,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₆H₁₂O₆_inos,Carbohidrato,oxidación,C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂,Respiración celular; fermentación alcohólica
+C₄H₇NO₄,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₅H₉NO₄_glu,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₄H₈N₂O₃,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₅H₁₀N₂O₃,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₃H₇NO₂S,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₅H₁₁NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₁₃NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₁₃NO₂_ile,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₉H₁₁NO₃,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₉H₁₁NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₅H₁₁NO₂_pro,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₄H₉NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₅H₁₁NO₂S,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₁₄N₄O₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₆H₉N₃O₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₂H₅NO₂,Aminoácido,adición-sustitución,nH₂N-CHR-COOH → polipéptido + nH₂O | + ninhidrina → color púrpura,Policondensación (proteínas); detección con ninhidrina
+C₄H₇NO₂,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₉H₂₀,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₁₀H₂₂,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₁₂H₂₆,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₁₆H₃₄,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₂H₆,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₅H₁₀,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₆H₁₂,Alcano,combustión,CₙH₂ₙ₊₂ + O₂ → CO₂ + H₂O | CₙH₂ₙ₊₂ + X₂ → CₙH₂ₙ₊₁X + HX,Combustión completa; halogenación radical
+C₄H₈,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₅H₈,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₆H₁₀,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₃H₄,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₄H₄,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₆H₅CH₃,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₄H₈O,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₅H₁₀O,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₄H₆O₂,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₃H₆O₂,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₄H₈O₂,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+C₅H₁₀O₂,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+C₆H₁₂O₂,Acetato,desplazamiento,CH₃COOM + HA → MA + CH₃COOH,Acetato + ácido fuerte → ácido acético (vinagre)
+C₅H₁₀O₂_form,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₄H₆O₃,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₄H₄O,Compuesto carbonílico,adición-sustitución,R-CHO + Cu(OH)₂ → Cu₂O↓ (Fehling) | R-CHO + 2Ag⁺ → 2Ag↓ (espejo),"Aldehídos: reductores (Fehling, Tollens)"
+C₅H₅N_py,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₄H₄S,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+C₁₇H₂₁NO₄,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₈H₉NO₂,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₁₃H₁₆N₂O₂,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₁₀H₁₂N₂O,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₁₀H₁₂N₂O_ser,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C₅H₄N₄O₃,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+C₂H₄,Alqueno/Alquino,adición-sustitución,C=C + Br₂ → CBr-CBr | C=C + H₂O → C-OH | nC=C → polímero,"Adición electrofílica, hidratación, polimerización"
+C₁₀H₁₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+C₁₀H₁₈O,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₁₀H₁₄O,Alcohol,oxidación,R-OH [O] → R-CHO → R-COOH | R-OH + Na → RO⁻Na⁺ + H₂↑,Oxidación a aldehído/ácido; reacción con sodio
+C₁₅H₁₂O₅,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₂₁H₃₀O₂,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C₁₆H₁₂O₅,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+B₄C,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+WC,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+TiC,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+VC_car,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Cr₃C₂,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Mo₂C,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+HfC,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+TaN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+TiN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Si₃N₄,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+BN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+AlN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+GaN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+InN,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Mg₃N₂,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+Li₃N,Carburo/Nitruro,hidrólisis,CaC₂ + 2H₂O → Ca(OH)₂ + C₂H₂↑ | Ca₃N₂ + 6H₂O → 3Ca(OH)₂ + 2NH₃↑,Carburo/nitruro + agua → gas + hidróxido
+XeF₂,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+XeF₄,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+XeO₃,Óxido,neutralización,MO + H₂O → M(OH)₂ | MO + HCl → MCl₂ + H₂O,Óxido + agua → hidróxido; óxido + ácido → sal + agua
+KrF₂,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+SF₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+UF₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+IF₇,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+OsF₈,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+ClF₃,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+BrF₅,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+N₂F₄,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+SeF₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+TeF₆,Compuesto inorgánico,síntesis,NH₃ + HCl → NH₄Cl | H₂O + SO₃ → H₂SO₄,Reacciones de combinación directa
+PF₅,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+AsF₅,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+H2,Molécula homoatómica,síntesis,H₂ + ½O₂ → H₂O | N₂ + 3H₂ → 2NH₃ | Cl₂ + 2NaOH → NaOCl,"Moléculas diatómicas: combustión, síntesis, dismutación"
+HI,Ácido,neutralización,HnA + nMOH → MnA + nH₂O,Ácido + base → sal + agua (reacción de neutralización)
+FeCl2,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+ZnCl2,Haluro,precipitación,MX + AgNO₃ → AgX↓ + M(NO₃) | MX + NaOH → M(OH)↓ + NaX,Haluro + plata → precipitado; con NaOH → hidróxido
+Cu2S,Sulfuro,desplazamiento,MS + 2HA → MA₂ + H₂S↑,Sulfuro + ácido → H₂S (gas tóxico característico)
+C2H7N,Amina,neutralización,R-NH₂ + HA → R-NH₃⁺A⁻ | C₆H₅NH₂ + HNO₂ → C₆H₅N₂⁺ (diazonio),Amina básica + ácido; diazotación de arilaminas
+C8H10N4O2,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+C10H14N2,Alcaloide,neutralización,Alcaloide + HA → sal de alcaloide (soluble) | + reactivos colorimétricos,Alcaloides: bases → sales solubles con ácidos
+MgS2O3,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+BaS2O3,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+CaS2O3,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+ZnS2O3,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
+(NH4)2S2O3,Tiosulfato,oxidación-reducción,2S₂O₃²⁻ + I₂ → S₄O₆²⁻ + 2I⁻ (yodometría),Tiosulfato reduce yodo (titulación yodométrica)
